@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    internal class Liga
+    internal class Liga : Competicion
     {
     }
 }
