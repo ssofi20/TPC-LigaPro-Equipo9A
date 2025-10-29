@@ -8,6 +8,11 @@ namespace LigaPro.Domain
 {
     public class Equipo
     {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string NombreCapitan { get; set; }
+        public string TelefonoContacto { get; set; }
+        public string Imagen { get; set; }
 
     }
 }
