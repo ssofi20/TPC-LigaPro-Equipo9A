@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    public class Equipo
+    public class Jugador
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public Usuario Creador { get; set; } //Usuario que creo el equipo, es un Jugador tambien
-        public List<EquipoJugador> Plantel { get; set; }
-        public string Imagen { get; set; }
-
+        public string Apellido { get; set; }
+        public DateTime FechaNacimiento { get; set; }
+        public Usuario Usuario { get; set; }
     }
 }

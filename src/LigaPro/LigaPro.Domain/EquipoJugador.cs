@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    internal class Inscripcion
+    public class EquipoJugador
     {
-        public int IdCompetencia { get; set; }
-        public Competicion Competicion { get; set; }
         public int IdEquipo { get; set; }
         public Equipo Equipo { get; set; }
-        public DateTime FechaInscripcion { get; set; }
-        public string Estado { get; set; }
+        public int IdJugador { get; set; }
+        public Jugador Jugador { get; set; }
+        public bool EsCapitan { get; set; }
+        public int NumeroCamiseta { get; set; }
     }
 }

@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    public class Equipo
+    internal class TipoEvento
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public Usuario Creador { get; set; } //Usuario que creo el equipo, es un Jugador tambien
-        public List<EquipoJugador> Plantel { get; set; }
-        public string Imagen { get; set; }
-
+        public Deporte Deporte { get; set; }
     }
 }

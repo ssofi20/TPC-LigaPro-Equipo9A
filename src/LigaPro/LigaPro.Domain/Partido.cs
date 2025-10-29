@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    class Partido
+    public class Partido
     {
         public int Id { get; set; }
-        public int IdCompeticion { get; set; }
         public int NumeroFecha { get; set; }
         public DateTime FechaHora { get; set; }
-        public string Estado { get; set; }
         public Equipo Equipo1 { get; set; }
         public Equipo Equipo2 { get; set; }
-        public Equipo Ganador { get; set; }
-        public int PuntosE1 { get; set; }
-        public int PuntosE2 { get; set; }
-        public bool Empate { get; set; }
-        
+        public int ResultadoEquipo1 { get; set; }
+        public int ResultadoEquipo2 { get; set; }
+        public int IdCompeticion { get; set; }
+        public Competicion Competicion { get; set; }
+        public string Estado { get; set; }
+        public List<EventoPartido> Eventos { get; set; }
     }
 }

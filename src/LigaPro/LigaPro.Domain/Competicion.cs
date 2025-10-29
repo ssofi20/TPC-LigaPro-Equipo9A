@@ -10,9 +10,10 @@ namespace LigaPro.Domain
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public string Deporte { get; set; }
-        public DateTime FechaInicio { get; set; }
+        public Deporte Deporte { get; set; }
         public string Estado { get; set; } //"Inscripción Abierta", "En Curso", "Finalizado"
+        public Reglamento Reglamento { get; set; }
+        public Usuario Admin { get; set; }
         public List<Equipo> EquiposInscritos { get; set; }
     }
 }

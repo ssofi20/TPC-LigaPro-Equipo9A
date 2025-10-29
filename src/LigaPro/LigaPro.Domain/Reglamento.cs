@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    class Jugadores
+    public class Reglamento
     {
         public int Id { get; set; }
-        public int IdEquipo { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public int Edad { get; set; }
+        public int PuntosVictoria { get; set; }
+        public int PuntosPorEmpate { get; set; }
+        public int PuntosPorDerrota { get; set; }
     }
 }

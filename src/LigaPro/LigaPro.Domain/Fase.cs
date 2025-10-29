@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain
 {
-    public class Equipo
+    public class Fase
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public Usuario Creador { get; set; } //Usuario que creo el equipo, es un Jugador tambien
-        public List<EquipoJugador> Plantel { get; set; }
-        public string Imagen { get; set; }
+        public string Tipo { get; set; } // "Grupos", "Eliminatoria", etc.
+        public List<Partido> Partidos { get; set; }
 
     }
 }
