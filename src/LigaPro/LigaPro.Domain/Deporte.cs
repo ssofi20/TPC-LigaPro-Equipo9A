@@ -11,5 +11,6 @@ namespace LigaPro.Domain
         public int Id { get; set; }
         public string Nombre { get; set; }
         public int CantJugadores { get; set; }
+        public bool PermiteEmpate { get; set; }
     }
 }

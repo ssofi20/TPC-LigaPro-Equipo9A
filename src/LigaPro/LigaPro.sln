@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36616.10 d17.14
+VisualStudioVersion = 17.14.36616.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LigaPro.Web", "LigaPro.Web\LigaPro.Web.csproj", "{64DD6A69-9B9D-47F8-838D-D1DFD52C4B70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LigaPro.Dominio", "LigaPro.Domain\LigaPro.Dominio.csproj", "{166DDD7D-D3D0-4148-AB72-BBCB97F202E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LigaPro.Negocio", "LigaPro.Negocio\LigaPro.Negocio.csproj", "{87965F69-6C8F-4300-B2C0-079EE6EC7798}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LigaPro.Datos", "LigaPro.Datos\LigaPro.Datos.csproj", "{EBF6CA80-E6BB-41EB-AFCD-C8C8D49E7795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{87965F69-6C8F-4300-B2C0-079EE6EC7798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87965F69-6C8F-4300-B2C0-079EE6EC7798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87965F69-6C8F-4300-B2C0-079EE6EC7798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF6CA80-E6BB-41EB-AFCD-C8C8D49E7795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF6CA80-E6BB-41EB-AFCD-C8C8D49E7795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF6CA80-E6BB-41EB-AFCD-C8C8D49E7795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF6CA80-E6BB-41EB-AFCD-C8C8D49E7795}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
