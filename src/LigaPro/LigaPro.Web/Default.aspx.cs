@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LigaPro.Datos;
 
 namespace LigaPro.Web
 {
@@ -11,7 +12,10 @@ namespace LigaPro.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //Listar
+            DeporteDatos deporteDatos = new DeporteDatos();
+            dgvDeportes.DataSource = deporteDatos.Listar();
+            dgvDeportes.DataBind();
         }
     }
 }

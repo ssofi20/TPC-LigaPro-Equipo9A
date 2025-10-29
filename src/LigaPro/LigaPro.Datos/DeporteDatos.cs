@@ -16,18 +16,15 @@ namespace LigaPro.Datos
 
             try
             {
-                // 1. Seteamos la consulta SQL
-                datos.setearConsulta("SELECT Id, Nombre, PermiteEmpate FROM Deporte");
-
-                // 2. Ejecutamos la lectura
+                datos.setearConsulta("SELECT IdDeporte, Nombre, CantidadJugadores, PermiteEmpate FROM DEPORTES");
                 datos.ejecutarLectura();
 
-                // 3. Leemos los resultados uno por uno
                 while (datos.Lector.Read())
                 {
                     Deporte aux = new Deporte();
-                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Id = (int)datos.Lector["IdDeporte"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.CantJugadores = (int)datos.Lector["CantidadJugadores"];
                     aux.PermiteEmpate = (bool)datos.Lector["PermiteEmpate"];
 
                     lista.Add(aux);
