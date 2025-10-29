@@ -4,10 +4,19 @@ GO
 USE LIGAPRO_DB
 GO
 
+--CREATE DEPORTES
 CREATE TABLE DEPORTES(
 	IdDeporte INT IDENTITY(1,1),
-	Nombre INT NOT NULL,
+	Nombre VARCHAR(50) NOT NULL,
 	CantidadJugadores INT NOT NULL,
+	PermiteEmpate BIT NOT NULL DEFAULT 0,
 	CONSTRAINT PK_DEPORTES PRIMARY KEY (IdDeporte)
 )
 GO
+
+--INSERT DEPORTES
+INSERT INTO DEPORTES (Nombre, CantidadJugadores, PermiteEmpate) VALUES 
+('Fútbol', 11, 1),
+('Básquet', 5, 0),
+('Voley', 6, 0),
+('Paddle', 2, 0)
