@@ -12,6 +12,6 @@ namespace LigaPro.Domain
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public DateTime FechaNacimiento { get; set; }
-        public Usuario Usuario { get; set; }
+        public Usuario UsuarioJugador { get; set; }
     }
 }

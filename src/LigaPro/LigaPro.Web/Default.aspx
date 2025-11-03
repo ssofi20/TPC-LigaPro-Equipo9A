@@ -9,25 +9,4 @@
             <p class="lead mb-4">La plataforma definitiva para organizar y seguir tus ligas y torneos amateurs. Crea tu competición, inscribe equipos y deja que nosotros nos encarguemos del resto.</p>
         </div>
     </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h2 class="text-center mb-4">Deportes Disponibles en la Plataforma</h2>
-
-                <asp:GridView ID="dgvDeportes" runat="server"
-                    CssClass="table table-hover table-striped text-center shadow-sm"
-                    AutoGenerateColumns="False"
-                    GridLines="None">
-                    <HeaderStyle CssClass="table-dark" />
-                    <Columns>
-                        <asp:BoundField DataField="Nombre" HeaderText="Deporte" />
-                        <asp:BoundField DataField="CantJugadores" HeaderText="Jugadores por Equipo" />
-                        <asp:BoundField DataField="PermiteEmpate" HeaderText="Permite Empate" />
-                    </Columns>
-                </asp:GridView>
-
-            </div>
-        </div>
-    </div>
 </asp:Content>

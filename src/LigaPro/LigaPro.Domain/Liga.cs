@@ -8,7 +8,7 @@ namespace LigaPro.Domain
 {
     internal class Liga : Competicion
     {
-        public string TipoModalidad { get; set; }
+        public TipoLiga TipoLiga { get; set; }
         public List<Partido> Partidos { get; set; }
     }
 }

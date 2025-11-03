@@ -12,10 +12,7 @@ namespace LigaPro.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Listar
-            DeporteDatos deporteDatos = new DeporteDatos();
-            dgvDeportes.DataSource = deporteDatos.Listar();
-            dgvDeportes.DataBind();
+            
         }
     }
 }
