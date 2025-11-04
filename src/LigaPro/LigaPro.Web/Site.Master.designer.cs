@@ -33,13 +33,49 @@ namespace LigaPro.Web
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// Login control.
+        /// PanelNavegacionPublica control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Login;
+        protected global::System.Web.UI.WebControls.Panel PanelNavegacionPublica;
+
+        /// <summary>
+        /// PanelNavegacionJugador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelNavegacionJugador;
+
+        /// <summary>
+        /// btnCerrarSesionJugador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesionJugador;
+
+        /// <summary>
+        /// PanelNavegacionOrganizador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelNavegacionOrganizador;
+
+        /// <summary>
+        /// btnCerrarSesionOrganizador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesionOrganizador;
 
         /// <summary>
         /// ContentPlaceHolder1 control.
