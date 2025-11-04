@@ -13,10 +13,10 @@ namespace LigaPro.Domain
         Jugador
     }
 
-    /// Define los posibles estados de una competición.
+    ///Define los posibles estados de una competición.
     public enum EstadoCompetencia
     {
-        Registrando,
+        InscripcionAbierta,
         EnCurso,
         Finalizado
     }
@@ -28,7 +28,7 @@ namespace LigaPro.Domain
         IdaYVuelta
     }
 
-    /// Define los tipos de etapas que puede tener un torneo.
+    ///Define los tipos de etapas que puede tener un torneo.
     public enum TipoEtapa
     {
         Grupo,
@@ -36,17 +36,17 @@ namespace LigaPro.Domain
         Final
     }
 
-    /// Define los posibles estados de un partido.
+    ///Define los posibles estados de un partido.
     public enum EstadoPartido
     {
         Pendiente,
         EnCurso,
         Finalizado,
         Suspendido,
-        Walkover // (Cuando un equipo no se presenta)
+        Walkover //Cuando un equipo no se presenta
     }
 
-    /// Define los tipos de eventos que pueden ocurrir en un partido.
+    ///Define los tipos de eventos que pueden ocurrir en un partido.
     public enum TipoEvento
     {
         Gol,
@@ -54,5 +54,10 @@ namespace LigaPro.Domain
         TarjetaAmarilla,
         TarjetaRoja,
         Sustitucion
+    }
+
+    public enum TipoFase 
+    { 
+        Grupos, EliminatoriaDirecta 
     }
 }

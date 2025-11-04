@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LigaPro.Domain
+namespace LigaPro.Domain.Actores
 {
     public class Organizador
     {
@@ -15,5 +15,6 @@ namespace LigaPro.Domain
         public string Logo { get; set; }
         public string EmailContacto { get; set; }
         public string NumeroTelefono { get; set; }
+        public List<Competicion> CompetenciasOrganizador { get; set; }
     }
 }

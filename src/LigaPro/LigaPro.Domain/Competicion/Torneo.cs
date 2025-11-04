@@ -5,10 +5,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LigaPro.Domain
+namespace LigaPro.Domain.Actores
 {
     internal class Torneo : Competicion
     {
+        public bool TieneFaseDeGrupos { get; set; }
         public List<Fase> Fases { get; set; }
     }
 }

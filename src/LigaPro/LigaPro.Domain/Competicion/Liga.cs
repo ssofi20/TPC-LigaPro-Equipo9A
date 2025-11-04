@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LigaPro.Domain
+namespace LigaPro.Domain.Actores
 {
     internal class Liga : Competicion
     {
-        public TipoLiga TipoLiga { get; set; }
-        public List<Partido> Partidos { get; set; }
+        public TipoLiga Formato { get; set; }
+        public List<PartidoLiga> PartidosDeLiga { get; set; }
     }
 }
