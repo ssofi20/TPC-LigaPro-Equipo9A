@@ -13,6 +13,7 @@ namespace LigaPro.Domain.Actores
         public string Apellidos { get; set; }
         public DateTime FechaNacimiento { get; set; }
 
+        //Referencia al usuario
         public int IdUsuarioJugador { get; set; }
     }
 }
