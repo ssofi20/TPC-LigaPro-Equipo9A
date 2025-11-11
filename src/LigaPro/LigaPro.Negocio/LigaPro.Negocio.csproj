@@ -41,9 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrganizadorNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seguridad.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LigaPro.Datos\LigaPro.Datos.csproj">
+      <Project>{ebf6ca80-e6bb-41eb-afcd-c8c8d49e7795}</Project>
+      <Name>LigaPro.Datos</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LigaPro.Domain\LigaPro.Dominio.csproj">
       <Project>{166ddd7d-d3d0-4148-ab72-bbcb97f202e2}</Project>
       <Name>LigaPro.Dominio</Name>

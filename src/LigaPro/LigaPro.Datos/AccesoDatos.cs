@@ -58,6 +58,21 @@ namespace LigaPro.Datos
             }
         }
 
+        //Se usa para consultas que devuelven un solo valor (ej. COUNT, o un ID nuevo)
+        public object ejecutarScalar()
+        {
+            comando.Connection = conexion;
+            try
+            {
+                conexion.Open();
+                return comando.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void setearParametro(string nombre, object valor)
         {
             comando.Parameters.AddWithValue(nombre, valor);
@@ -67,7 +82,8 @@ namespace LigaPro.Datos
         {
             if (lector != null)
                 lector.Close();
-            conexion.Close();
+           conexion.Close();
+           comando.Parameters.Clear();
         }
     }
 }
