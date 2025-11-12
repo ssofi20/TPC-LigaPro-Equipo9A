@@ -36,8 +36,7 @@
                                     <a class="nav-link" href="PortalPublico.aspx">Equipos</a>
                                 </li>
                                 <li class="nav-item ms-lg-2">
-                                    <button type="button" class="btn btn-secondary" href="InicioSesion.aspx">Login</button>
-                                </li>
+                                    <a class="btn btn-secondary" href="InicioSesion.aspx">Login</a>                                </li>
                                 <li class="nav-item ms-lg-2">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignUp">Sign Up</button>
                                 </li>
@@ -86,7 +85,7 @@
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                 </asp:ContentPlaceHolder>
             </div>
-            
+
             <div class="modal fade" id="modalSignUp" tabindex="-1" aria-labelledby="modalSignUpLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
