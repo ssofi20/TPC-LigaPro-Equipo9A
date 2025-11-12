@@ -83,16 +83,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Auth\RecuperarContraseña.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="InicioSesion.aspx" />
-    <Content Include="PerfilAdmin.aspx" />
-    <Content Include="PerfilJugador.aspx" />
-    <Content Include="RegistrarAdmin.aspx" />
-    <Content Include="RegistrarJugador.aspx" />
+    <Content Include="Auth\InicioSesion.aspx" />
+    <Content Include="Jugador\MisEquipos.aspx" />
+    <Content Include="Jugador\UnirseAEquipo.aspx" />
+    <Content Include="Organizador\CrearCompeticion.aspx" />
+    <Content Include="Organizador\GestionarCompetencias.aspx" />
+    <Content Include="Organizador\MisCompeticiones.aspx" />
+    <Content Include="Organizador\PerfilAdmin.aspx" />
+    <Content Include="Jugador\PerfilJugador.aspx" />
+    <Content Include="Auth\RegistrarAdmin.aspx" />
+    <Content Include="Auth\RegistrarJugador.aspx" />
+    <Content Include="Styles\Site.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\RecuperarContraseña.aspx.cs">
+      <DependentUpon>RecuperarContraseña.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Auth\RecuperarContraseña.aspx.designer.cs">
+      <DependentUpon>RecuperarContraseña.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -103,40 +117,75 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="InicioSesion.aspx.cs">
+    <Compile Include="Auth\InicioSesion.aspx.cs">
       <DependentUpon>InicioSesion.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="InicioSesion.aspx.designer.cs">
+    <Compile Include="Auth\InicioSesion.aspx.designer.cs">
       <DependentUpon>InicioSesion.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PerfilAdmin.aspx.cs">
+    <Compile Include="Jugador\MisEquipos.aspx.cs">
+      <DependentUpon>MisEquipos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Jugador\MisEquipos.aspx.designer.cs">
+      <DependentUpon>MisEquipos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Jugador\UnirseAEquipo.aspx.cs">
+      <DependentUpon>UnirseAEquipo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Jugador\UnirseAEquipo.aspx.designer.cs">
+      <DependentUpon>UnirseAEquipo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organizador\CrearCompeticion.aspx.cs">
+      <DependentUpon>CrearCompeticion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organizador\CrearCompeticion.aspx.designer.cs">
+      <DependentUpon>CrearCompeticion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organizador\GestionarCompetencias.aspx.cs">
+      <DependentUpon>GestionarCompetencias.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organizador\GestionarCompetencias.aspx.designer.cs">
+      <DependentUpon>GestionarCompetencias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organizador\MisCompeticiones.aspx.cs">
+      <DependentUpon>MisCompeticiones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organizador\MisCompeticiones.aspx.designer.cs">
+      <DependentUpon>MisCompeticiones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organizador\PerfilAdmin.aspx.cs">
       <DependentUpon>PerfilAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PerfilAdmin.aspx.designer.cs">
+    <Compile Include="Organizador\PerfilAdmin.aspx.designer.cs">
       <DependentUpon>PerfilAdmin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PerfilJugador.aspx.cs">
+    <Compile Include="Jugador\PerfilJugador.aspx.cs">
       <DependentUpon>PerfilJugador.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PerfilJugador.aspx.designer.cs">
+    <Compile Include="Jugador\PerfilJugador.aspx.designer.cs">
       <DependentUpon>PerfilJugador.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistrarAdmin.aspx.cs">
+    <Compile Include="Auth\RegistrarAdmin.aspx.cs">
       <DependentUpon>RegistrarAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RegistrarAdmin.aspx.designer.cs">
+    <Compile Include="Auth\RegistrarAdmin.aspx.designer.cs">
       <DependentUpon>RegistrarAdmin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="RegistrarJugador.aspx.cs">
+    <Compile Include="Auth\RegistrarJugador.aspx.cs">
       <DependentUpon>RegistrarJugador.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RegistrarJugador.aspx.designer.cs">
+    <Compile Include="Auth\RegistrarJugador.aspx.designer.cs">
       <DependentUpon>RegistrarJugador.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
@@ -159,7 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LigaPro.Datos\LigaPro.Datos.csproj">
