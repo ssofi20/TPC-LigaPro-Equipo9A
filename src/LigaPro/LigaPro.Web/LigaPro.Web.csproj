@@ -87,13 +87,13 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Auth\InicioSesion.aspx" />
-    <Content Include="Jugador\MisEquipos.aspx" />
-    <Content Include="Jugador\UnirseAEquipo.aspx" />
-    <Content Include="Organizador\CrearCompeticion.aspx" />
-    <Content Include="Organizador\GestionarCompetencias.aspx" />
-    <Content Include="Organizador\MisCompeticiones.aspx" />
-    <Content Include="Organizador\PerfilAdmin.aspx" />
-    <Content Include="Jugador\PerfilJugador.aspx" />
+    <Content Include="PaginasJugador\MisEquipos.aspx" />
+    <Content Include="PaginasJugador\UnirseAEquipo.aspx" />
+    <Content Include="PaginasOrganizador\CrearCompeticion.aspx" />
+    <Content Include="PaginasOrganizador\GestionarCompetencias.aspx" />
+    <Content Include="PaginasOrganizador\MisCompeticiones.aspx" />
+    <Content Include="PaginasOrganizador\PerfilAdmin.aspx" />
+    <Content Include="PaginasJugador\PerfilJugador.aspx" />
     <Content Include="Auth\RegistrarAdmin.aspx" />
     <Content Include="Auth\RegistrarJugador.aspx" />
     <Content Include="Styles\Site.css" />
@@ -124,53 +124,53 @@
     <Compile Include="Auth\InicioSesion.aspx.designer.cs">
       <DependentUpon>InicioSesion.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Jugador\MisEquipos.aspx.cs">
+    <Compile Include="PaginasJugador\MisEquipos.aspx.cs">
       <DependentUpon>MisEquipos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Jugador\MisEquipos.aspx.designer.cs">
+    <Compile Include="PaginasJugador\MisEquipos.aspx.designer.cs">
       <DependentUpon>MisEquipos.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Jugador\UnirseAEquipo.aspx.cs">
+    <Compile Include="PaginasJugador\UnirseAEquipo.aspx.cs">
       <DependentUpon>UnirseAEquipo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Jugador\UnirseAEquipo.aspx.designer.cs">
+    <Compile Include="PaginasJugador\UnirseAEquipo.aspx.designer.cs">
       <DependentUpon>UnirseAEquipo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Organizador\CrearCompeticion.aspx.cs">
+    <Compile Include="PaginasOrganizador\CrearCompeticion.aspx.cs">
       <DependentUpon>CrearCompeticion.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Organizador\CrearCompeticion.aspx.designer.cs">
+    <Compile Include="PaginasOrganizador\CrearCompeticion.aspx.designer.cs">
       <DependentUpon>CrearCompeticion.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Organizador\GestionarCompetencias.aspx.cs">
+    <Compile Include="PaginasOrganizador\GestionarCompetencias.aspx.cs">
       <DependentUpon>GestionarCompetencias.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Organizador\GestionarCompetencias.aspx.designer.cs">
+    <Compile Include="PaginasOrganizador\GestionarCompetencias.aspx.designer.cs">
       <DependentUpon>GestionarCompetencias.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Organizador\MisCompeticiones.aspx.cs">
+    <Compile Include="PaginasOrganizador\MisCompeticiones.aspx.cs">
       <DependentUpon>MisCompeticiones.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Organizador\MisCompeticiones.aspx.designer.cs">
+    <Compile Include="PaginasOrganizador\MisCompeticiones.aspx.designer.cs">
       <DependentUpon>MisCompeticiones.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Organizador\PerfilAdmin.aspx.cs">
+    <Compile Include="PaginasOrganizador\PerfilAdmin.aspx.cs">
       <DependentUpon>PerfilAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Organizador\PerfilAdmin.aspx.designer.cs">
+    <Compile Include="PaginasOrganizador\PerfilAdmin.aspx.designer.cs">
       <DependentUpon>PerfilAdmin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Jugador\PerfilJugador.aspx.cs">
+    <Compile Include="PaginasJugador\PerfilJugador.aspx.cs">
       <DependentUpon>PerfilJugador.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Jugador\PerfilJugador.aspx.designer.cs">
+    <Compile Include="PaginasJugador\PerfilJugador.aspx.designer.cs">
       <DependentUpon>PerfilJugador.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

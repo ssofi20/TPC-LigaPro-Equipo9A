@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace LigaPro.Web.Jugador
+namespace LigaPro.Web.PaginasJugador
 {
     public partial class UnirseAEquipo : System.Web.UI.Page
     {

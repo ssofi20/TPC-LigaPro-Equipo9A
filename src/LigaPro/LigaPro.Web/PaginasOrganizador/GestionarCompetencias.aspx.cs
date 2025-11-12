@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace LigaPro.Web.Organizador
+namespace LigaPro.Web.PaginasOrganizador
 {
-    public partial class CrearCompeticion : System.Web.UI.Page
+    public partial class GestionarCompetencias : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

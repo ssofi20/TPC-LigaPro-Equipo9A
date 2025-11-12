@@ -46,7 +46,7 @@ namespace LigaPro.Web
 
             /// 4. Redirigir a la página de inicio de sesión
             Session["UsuarioLogueado"] = nuevoUsuario;
-            Response.Redirect("PerfilJugador.aspx");
+            Response.Redirect("~/Jugador/PerfilJugador.aspx");
         }
     }
 }

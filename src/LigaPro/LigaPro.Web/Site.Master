@@ -28,16 +28,16 @@
                                 <a class="nav-link active" aria-current="page" href="Default.aspx">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="PortalPublico.aspx">Torneos</a>
+                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Torneos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="PortalPublico.aspx">Ligas</a>
+                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Ligas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="PortalPublico.aspx">Equipos</a>
+                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Equipos</a>
                             </li>
                             <li class="nav-item ms-lg-2">
-                                <a class="btn btn-secondary" href="InicioSesion.aspx">Login</a>
+                                <a class="btn btn-secondary" href="/Auth/InicioSesion.aspx">Login</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignUp">Sign Up</button>
@@ -47,13 +47,13 @@
                         <!-- Panel Jugador -->
                         <ul id="PanelNavegacionJugador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="PortalPublico.aspx">Ver Torneos</a>
+                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Ver Torneos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="MisEquipos.aspx">Mis Equipos</a>
+                                <a class="nav-link" href="/Jugador/MisEquipos.aspx">Mis Equipos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="PanelJugador.aspx">Mi Perfil</a>
+                                <a class="nav-link" href="/Jugador/PanelJugador.aspx">Mi Perfil</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <asp:LinkButton ID="btnCerrarSesionJugador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
@@ -63,13 +63,13 @@
                         <!-- Panel Organizador -->
                         <ul id="PanelNavegacionOrganizador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="PortalPublico.aspx">Ver Torneos</a>
+                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Ver Torneos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="MisCompeticiones.aspx">Mis Competiciones</a>
+                                <a class="nav-link" href="/Organizador/MisCompeticiones.aspx">Mis Competiciones</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="PanelOrganizador.aspx">Mi Perfil</a>
+                                <a class="nav-link" href="/Organizador/PanelOrganizador.aspx">Mi Perfil</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <asp:LinkButton ID="btnCerrarSesionOrganizador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
@@ -95,11 +95,11 @@
                         <div class="modal-body">
                             <p class="text-center">¿Cómo quieres participar en LigaPro?</p>
                             <div class="d-grid gap-3">
-                                <a href="RegistrarJugador.aspx" class="btn btn-outline-primary p-3">
+                                <a href="/Auth/RegistrarJugador.aspx" class="btn btn-outline-primary p-3">
                                     <div class="fw-bold fs-5">Soy Jugador</div>
                                     <small>Quiero unirme a un equipo y registrar mis estadísticas.</small>
                                 </a>
-                                <a href="RegistrarAdmin.aspx" class="btn btn-outline-success p-3">
+                                <a href="/Auth/RegistrarAdmin.aspx" class="btn btn-outline-success p-3">
                                     <div class="fw-bold fs-5">Soy Organizador</div>
                                     <small>Quiero crear y administrar mis propias Ligas y Torneos.</small>
                                 </a>

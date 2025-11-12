@@ -95,7 +95,7 @@ namespace LigaPro.Web
             // 4. Envía email, guardar datos en la sesion y redirigir al perfil del nuevo administrador
             //lblMensaje.Text = "Administrador registrado exitosamente.";
             Session["UsuarioLogueado"] = nuevoUsuario;
-            Response.Redirect("PerfilAdmin.aspx");
+            Response.Redirect("~/Organizador/PerfilAdmin.aspx");
         }
     }
 }
