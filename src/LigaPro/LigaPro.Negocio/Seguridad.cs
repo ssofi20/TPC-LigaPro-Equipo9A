@@ -4,23 +4,28 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using BCryptNet = BCrypt.Net.BCrypt;
+
 
 namespace LigaPro.Negocio
 {
     public class Seguridad
     {
-        // Método para hashear una contraseña
-        public string HashPassword(string password)
+        //Genera un hash seguro de una contraseña usando BCrypt.
+        public string HashPassword(string passwordPlano)
         {
-            using (SHA256 sha256 = SHA256.Create())
+            return BCryptNet.HashPassword(passwordPlano);
+        }
+        //Verifica si una contraseña en texto plano coincide con un hash guardado. True si coinciden, False si no.</returns>
+        public bool VerifyPassword(string passwordPlano, string passwordHashDB)
+        {
+            try
             {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+                return BCryptNet.Verify(passwordPlano, passwordHashDB);
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

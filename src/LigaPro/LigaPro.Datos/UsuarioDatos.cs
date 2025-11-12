@@ -1,4 +1,5 @@
-﻿using LigaPro.Domain.Actores;
+﻿using LigaPro.Domain;
+using LigaPro.Domain.Actores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,44 @@ namespace LigaPro.Datos
 
                 int count = Convert.ToInt32(datos.ejecutarScalar());
                 return count > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Busaca un usuario por su email
+        public Usuario GetUsuarioPorEmail(string email)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                Usuario usuario = new Usuario();
+
+                datos.setearConsulta("SELECT IdUsuario, Email, PasswordHash, Rol, FechaRegistro, NombreUsuario FROM Usuarios WHERE Email = @email");
+                datos.setearParametro("@email", email);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    usuario.Id = (int)datos.Lector["IdUsuario"];
+                    usuario.Email = (string)datos.Lector["Email"];
+                    usuario.PasswordHash = (string)datos.Lector["PasswordHash"];
+                    usuario.NombreUsuario = (string)datos.Lector["NombreUsuario"];
+
+                    string rolStr = (string)datos.Lector["Rol"];
+                    usuario.Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), rolStr);
+
+                    return usuario;
+                }
+                else
+                {
+                    return null; // No se encontró el usuario
+                }
             }
             catch (Exception ex)
             {

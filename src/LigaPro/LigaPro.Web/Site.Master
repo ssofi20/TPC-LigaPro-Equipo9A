@@ -36,7 +36,7 @@
                                     <a class="nav-link" href="PortalPublico.aspx">Equipos</a>
                                 </li>
                                 <li class="nav-item ms-lg-2">
-                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalLogin">Login</button>
+                                    <button type="button" class="btn btn-secondary" href="InicioSesion.aspx">Login</button>
                                 </li>
                                 <li class="nav-item ms-lg-2">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignUp">Sign Up</button>
@@ -85,28 +85,6 @@
             <div>
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                 </asp:ContentPlaceHolder>
-            </div>
-
-            <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalLoginLabel">Elige tu tipo de ingreso</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-center">¿Cómo quieres ingresar a LigaPro?</p>
-                            <div class="d-grid gap-3">
-                                <a href="LoginJugador.aspx" class="btn btn-outline-primary p-3">
-                                    <div class="fw-bold fs-5">Soy Jugador</div>
-                                </a>
-                                <a href="LoginOrganizador.aspx" class="btn btn-outline-success p-3">
-                                    <div class="fw-bold fs-5">Soy Organizador</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             
             <div class="modal fade" id="modalSignUp" tabindex="-1" aria-labelledby="modalSignUpLabel" aria-hidden="true">
