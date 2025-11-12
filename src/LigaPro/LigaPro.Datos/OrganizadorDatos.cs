@@ -16,18 +16,15 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                string query = "INSERT INTO Organizadores (IdUsuario, NombrePublico, Logo, EmailContacto, NumeroTelefono) " +
-                               "VALUES (@IdUsuario, @NombrePublico, @Logo, @EmailContacto, @NumeroTelefono)";
+                string query = "INSERT INTO Organizadores(IdUsuario, NombrePublico, Logo, EmailContacto, NumeroTelefono) VALUES(@idUsuario, @nombrePublico, @logo, @emailContacto, @numeroTel)";
 
                 datos.setearConsulta(query);
 
-                datos.setearParametro("@IdUsuario", organizador.IdUsuario);
-                datos.setearParametro("@NombrePublico", organizador.NombrePublico);
-
-                datos.setearParametro("@Logo", (object)organizador.Logo ?? DBNull.Value);
-
-                datos.setearParametro("@EmailContacto", organizador.EmailContacto);
-                datos.setearParametro("@NumeroTelefono", organizador.NumeroTelefono);
+                datos.setearParametro("@idUsuario", organizador.IdUsuario);
+                datos.setearParametro("@nombrePublico", organizador.NombrePublico);
+                datos.setearParametro("@logo", (object)organizador.Logo ?? DBNull.Value);
+                datos.setearParametro("@emailContacto", organizador.EmailContacto);
+                datos.setearParametro("@numeroTel", organizador.NumeroTelefono);
 
                 datos.ejecutarAccion();
             }

@@ -19,8 +19,8 @@ namespace LigaPro.Datos
 
             try
             {
-                string query = "INSERT INTO Usuarios (Email, PasswordHash, NombreUsuario, RolUsuario) " +
-                               "VALUES (@Email, @PasswordHash, @NombreUsuario, @RolUsuario); " +
+                string query = "INSERT INTO Usuarios (Email, PasswordHash, NombreUsuario, Rol) " +
+                               "VALUES (@Email, @PasswordHash, @NombreUsuario, @Rol); " +
                                "SELECT SCOPE_IDENTITY();";
 
                 datos.setearConsulta(query);
@@ -31,13 +31,14 @@ namespace LigaPro.Datos
                 datos.setearParametro("@Rol", usuario.Rol.ToString());
                 datos.setearParametro("@FechaRegistro", usuario.FechaRegistro);
 
+                // Ejecutar la consulta y obtener el Id generado
                 object resultado = datos.ejecutarScalar();
                 return Convert.ToInt32(resultado);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return -1;
+                throw ex;
             }
             finally
             {
