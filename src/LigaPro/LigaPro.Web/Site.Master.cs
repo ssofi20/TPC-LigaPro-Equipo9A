@@ -16,25 +16,27 @@ namespace LigaPro.Web
             PanelNavegacionJugador.Visible = false;
             PanelNavegacionOrganizador.Visible = false;
 
-            if (Session["usuario"] == null)
+            if (Session["UsuarioLogueado"] == null)
             {
                 PanelNavegacionPublica.Visible = true;
+                PanelNavegacionJugador.Visible = false;
+                PanelNavegacionOrganizador.Visible = false;
             }
             else
             {
-                Usuario usuario = (Usuario)Session["usuario"];
+                Usuario usuario = (Usuario)Session["UsuarioLogueado"];
+
+                PanelNavegacionPublica.Visible = false;
 
                 if (usuario.Rol == Domain.RolUsuario.Jugador)
                 {
                     PanelNavegacionJugador.Visible = true;
+                    PanelNavegacionOrganizador.Visible = false;
                 }
                 else if (usuario.Rol == Domain.RolUsuario.Organizador)
                 {
+                    PanelNavegacionJugador.Visible = false;
                     PanelNavegacionOrganizador.Visible = true;
-                }
-                else
-                {
-                    PanelNavegacionPublica.Visible = true;
                 }
             }
         }
@@ -42,7 +44,7 @@ namespace LigaPro.Web
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            Response.Redirect("Default.aspx", false);
+            Response.Redirect("Default.aspx");
         }
     }
 }
