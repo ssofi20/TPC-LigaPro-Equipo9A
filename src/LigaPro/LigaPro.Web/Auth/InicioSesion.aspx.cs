@@ -38,11 +38,11 @@ namespace LigaPro.Web
                     //Redirigir segun el rol
                     if (usuario.Rol == Domain.RolUsuario.Organizador)
                     {
-                        Response.Redirect("~/Jugador/PerfilAdmin.aspx", false);
+                        Response.Redirect("~/PaginasJugador/PerfilAdmin.aspx", false);
                     }
                     else if (usuario.Rol == Domain.RolUsuario.Jugador)
                     {
-                        Response.Redirect("~/Jugador/PerfilJugador.aspx", false);
+                        Response.Redirect("~/PaginasJugador/PerfilJugador.aspx", false);
                     }
                     else
                     {

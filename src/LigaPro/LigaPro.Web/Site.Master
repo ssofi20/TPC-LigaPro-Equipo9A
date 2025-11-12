@@ -28,13 +28,13 @@
                                 <a class="nav-link active" aria-current="page" href="Default.aspx">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Torneos</a>
+                                <a class="nav-link" href="Default.aspx">Torneos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Ligas</a>
+                                <a class="nav-link" href="Default.aspx">Ligas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Equipos</a>
+                                <a class="nav-link" href="Default.aspx">Equipos</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <a class="btn btn-secondary" href="/Auth/InicioSesion.aspx">Login</a>
@@ -47,13 +47,16 @@
                         <!-- Panel Jugador -->
                         <ul id="PanelNavegacionJugador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Ver Torneos</a>
+                                <a class="nav-link" href="Default.aspx">Ver Torneos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Jugador/MisEquipos.aspx">Mis Equipos</a>
+                                <a class="nav-link" href="/PaginasJugador/MisEquipos.aspx">Mis Equipos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Jugador/PanelJugador.aspx">Mi Perfil</a>
+                                <a class="nav-link" href="/PaginasJugador/UniseAEquipo.asp">Unirse a Equipo</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/PaginasJugador/PerfilJugador.aspx">Mi Perfil</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <asp:LinkButton ID="btnCerrarSesionJugador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
@@ -63,13 +66,16 @@
                         <!-- Panel Organizador -->
                         <ul id="PanelNavegacionOrganizador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/Auth/PortalPublico.aspx">Ver Torneos</a>
+                                <a class="nav-link" href="/PaginasOrganizador/CrearCompeticion.aspx">Crear Competicion</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Organizador/MisCompeticiones.aspx">Mis Competiciones</a>
+                                <a class="nav-link" href="/PaginasOrganizador/MisCompeticiones.aspx">Mis Competiciones</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Organizador/PanelOrganizador.aspx">Mi Perfil</a>
+                                <a class="nav-link" href="/PaginasOrganizador/GestionarCompetencias.aspx">Gestionar Competencias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/PaginasOrganizador/PerfilAdmin.aspx">Mi Perfil</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <asp:LinkButton ID="btnCerrarSesionOrganizador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
