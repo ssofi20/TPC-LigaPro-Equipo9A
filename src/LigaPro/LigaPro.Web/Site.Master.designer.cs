@@ -39,7 +39,7 @@ namespace LigaPro.Web
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelNavegacionPublica;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PanelNavegacionPublica;
 
         /// <summary>
         /// PanelNavegacionJugador control.
@@ -48,7 +48,7 @@ namespace LigaPro.Web
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelNavegacionJugador;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PanelNavegacionJugador;
 
         /// <summary>
         /// btnCerrarSesionJugador control.
@@ -66,7 +66,7 @@ namespace LigaPro.Web
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelNavegacionOrganizador;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PanelNavegacionOrganizador;
 
         /// <summary>
         /// btnCerrarSesionOrganizador control.

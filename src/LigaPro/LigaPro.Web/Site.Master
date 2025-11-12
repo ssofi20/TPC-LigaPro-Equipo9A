@@ -19,64 +19,62 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
-                        <asp:Panel ID="PanelNavegacionPublica" runat="server" Visible="true">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="Default.aspx">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PortalPublico.aspx">Torneos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PortalPublico.aspx">Ligas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PortalPublico.aspx">Equipos</a>
-                                </li>
-                                <li class="nav-item ms-lg-2">
-                                    <a class="btn btn-secondary" href="InicioSesion.aspx">Login</a>
-                                </li>
-                                <li class="nav-item ms-lg-2">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignUp">Sign Up</button>
-                                </li>
-                            </ul>
-                        </asp:Panel>
+                        <!-- Panel Público -->
+                        <ul id="PanelNavegacionPublica" runat="server" visible="true" class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="Default.aspx">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="PortalPublico.aspx">Torneos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="PortalPublico.aspx">Ligas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="PortalPublico.aspx">Equipos</a>
+                            </li>
+                            <li class="nav-item ms-lg-2">
+                                <a class="btn btn-secondary" href="InicioSesion.aspx">Login</a>
+                            </li>
+                            <li class="nav-item ms-lg-2">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignUp">Sign Up</button>
+                            </li>
+                        </ul>
 
-                        <asp:Panel ID="PanelNavegacionJugador" runat="server" Visible="false">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PortalPublico.aspx">Ver Torneos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="MisEquipos.aspx">Mis Equipos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PanelJugador.aspx">Mi Perfil</a>
-                                </li>
-                                <li class="nav-item ms-lg-2">
-                                    <asp:LinkButton ID="btnCerrarSesionJugador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
-                                </li>
-                            </ul>
-                        </asp:Panel>
+                        <!-- Panel Jugador -->
+                        <ul id="PanelNavegacionJugador" runat="server" visible="false" class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="PortalPublico.aspx">Ver Torneos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="MisEquipos.aspx">Mis Equipos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="PanelJugador.aspx">Mi Perfil</a>
+                            </li>
+                            <li class="nav-item ms-lg-2">
+                                <asp:LinkButton ID="btnCerrarSesionJugador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
+                            </li>
+                        </ul>
 
-                        <asp:Panel ID="PanelNavegacionOrganizador" runat="server" Visible="false">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PortalPublico.aspx">Ver Torneos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="MisCompeticiones.aspx">Mis Competiciones</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="PanelOrganizador.aspx">Mi Perfil</a>
-                                </li>
-                                <li class="nav-item ms-lg-2">
-                                    <asp:LinkButton ID="btnCerrarSesionOrganizador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
-                                </li>
-                            </ul>
-                        </asp:Panel>
+                        <!-- Panel Organizador -->
+                        <ul id="PanelNavegacionOrganizador" runat="server" visible="false" class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="PortalPublico.aspx">Ver Torneos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="MisCompeticiones.aspx">Mis Competiciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="PanelOrganizador.aspx">Mi Perfil</a>
+                            </li>
+                            <li class="nav-item ms-lg-2">
+                                <asp:LinkButton ID="btnCerrarSesionOrganizador" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCerrarSesion_Click">Cerrar Sesión</asp:LinkButton>
+                            </li>
+                        </ul>
 
                     </div>
                 </div>
