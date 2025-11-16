@@ -89,6 +89,8 @@
     <Content Include="PaginasOrganizador\CrearCompeticion.aspx" />
     <Content Include="PaginasOrganizador\GestionarCompetencias.aspx" />
     <Content Include="PaginasOrganizador\MisCompeticiones.aspx" />
+    <Content Include="PaginasOrganizador\ModificarPerfilAdmin.aspx" />
+    <Content Include="PaginasOrganizador\ModificarSecurityAdmin.aspx" />
     <Content Include="PaginasOrganizador\PerfilAdmin.aspx" />
     <Content Include="PaginasJugador\PerfilJugador.aspx" />
     <Content Include="Auth\RegistrarAdmin.aspx" />
@@ -155,6 +157,20 @@
     </Compile>
     <Compile Include="PaginasOrganizador\MisCompeticiones.aspx.designer.cs">
       <DependentUpon>MisCompeticiones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasOrganizador\ModificarPerfilAdmin.aspx.cs">
+      <DependentUpon>ModificarPerfilAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasOrganizador\ModificarPerfilAdmin.aspx.designer.cs">
+      <DependentUpon>ModificarPerfilAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasOrganizador\ModificarSecurityAdmin.aspx.cs">
+      <DependentUpon>ModificarSecurityAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasOrganizador\ModificarSecurityAdmin.aspx.designer.cs">
+      <DependentUpon>ModificarSecurityAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginasOrganizador\PerfilAdmin.aspx.cs">
       <DependentUpon>PerfilAdmin.aspx</DependentUpon>
