@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Security;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LigaPro.Negocio;
 
 namespace LigaPro.Web.PaginasOrganizador
 {
@@ -12,7 +14,7 @@ namespace LigaPro.Web.PaginasOrganizador
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+                
         }
     }
 }

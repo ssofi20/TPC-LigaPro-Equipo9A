@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LigaPro.Negocio;
 
 namespace LigaPro.Web
 {
@@ -12,6 +13,7 @@ namespace LigaPro.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+         
             PanelNavegacionPublica.Visible = false;
             PanelNavegacionJugador.Visible = false;
             PanelNavegacionOrganizador.Visible = false;

@@ -30,7 +30,7 @@
                             <img src=" " class="rounded-circle me-3" width="60" height="60" />
                             <div class="flex-grow-1">
                                 <h5 class="mb-0 fw-semibold">Seguridad </h5>
-                                <small class="text-muted">Editar información de seguridad</small>
+                                <small class="text-muted">Editar contraseña</small>
                             </div>
                         </div>
                     </div>

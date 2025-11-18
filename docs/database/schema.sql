@@ -197,3 +197,11 @@ CREATE TABLE Sancion (
     CONSTRAINT FK_Sanciones_Jugadores FOREIGN KEY (IdEquipoJugador) REFERENCES EquipoJugador(Id),
     CONSTRAINT FK_Sanciones_Partidos FOREIGN KEY (IdPartidoOrigen) REFERENCES Partidos(IdPartido)
 );
+select * from Usuarios
+
+select O.IdOrganizador,O.IdUsuario, O.NombrePublico , O.Logo , O.EmailContacto, O.NumeroTelefono 
+FROM Organizadores O, Usuarios U Where O.IdUsuario = U.IdUsuario
+
+UPDATE Organizadores 
+SET NombrePublico = 'Sofia', EmailContacto = 'user1@user.com', NumeroTelefono = '1231234'
+WHERE IdUsuario = 4

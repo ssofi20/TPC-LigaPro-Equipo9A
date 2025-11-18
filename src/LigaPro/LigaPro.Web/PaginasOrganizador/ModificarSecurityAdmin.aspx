@@ -8,23 +8,9 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Registro de Administrador</h3>
-                        <p class="text-muted">Crea una cuenta para organizar Ligas y Torneos.</p>
+                        <h3>Cambio de Contraseña</h3>
                     </div>
                     <div class="card-body">
-                        <!-- Campo Email -->
-                        <div class="mb-3">
-                            <label for="txtEmail" class="form-label">Email</label>
-                            <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" TextMode="Email"></asp:TextBox>
-                            <asp:RequiredFieldValidator ErrorMessage="El email es obligatorio." ControlToValidate="txtEmail" CssClass="text-danger" runat="server" />
-                        </div>
-
-                        <!-- Campo Telefono Contacto-->
-                        <div class="mb-3">
-                            <label for="txtTelefonoContacto" class="form-label">Teléfono de Contacto</label>
-                            <asp:TextBox ID="txtTelefonoContacto" runat="server" CssClass="form-control" TextMode="Phone"></asp:TextBox>
-                            <asp:RequiredFieldValidator ErrorMessage="El teléfono de contacto es obligatorio." ControlToValidate="txtTelefonoContacto" CssClass="text-danger" runat="server" />
-                        </div>
 
                         <!-- Campo  Old Password -->
                         <div class="mb-3">

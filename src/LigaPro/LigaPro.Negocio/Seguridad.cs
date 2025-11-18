@@ -1,5 +1,7 @@
-﻿using System;
+﻿using LigaPro.Domain.Actores;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -27,6 +29,6 @@ namespace LigaPro.Negocio
             {
                 return false;
             }
-        }
+        }        
     }
 }

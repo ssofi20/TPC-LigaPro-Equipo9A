@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,90 @@ namespace LigaPro.Datos
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Organizador ObtenerInfoAdmin(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            Organizador aux = new Organizador();
+            try
+            {
+                datos.setearConsulta("select O.IdOrganizador,O.IdUsuario, O.NombrePublico , O.Logo , O.EmailContacto, O.NumeroTelefono FROM Organizadores O, Usuarios U Where O.IdUsuario = " + id);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    aux.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    aux.NombrePublico = (string)datos.Lector["NombrePublico"];
+                    //aux.Logo = (string)datos.Lector["Logo"];
+                    aux.Logo = datos.Lector.IsDBNull(datos.Lector.GetOrdinal("Logo"))
+                        ? null
+                        : datos.Lector.GetString(datos.Lector.GetOrdinal("Logo")); 
+                    aux.EmailContacto = (string)datos.Lector["EmailContacto"];
+                    aux.NumeroTelefono = (string)datos.Lector["NumeroTelefono"];
+                } 
+                    datos.cerrarConexion();
+                    return aux;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void modificarAdmin(Organizador organizador)
+        {
+            AccesoDatos aux = new AccesoDatos();
+
+            try
+            {
+                aux.setearConsulta("UPDATE Organizadores SET NombrePublico = @NombrePublico, EmailContacto = @EmailContacto, NumeroTelefono = @NumeroTelefono WHERE IdUsuario = @IdUsuario");
+
+                aux.setearParametro("@NombrePublico",organizador.NombrePublico );
+                aux.setearParametro("@EmailContacto", organizador.EmailContacto );
+                aux.setearParametro("@NumeroTelefono", organizador.NumeroTelefono );
+                aux.setearParametro("@IdUsuario", organizador.IdUsuario);
+
+                aux.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                aux.cerrarConexion();
+            }
+        }
+
+        public void modificarPassAdmin(Usuario user)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE Usuarios SET PasswordHash = @PasswordHash WHERE IdUsuario = @IdUsuario");
+                datos.setearParametro("@PasswordHash", user.PasswordHash);
+                datos.setearParametro("@IdUsuario", user.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
                 throw ex;
             }
             finally

@@ -11,7 +11,7 @@
                         <h3>Modificar datos</h3>
                     </div>
                     <div class="card-body">
-                    
+
                         <!-- Nombre -->
                         <div class="mb-3">
                             <label for="txtNombrePublico" class="form-label">Nombre Publico</label>
@@ -22,6 +22,20 @@
                         <div class="mb-3">
                             <label for="FileUploadControl" class="form-label">Subir Imagen</label>
                             <asp:FileUpload ID="FileUploadControl" runat="server" CssClass="form-control" />
+                        </div>
+
+                        <!-- Campo Email -->
+                        <div class="mb-3">
+                            <label for="txtEmail" class="form-label">Email</label>
+                            <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" TextMode="Email"></asp:TextBox>
+                            <asp:RequiredFieldValidator ErrorMessage="El email es obligatorio." ControlToValidate="txtEmail" CssClass="text-danger" runat="server" />
+                        </div>
+
+                        <!-- Campo Telefono Contacto-->
+                        <div class="mb-3">
+                            <label for="txtTelefonoContacto" class="form-label">Teléfono de Contacto</label>
+                            <asp:TextBox ID="txtTelefonoContacto" runat="server" CssClass="form-control" TextMode="Phone"></asp:TextBox>
+                            <asp:RequiredFieldValidator ErrorMessage="El teléfono de contacto es obligatorio." ControlToValidate="txtTelefonoContacto" CssClass="text-danger" runat="server" />
                         </div>
 
                         <div class="d-flex justify-content-center gap-3">
