@@ -106,5 +106,26 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
+
+        public void DesactivarUsuario(Usuario usuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Usuarios SET Activo = 0 WHERE IdUsuario = @Id");
+                datos.setearParametro("@Id", usuario.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

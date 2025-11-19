@@ -14,5 +14,6 @@ namespace LigaPro.Domain.Actores
         public string NombreUsuario { get; set; }
         public RolUsuario Rol { get; set; }
         public DateTime FechaRegistro { get; set; }
+        public bool Activo {get; set; }
     }
 }

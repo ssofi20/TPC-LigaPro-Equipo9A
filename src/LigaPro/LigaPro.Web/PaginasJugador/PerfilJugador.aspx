@@ -36,7 +36,7 @@
                     </div>
                 </a>
 
-                <a href="/Default.aspx" style="text-decoration: none">
+                <a href="/Auth/EliminarUsuario.aspx" style="text-decoration: none">
                     <div class="card shadow-sm mb-3 border-0 rounded-3">
                         <div class="card-body d-flex align-items-center">
                             <img src=" " class="rounded-circle me-3" width="60" height="60" />
