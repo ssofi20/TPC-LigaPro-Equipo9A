@@ -8,9 +8,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace LigaPro.Web.PaginasOrganizador
+namespace LigaPro.Web.PaginasJugador
 {
-    public partial class ModificarSecurityAdmin : System.Web.UI.Page
+    public partial class ModificarSeguridadJugador : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -19,22 +19,21 @@ namespace LigaPro.Web.PaginasOrganizador
                 try
                 {
                     Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
-                    if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
+                    if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Jugador)
                     {
                     }
                     else
                     {
                         Response.Redirect("/Auth/InicioSesion.aspx", false);
                     }
-
-
                 }
                 catch (Exception ex)
                 {
 
                     throw ex;
                 }
-            }else
+            }
+            else
             {
                 Response.Redirect("/Auth/InicioSesion.aspx", false);
             }
@@ -46,17 +45,16 @@ namespace LigaPro.Web.PaginasOrganizador
             try
             {
                 Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
-                if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
+                if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Jugador)
                 {
                     Seguridad seguridad = new Seguridad();
-                    OrganizadorDatos datos = new OrganizadorDatos();
+                    JugadorDatos datos = new JugadorDatos();
                     if (seguridad.VerifyPassword(txtOldPass.Text, usuario.PasswordHash))
                     {
                         usuario.PasswordHash = seguridad.HashPassword(txtNewPass.Text);
-                        datos.modificarPassAdmin(usuario);
+                        datos.modificarPassJugador(usuario);
 
                         Response.Redirect("PerfilAdmin.aspx", false);
-
                     }
                     else
                     {
@@ -73,7 +71,8 @@ namespace LigaPro.Web.PaginasOrganizador
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            Response.Redirect("PerfilAdmin.aspx", false);
+            Response.Redirect("PerfilJugador.aspx", false);
+
         }
     }
 }

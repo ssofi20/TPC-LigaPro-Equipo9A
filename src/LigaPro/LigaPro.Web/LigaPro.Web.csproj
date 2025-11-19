@@ -85,6 +85,8 @@
     <Content Include="Global.asax" />
     <Content Include="Auth\InicioSesion.aspx" />
     <Content Include="PaginasJugador\MisEquipos.aspx" />
+    <Content Include="PaginasJugador\ModificarPerfilJugador.aspx" />
+    <Content Include="PaginasJugador\ModificarSeguridadJugador.aspx" />
     <Content Include="PaginasJugador\UnirseAEquipo.aspx" />
     <Content Include="PaginasOrganizador\CrearCompeticion.aspx" />
     <Content Include="PaginasOrganizador\GestionarCompetencias.aspx" />
@@ -129,6 +131,20 @@
     </Compile>
     <Compile Include="PaginasJugador\MisEquipos.aspx.designer.cs">
       <DependentUpon>MisEquipos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasJugador\ModificarPerfilJugador.aspx.cs">
+      <DependentUpon>ModificarPerfilJugador.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasJugador\ModificarPerfilJugador.aspx.designer.cs">
+      <DependentUpon>ModificarPerfilJugador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasJugador\ModificarSeguridadJugador.aspx.cs">
+      <DependentUpon>ModificarSeguridadJugador.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasJugador\ModificarSeguridadJugador.aspx.designer.cs">
+      <DependentUpon>ModificarSeguridadJugador.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginasJugador\UnirseAEquipo.aspx.cs">
       <DependentUpon>UnirseAEquipo.aspx</DependentUpon>
