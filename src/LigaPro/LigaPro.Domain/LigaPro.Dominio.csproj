@@ -61,6 +61,8 @@
     <Compile Include="Partidos\Sancion.cs" />
     <Compile Include="Competicion\Torneo.cs" />
     <Compile Include="Actores\Usuario.cs" />
+    <Compile Include="Relaciones\JugadorEquipo.cs" />
+    <Compile Include="Relaciones\Solicitud.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

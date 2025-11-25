@@ -1,9 +1,9 @@
 ﻿using LigaPro.Domain.Actores;
+using LigaPro.Domain.Relaciones;
 using LigaPro.Negocio;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -11,103 +11,174 @@ namespace LigaPro.Web.PaginasJugador
 {
     public partial class DetalleEquipo : System.Web.UI.Page
     {
-        // Propiedad para acceder al ID fácilmente en toda la clase
         public int IdEquipoSeleccionado { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // 1. Validar Sesión
             if (Session["UsuarioLogueado"] == null)
             {
                 Response.Redirect("~/Auth/InicioSesion.aspx");
                 return;
             }
 
-            // 2. Validar que venga un ID en la URL
             string idStr = Request.QueryString["id"];
             if (string.IsNullOrEmpty(idStr) || !int.TryParse(idStr, out int idTemp))
             {
-                Response.Redirect("MisEquipos.aspx"); // Si no hay ID valido, volver
+                Response.Redirect("MisEquipos.aspx");
                 return;
             }
-
             IdEquipoSeleccionado = idTemp;
 
             if (!IsPostBack)
             {
                 CargarDatosEquipo();
                 CargarJugadores();
+                CargarSolicitudes();
             }
         }
 
+        // -- MÉTODOS DE CARGA DE DATOS -- //
+
+        // CARGAR DATOS DEL EQUIPO
         private void CargarDatosEquipo()
         {
             EquipoNegocio negocio = new EquipoNegocio();
             try
             {
-                // Obtenemos el equipo
                 Equipo equipo = negocio.ObtenerEquipoPorId(IdEquipoSeleccionado);
-                Usuario usuarioLogueado = (Usuario)Session["UsuarioLogueado"];
+                Usuario usuario = (Usuario)Session["UsuarioLogueado"];
 
-                // VALIDACIÓN DE SEGURIDAD:
-                // ¿El equipo existe? ¿Pertenece al usuario logueado?
-                if (equipo == null || equipo.IdUsuarioCreador != usuarioLogueado.Id)
+                if (equipo == null || equipo.IdUsuarioCreador != usuario.Id)
                 {
-                    // Si intenta ver un equipo ajeno, lo mandamos afuera
                     Response.Redirect("MisEquipos.aspx");
                     return;
                 }
 
-                // Cargar datos en pantalla
                 lblNombreEquipo.Text = equipo.Nombre;
-
-                if (!string.IsNullOrEmpty(equipo.Imagen))
-                    imgEscudo.ImageUrl = equipo.Imagen;
-                else
-                    imgEscudo.ImageUrl = "/Uploads/default-team.png";
+                imgEscudo.ImageUrl = !string.IsNullOrEmpty(equipo.Imagen) ? equipo.Imagen : "/Uploads/default-team.png";
             }
-            catch (Exception ex)
-            {
-                Session["Error"] = "Error al cargar equipo: " + ex.Message;
-                Response.Redirect("MisEquipos.aspx");
-            }
+            catch (Exception) { }
         }
 
+        // CARGAR LOS JUAGDORES DEL EQUIPO
         private void CargarJugadores()
         {
             EquipoNegocio negocio = new EquipoNegocio();
             try
             {
-                // Nota: Asegúrate de implementar la lógica real en EquipoNegocio.ListarJugadoresDeEquipo
-                // Actualmente tu archivo EquipoNegocio.cs devuelve una lista vacía.
-                var listaJugadores = negocio.ListarJugadoresDeEquipo(IdEquipoSeleccionado);
-
-                // Actualizar contador
-                lblCantidadJugadores.Text = listaJugadores.Count.ToString();
-
-                // Enlazar al Repeater
-                rptJugadores.DataSource = listaJugadores;
+                List<JugadorEquipo> lista = negocio.ListarJugadoresDeEquipo(IdEquipoSeleccionado);
+                lblCantidadJugadores.Text = lista.Count.ToString();
+                rptJugadores.DataSource = lista;
                 rptJugadores.DataBind();
             }
-            catch (Exception ex)
-            {
-                // Manejo de error silencioso o mostrar en un label de error
+            catch (Exception ex){
+                throw ex;
             }
         }
 
-        protected void btnEliminar_Click(object sender, EventArgs e)
+        // CARGAR LAS SOLICITUDES PENDIENTES DE JUGADORES
+        private void CargarSolicitudes()
         {
+            EquipoNegocio negocio = new EquipoNegocio();
+            try
+            {
+                List<Solicitud> listaSolicitudes = negocio.ListarSolicitudesPendientes(IdEquipoSeleccionado);
 
+                rptSolicitudes.DataSource = listaSolicitudes;
+                rptSolicitudes.DataBind();
+
+                lblCantidadSolicitudes.Text = listaSolicitudes.Count.ToString();
+                badgeSolicitudes.InnerText = listaSolicitudes.Count.ToString();
+
+                // Ocultar badge si es 0
+                badgeSolicitudes.Visible = listaSolicitudes.Count > 0;
+            }
+            catch { }
+        }
+
+        // --- ACCIONES DE EDICIÓN ---
+        protected void btnAbrirEditar_Click(object sender, EventArgs e)
+        {
+            // Pre-llenar el modal con el nombre actual antes de abrirlo
+            txtNombreEditar.Text = lblNombreEquipo.Text;
+
+            // Usar ScriptManager para abrir el modal tras el PostBack
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "abrirModalEditar();", true);
+        }
+
+        protected void btnGuardarEdicion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EquipoNegocio negocio = new EquipoNegocio();
+                Equipo equipo = negocio.ObtenerEquipoPorId(IdEquipoSeleccionado);
+
+                // Actualizar Nombre
+                equipo.Nombre = txtNombreEditar.Text;
+
+                // Actualizar Imagen si se subió una nueva
+                if (fuEscudoEditar.HasFile)
+                {
+                    string carpeta = Server.MapPath("~/Uploads/Escudos/");
+                    if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
+
+                    string nombreArchivo = "Eq_" + DateTime.Now.Ticks + "_" + Path.GetFileName(fuEscudoEditar.FileName);
+                    fuEscudoEditar.SaveAs(Path.Combine(carpeta, nombreArchivo));
+                    equipo.Imagen = "/Uploads/Escudos/" + nombreArchivo;
+                }
+
+                negocio.ActualizarEquipo(equipo); 
+
+                // Recargar pantalla
+                Response.Redirect(Request.RawUrl);
+            }
+            catch (Exception ex)
+            {
+                // Manejar error
+            }
+        }
+
+        // --- ACCIONES DE ELIMINACIÓN ---
+        protected void btnConfirmarEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EquipoNegocio negocio = new EquipoNegocio();
+                negocio.EliminarEquipo(IdEquipoSeleccionado);
+                Response.Redirect("MisEquipos.aspx");
+            }
+            catch (Exception) { }
+        }
+
+        // --- ACCIONES DE SOLICITUDES ---
+        protected void rptSolicitudes_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            int idUsuarioSolicitante = int.Parse(e.CommandArgument.ToString());
+            EquipoNegocio negocio = new EquipoNegocio();
+
+            if (e.CommandName == "Aceptar")
+            {
+                negocio.AceptarSolicitud(idUsuarioSolicitante, IdEquipoSeleccionado);
+            }
+            else if (e.CommandName == "Rechazar")
+            {
+                // Solo borrar de Solicitudes
+                negocio.RechazarSolicitud(idUsuarioSolicitante, IdEquipoSeleccionado);
+            }
+
+            // Recargar ambas listas
+            CargarSolicitudes();
+            CargarJugadores();
         }
 
         protected void btnBajaJugador_Click(object sender, EventArgs e)
         {
+            LinkButton btn = (LinkButton)sender;
+            int idJugador = int.Parse(btn.CommandArgument);
+            EquipoNegocio negocio = new EquipoNegocio();
 
-        }
-
-        protected void btnEditar_Click(object sender, EventArgs e)
-        {
-
+            negocio.EliminarJugadorDeEquipo(idJugador, IdEquipoSeleccionado);
+            CargarJugadores();
         }
     }
 }

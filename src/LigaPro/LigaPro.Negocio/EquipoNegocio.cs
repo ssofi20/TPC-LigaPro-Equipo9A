@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LigaPro.Datos;
+using LigaPro.Domain;
 using LigaPro.Domain.Actores;
+using LigaPro.Domain.Relaciones;
 
 namespace LigaPro.Negocio
 {
@@ -32,11 +34,9 @@ namespace LigaPro.Negocio
         }
 
         // LISTAR JUGADORES DE UN EQUIPO
-        public List<EquipoJugador> ListarJugadoresDeEquipo(int idEquipo)
+        public List<JugadorEquipo> ListarJugadoresDeEquipo(int idEquipo)
         {
-            List<EquipoJugador> list = new List<EquipoJugador>();
-            return list;
-            //return datos.ListarJugadoresDeEquipo(idEquipo);
+            return datos.ListarJugadoresDeEquipo(idEquipo);
         }
 
         // AGREGAR JUGADOR A EQUIPO
@@ -44,6 +44,45 @@ namespace LigaPro.Negocio
         {
             // Podrías validar que el jugador no esté ya en el equipo
             //datos.InsertarJugadorEnEquipo(nuevoIntegrante);
+        }
+
+        public List<Solicitud> ListarSolicitudesPendientes(int idEquipo)
+        {
+            EquipoNegocio negocio = new EquipoNegocio();
+
+            return datos.ListarSolicitudesPendientes(idEquipo);
+        }
+
+        // ACTUALIZAR INFORMACIÓN DE UN EQUIPO
+        public bool ActualizarEquipo(Equipo equipo)
+        {
+            return datos.ModificarEquipo(equipo);
+        }
+
+        // ELIMINAR UN EQUIPO
+        public bool EliminarEquipo(int idEquipo)
+        {
+            return datos.EliminarEquipo(idEquipo);
+        }
+
+        // AGREGAR JUGADOR AL EQUIPO POR SOLICITUD ACEPTADA
+        public void AceptarSolicitud(int idUsuario, int idEquipo)
+        {
+            datos.AgregarJugadorAEquipo(idUsuario, idEquipo);
+            datos.ActualizarEstadoSolicitud(idUsuario, idEquipo, "Aceptada");
+        }
+
+        // RECHAZAR SOLICITUD DE UN JUGADOR
+        public void RechazarSolicitud(int idUsuarioSolicitante, int IdEquipoSeleccionado)
+        {
+            datos.RechazarSolicitud(idUsuarioSolicitante, IdEquipoSeleccionado);
+            datos.ActualizarEstadoSolicitud(idUsuarioSolicitante, IdEquipoSeleccionado, "Rechazada");
+        }
+
+        // ELIMINAR JUGADOR DE UN EQUIPO
+        public void EliminarJugadorDeEquipo(int idUsuario, int idEquipo)
+        {
+            datos.EliminarJugadorDeEquipo(idUsuario, idEquipo);
         }
     }
 }

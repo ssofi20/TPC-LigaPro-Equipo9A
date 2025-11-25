@@ -11,10 +11,8 @@ namespace LigaPro.Domain.Actores
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Imagen { get; set; }
-
-        //Relación (El Usuario-Jugador que lo creó y administra)
+        public bool Activo { get; set; }
         public int IdUsuarioCreador { get; set; }
-        //Navegación
         public List<EquipoJugador> Plantel { get; set; }
 
     }

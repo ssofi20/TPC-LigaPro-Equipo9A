@@ -33,22 +33,13 @@ namespace LigaPro.Web.PaginasJugador
         protected global::System.Web.UI.WebControls.Label lblNombreEquipo;
 
         /// <summary>
-        /// btnEditar control.
+        /// btnAbrirEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEditar;
-
-        /// <summary>
-        /// btnEliminar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEliminar;
+        protected global::System.Web.UI.WebControls.Button btnAbrirEditar;
 
         /// <summary>
         /// lblCantidadJugadores control.
@@ -60,6 +51,24 @@ namespace LigaPro.Web.PaginasJugador
         protected global::System.Web.UI.WebControls.Label lblCantidadJugadores;
 
         /// <summary>
+        /// lblCantidadSolicitudes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantidadSolicitudes;
+
+        /// <summary>
+        /// badgeSolicitudes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl badgeSolicitudes;
+
+        /// <summary>
         /// rptJugadores control.
         /// </summary>
         /// <remarks>
@@ -69,21 +78,48 @@ namespace LigaPro.Web.PaginasJugador
         protected global::System.Web.UI.WebControls.Repeater rptJugadores;
 
         /// <summary>
-        /// txtBusquedaJugador control.
+        /// rptSolicitudes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBusquedaJugador;
+        protected global::System.Web.UI.WebControls.Repeater rptSolicitudes;
 
         /// <summary>
-        /// btnGuardarJugador control.
+        /// txtNombreEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGuardarJugador;
+        protected global::System.Web.UI.WebControls.TextBox txtNombreEditar;
+
+        /// <summary>
+        /// fuEscudoEditar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuEscudoEditar;
+
+        /// <summary>
+        /// btnGuardarEdicion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarEdicion;
+
+        /// <summary>
+        /// btnConfirmarEliminar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmarEliminar;
     }
 }

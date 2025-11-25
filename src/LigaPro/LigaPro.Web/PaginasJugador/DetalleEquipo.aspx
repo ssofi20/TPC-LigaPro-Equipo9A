@@ -3,6 +3,16 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <script type="text/javascript">
+        function abrirModalEditar() {
+            var myModal = new bootstrap.Modal(document.getElementById('modalEditarEquipo'));
+            myModal.show();
+        }
+        function abrirModalEliminar() {
+            var myModal = new bootstrap.Modal(document.getElementById('modalEliminarConfirmacion'));
+            myModal.show();
+        }
+    </script>
 
     <div class="container mt-4">
         <div class="mb-3">
@@ -24,8 +34,12 @@
                         <span class="badge bg-success mb-4">Activo</span>
 
                         <div class="d-grid gap-2">
-                            <asp:Button ID="btnEditar" runat="server" Text="Editar Información" CssClass="btn btn-outline-secondary btn-sm" OnClick="btnEditar_Click" />
-                            <asp:Button ID="btnEliminar" runat="server" Text="Eliminar Equipo" CssClass="btn btn-outline-danger btn-sm" OnClientClick="return confirm('¿Seguro que deseas eliminar este equipo?');" OnClick="btnEliminar_Click"/>
+                            <asp:Button ID="btnAbrirEditar" runat="server" Text="Editar Información"
+                                CssClass="btn btn-outline-secondary btn-sm" OnClick="btnAbrirEditar_Click" />
+
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="abrirModalEliminar()">
+                                Eliminar Equipo
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -34,14 +48,11 @@
                     <div class="card-body">
                         <h6 class="card-title text-muted fw-bold">Estadísticas</h6>
                         <ul class="list-group list-group-flush small">
-                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">Jugadores
-                               
-                                <span class="badge bg-primary rounded-pill">
-                                    <asp:Label ID="lblCantidadJugadores" runat="server" Text="0"></asp:Label></span>
+                            <li class="list-group-item d-flex justify-content-between px-0">Jugadores <span class="badge bg-primary rounded-pill">
+                                <asp:Label ID="lblCantidadJugadores" runat="server" Text="0"></asp:Label></span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">Torneos Jugados
-                               
-                                <span class="badge bg-secondary rounded-pill">0</span>
+                            <li class="list-group-item d-flex justify-content-between px-0">Solicitudes <span class="badge bg-warning text-dark rounded-pill">
+                                <asp:Label ID="lblCantidadSolicitudes" runat="server" Text="0"></asp:Label></span>
                             </li>
                         </ul>
                     </div>
@@ -50,59 +61,84 @@
 
             <div class="col-md-8">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold">Plantel de Jugadores</h5>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarJugador">
-                            <i class="bi bi-person-plus-fill me-1"></i>Agregar Jugador
-                       
-                        </button>
+                    <div class="card-header bg-white">
+                        <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="plantel-tab" data-bs-toggle="tab" data-bs-target="#plantel" type="button" role="tab">Plantel</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="solicitudes-tab" data-bs-toggle="tab" data-bs-target="#solicitudes" type="button" role="tab">
+                                    Solicitudes <span class="badge bg-danger ms-1" id="badgeSolicitudes" runat="server">0</span>
+                                </button>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th scope="col" class="ps-4">Jugador</th>
-                                        <th scope="col">Posición</th>
-                                        <th scope="col">Dorsal</th>
-                                        <th scope="col" class="text-end pe-4">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <asp:Repeater ID="rptJugadores" runat="server">
-                                        <ItemTemplate>
+
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade show active" id="plantel" role="tabpanel">
+                                <div class="table-responsive mt-2">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="table-light">
                                             <tr>
-                                                <td class="ps-4">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://ui-avatars.com/api/?name=<%# Eval("Nombre") %>&background=random"
-                                                            class="rounded-circle me-2" width="35" height="35">
-                                                        <div>
+                                                <th>Jugador</th>
+                                                <th>Posición</th>
+                                                <th>Camiseta</th>
+                                                <th class="text-end">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <asp:Repeater ID="rptJugadores" runat="server">
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="fw-bold"><%# Eval("Nombres") %> <%# Eval("Apellidos") %></div>
+
+                                                            <%# (bool)Eval("EsCapitan") ? "<span class='badge bg-warning text-dark'>C</span>" : "" %>
+                                                        </td>
+
+                                                        <td><%# Eval("Posicion") %></td>
+
+                                                        <td><span class="badge bg-light text-dark border"><%# Eval("NumeroCamiseta") %></span></td>
+
+                                                        <td class="text-end"></td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="solicitudes" role="tabpanel">
+                                <h5 class="card-title mb-3 mt-2">Jugadores esperando aprobación</h5>
+                                <div class="table-responsive">
+                                    <table class="table align-middle">
+                                        <tbody>
+                                            <asp:Repeater ID="rptSolicitudes" runat="server" OnItemCommand="rptSolicitudes_ItemCommand">
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
                                                             <div class="fw-bold"><%# Eval("Nombre") %> <%# Eval("Apellido") %></div>
-                                                            <div class="text-muted small">DNI: <%# Eval("Dni") %></div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><%# Eval("Posicion") %></td>
-                                                <td><span class="badge bg-light text-dark border"><%# Eval("NumeroCamiseta") %></span></td>
-                                                <td class="text-end pe-4">
-                                                    <asp:LinkButton ID="btnBajaJugador" runat="server" CommandArgument='<%# Eval("Id") %>'
-                                                        CssClass="btn btn-link text-danger p-0" OnClick="btnBajaJugador_Click" ToolTip="Dar de baja">
-                                                        <i class="bi bi-x-circle"></i>
-                                                    </asp:LinkButton>
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                        <FooterTemplate>
-                                            <tr runat="server" visible='<%# rptJugadores.Items.Count == 0 %>'>
-                                                <td colspan="4" class="text-center py-5 text-muted">
-                                                    <i class="bi bi-people display-4 d-block mb-2"></i>
-                                                    Este equipo aún no tiene jugadores.
-                                                </td>
-                                            </tr>
-                                        </FooterTemplate>
-                                    </asp:Repeater>
-                                </tbody>
-                            </table>
+                                                            <small class="text-muted">Quiere unirse al equipo</small>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CommandName="Aceptar" CommandArgument='<%# Eval("IdUsuario") %>' CssClass="btn btn-success btn-sm me-2" />
+                                                            <asp:Button ID="btnRechazar" runat="server" Text="Rechazar" CommandName="Rechazar" CommandArgument='<%# Eval("IdUsuario") %>' CssClass="btn btn-outline-danger btn-sm" />
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                                <FooterTemplate>
+                                                    <tr runat="server" visible='<%# rptSolicitudes.Items.Count == 0 %>'>
+                                                        <td colspan="2" class="text-center text-muted py-3">No hay solicitudes pendientes.</td>
+                                                    </tr>
+                                                </FooterTemplate>
+                                            </asp:Repeater>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -110,25 +146,46 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalAgregarJugador" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalEditarEquipo" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Nuevo Jugador</h5>
+                    <h5 class="modal-title">Editar Equipo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">DNI o Nombre para buscar</label>
-                        <asp:TextBox ID="txtBusquedaJugador" runat="server" CssClass="form-control" placeholder="Buscar..."></asp:TextBox>
+                        <label class="form-label">Nombre</label>
+                        <asp:TextBox ID="txtNombreEditar" runat="server" CssClass="form-control"></asp:TextBox>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cambiar Escudo</label>
+                        <asp:FileUpload ID="fuEscudoEditar" runat="server" CssClass="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <asp:Button ID="btnGuardarJugador" runat="server" Text="Agregar al Equipo" CssClass="btn btn-primary" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <asp:Button ID="btnGuardarEdicion" runat="server" Text="Guardar Cambios" CssClass="btn btn-primary" OnClick="btnGuardarEdicion_Click" />
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="modal fade" id="modalEliminarConfirmacion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">¿Eliminar Equipo?</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Estás a punto de eliminar este equipo permanentemente. Esta acción no se puede deshacer y se perderán todos los datos asociados.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <asp:Button ID="btnConfirmarEliminar" runat="server" Text="Sí, Eliminar" CssClass="btn btn-danger" OnClick="btnConfirmarEliminar_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>
