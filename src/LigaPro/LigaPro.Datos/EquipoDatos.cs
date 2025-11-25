@@ -319,9 +319,33 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("DELETE FROM EquipoJugador WHERE IdEquipo = @idEquipo AND IdJugador = (SELECT IdJugador FROM Jugadores WHERE IdUsuarioJugador = @idUsuario)");
+                datos.setearConsulta("DELETE FROM EquipoJugador WHERE IdEquipo = @idEquipo AND IdJugador = (SELECT IdJugador FROM Jugadores WHERE IdJugador = @idUsuario)");
                 datos.setearParametro("@idEquipo", idEquipo);
                 datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // ACTUALIZAR DETALLES DE UN JUGADOR EN UN EQUIPO
+        public void ActualizarDatosJugadorEnEquipo(EquipoJugador detalles)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE EquipoJugador SET NumeroCamiseta = @numeroCamiseta, Posicion = @posicion, EsCapitan = @esCapitan WHERE IdEquipo = @idEquipo AND IdJugador = @idJugador");
+                datos.setearParametro("@numeroCamiseta", detalles.NumeroCamiseta);
+                datos.setearParametro("@posicion", detalles.Posicion);
+                datos.setearParametro("@esCapitan", detalles.EsCapitan);
+                datos.setearParametro("@idEquipo", detalles.IdEquipo);
+                datos.setearParametro("@idJugador", detalles.IdJugador);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

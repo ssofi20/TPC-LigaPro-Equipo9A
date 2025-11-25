@@ -180,5 +180,69 @@ namespace LigaPro.Web.PaginasJugador
             negocio.EliminarJugadorDeEquipo(idJugador, IdEquipoSeleccionado);
             CargarJugadores();
         }
+
+        protected void rptJugadores_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "EditarJugador")
+            {
+                // El argumento viene asi: "ID|Camiseta|Posicion"
+                string[] args = e.CommandArgument.ToString().Split('|');
+
+                hfIdJugadorEditar.Value = args[0];
+                txtCamisetaEditar.Text = args[1];
+
+                // Seleccionar la posicion correcta en el dropdown
+                string posicion = args[2];
+                if (ddlPosicionEditar.Items.FindByValue(posicion) != null)
+                    ddlPosicionEditar.SelectedValue = posicion;
+
+                // Abrir modal con JS
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopEdit", "abrirModalEditarJugador();", true);
+            }
+            else if (e.CommandName == "ConfirmarEliminar")
+            {
+                // Guardamos el ID en el hidden field del modal de eliminar
+                hfIdJugadorEliminar.Value = e.CommandArgument.ToString();
+
+                // Abrir modal con JS
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopDel", "abrirModalBajaJugador();", true);
+            }
+        }
+        protected void btnConfirmarBaja_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idJugador = int.Parse(hfIdJugadorEliminar.Value);
+
+                EquipoNegocio negocio = new EquipoNegocio();
+                negocio.EliminarJugadorDeEquipo(idJugador, IdEquipoSeleccionado);
+
+                CargarJugadores(); // Recargar la tabla
+            }
+            catch (Exception ex) { }
+        }
+
+        protected void btnGuardarEdicionJugador_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EquipoJugador equipoJugador = new EquipoJugador();
+                equipoJugador.IdJugador = int.Parse(hfIdJugadorEditar.Value);
+                equipoJugador.IdEquipo = IdEquipoSeleccionado;
+                equipoJugador.NumeroCamiseta = int.Parse(txtCamisetaEditar.Text);
+                equipoJugador.Posicion = ddlPosicionEditar.SelectedValue;
+
+                EquipoNegocio negocio = new EquipoNegocio();
+                // Llamamos al metodo que crearemos abajo
+                negocio.ActualizarDatosJugadorEquipo(equipoJugador);
+
+                CargarJugadores(); // Recargar la tabla
+            }
+            catch (Exception ex)
+            {
+                // Manejar error
+            }
+        }
+
     }
 }

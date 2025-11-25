@@ -84,5 +84,11 @@ namespace LigaPro.Negocio
         {
             datos.EliminarJugadorDeEquipo(idUsuario, idEquipo);
         }
+
+        // ACTUALIZAR DATOS DE UN JUGADOR EN EL EQUIPO
+        public void ActualizarDatosJugadorEquipo(EquipoJugador jugadorEquipo)
+        {
+            datos.ActualizarDatosJugadorEnEquipo(jugadorEquipo);
+        }
     }
 }

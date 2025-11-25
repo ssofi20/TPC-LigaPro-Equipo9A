@@ -84,7 +84,6 @@ namespace LigaPro.Web.PaginasJugador
                 {
                     rutaImagen = null;
                 }
-
             }
 
             // Crear objeto Equipo

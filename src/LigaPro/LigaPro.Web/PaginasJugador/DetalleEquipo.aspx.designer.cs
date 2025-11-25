@@ -78,6 +78,60 @@ namespace LigaPro.Web.PaginasJugador
         protected global::System.Web.UI.WebControls.Repeater rptJugadores;
 
         /// <summary>
+        /// hfIdJugadorEditar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdJugadorEditar;
+
+        /// <summary>
+        /// txtCamisetaEditar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCamisetaEditar;
+
+        /// <summary>
+        /// ddlPosicionEditar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlPosicionEditar;
+
+        /// <summary>
+        /// btnGuardarEdicionJugador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarEdicionJugador;
+
+        /// <summary>
+        /// hfIdJugadorEliminar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdJugadorEliminar;
+
+        /// <summary>
+        /// btnConfirmarBaja control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmarBaja;
+
+        /// <summary>
         /// rptSolicitudes control.
         /// </summary>
         /// <remarks>

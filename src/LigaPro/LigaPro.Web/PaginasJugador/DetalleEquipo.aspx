@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DetalleEquipo.aspx.cs" Inherits="LigaPro.Web.PaginasJugador.DetalleEquipo" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <script type="text/javascript">
@@ -84,25 +85,40 @@
                                             <tr>
                                                 <th>Jugador</th>
                                                 <th>Posición</th>
-                                                <th>Camiseta</th>
+                                                <th>Dorsal</th>
                                                 <th class="text-end">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <asp:Repeater ID="rptJugadores" runat="server">
+                                            <asp:Repeater ID="rptJugadores" runat="server" OnItemCommand="rptJugadores_ItemCommand">
                                                 <ItemTemplate>
                                                     <tr>
                                                         <td>
-                                                            <div class="fw-bold"><%# Eval("Nombres") %> <%# Eval("Apellidos") %></div>
-
-                                                            <%# (bool)Eval("EsCapitan") ? "<span class='badge bg-warning text-dark'>C</span>" : "" %>
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="https://ui-avatars.com/api/?name=<%# Eval("Nombres") %>&background=random" class="rounded-circle me-2" width="35" height="35">
+                                                                <div>
+                                                                    <div class="fw-bold"><%# Eval("Nombres") %> <%# Eval("Apellidos") %></div>
+                                                                    <%# (bool)Eval("EsCapitan") ? "<span class='badge bg-warning text-dark' style='font-size:0.7em'>C</span>" : "" %>
+                                                                </div>
+                                                            </div>
                                                         </td>
-
                                                         <td><%# Eval("Posicion") %></td>
-
                                                         <td><span class="badge bg-light text-dark border"><%# Eval("NumeroCamiseta") %></span></td>
+                                                        <td class="text-end">
+                                                            <asp:LinkButton ID="btnEditarJugador" runat="server"
+                                                                CommandName="EditarJugador"
+                                                                CommandArgument='<%# Eval("IdJugador") + "|" + Eval("NumeroCamiseta") + "|" + Eval("Posicion") %>'
+                                                                CssClass="btn btn-link text-secondary p-0 me-2" ToolTip="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                                            </asp:LinkButton>
 
-                                                        <td class="text-end"></td>
+                                                            <asp:LinkButton ID="btnEliminarJugador" runat="server"
+                                                                CommandName="ConfirmarEliminar"
+                                                                CommandArgument='<%# Eval("IdJugador") %>'
+                                                                CssClass="btn btn-link text-danger p-0" ToolTip="Dar de baja">
+                                    <i class="bi bi-trash"></i>
+                                                            </asp:LinkButton>
+                                                        </td>
                                                     </tr>
                                                 </ItemTemplate>
                                             </asp:Repeater>
@@ -110,6 +126,74 @@
                                     </table>
                                 </div>
                             </div>
+
+                            <div class="modal fade" id="modalEditarJugador" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Jugador</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <asp:HiddenField ID="hfIdJugadorEditar" runat="server" />
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Número de Camiseta</label>
+                                                <asp:TextBox ID="txtCamisetaEditar" runat="server" CssClass="form-control" TextMode="Number"></asp:TextBox>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Posición</label>
+                                                <asp:DropDownList ID="ddlPosicionEditar" runat="server" CssClass="form-select">
+                                                    <asp:ListItem Text="Portero" Value="Portero" />
+                                                    <asp:ListItem Text="Línea de defensa" Value="Línea de defensa" />
+                                                    <asp:ListItem Text="Mediocentro" Value="Mediocentro" />
+                                                    <asp:ListItem Text="Mediapunta" Value="Mediapunta" />
+                                                    <asp:ListItem Text="Mediocentro defensivo" Value="Mediocentro defensivo" />
+                                                    <asp:ListItem Text="Interior" Value="Interior" />
+                                                    <asp:ListItem Text="Delantero" Value="Delantero" />
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <asp:Button ID="btnGuardarEdicionJugador" runat="server" Text="Guardar Cambios"
+                                                CssClass="btn btn-primary" OnClick="btnGuardarEdicionJugador_Click"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="modalBajaJugador" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title">¿Dar de baja?</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Seguro que quieres eliminar a este jugador del equipo?</p>
+                                            <asp:HiddenField ID="hfIdJugadorEliminar" runat="server" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <asp:Button ID="btnConfirmarBaja" runat="server" Text="Sí, Eliminar"
+                                                CssClass="btn btn-danger" OnClick="btnConfirmarBaja_Click"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                function abrirModalEditarJugador() {
+                                    var myModal = new bootstrap.Modal(document.getElementById('modalEditarJugador'));
+                                    myModal.show();
+                                }
+                                function abrirModalBajaJugador() {
+                                    var myModal = new bootstrap.Modal(document.getElementById('modalBajaJugador'));
+                                    myModal.show();
+                                }
+                            </script>
 
                             <div class="tab-pane fade" id="solicitudes" role="tabpanel">
                                 <h5 class="card-title mb-3 mt-2">Jugadores esperando aprobación</h5>
