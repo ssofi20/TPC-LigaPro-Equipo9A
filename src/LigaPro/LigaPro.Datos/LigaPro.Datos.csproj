@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccesoDatos.cs" />
+    <Compile Include="EquipoDatos.cs" />
     <Compile Include="JugadorDatos.cs" />
     <Compile Include="OrganizadorDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

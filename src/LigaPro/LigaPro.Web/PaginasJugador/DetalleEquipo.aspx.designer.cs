@@ -11,61 +11,79 @@ namespace LigaPro.Web.PaginasJugador
 {
 
 
-    public partial class MisEquipos
+    public partial class DetalleEquipo
     {
 
         /// <summary>
-        /// rptEquipos control.
+        /// imgEscudo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptEquipos;
+        protected global::System.Web.UI.WebControls.Image imgEscudo;
 
         /// <summary>
-        /// pnlSinEquipos control.
+        /// lblNombreEquipo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSinEquipos;
+        protected global::System.Web.UI.WebControls.Label lblNombreEquipo;
 
         /// <summary>
-        /// txtNombreEquipo control.
+        /// btnEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNombreEquipo;
+        protected global::System.Web.UI.WebControls.Button btnEditar;
 
         /// <summary>
-        /// rfvNombreEquipo control.
+        /// btnEliminar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreEquipo;
+        protected global::System.Web.UI.WebControls.Button btnEliminar;
 
         /// <summary>
-        /// fuEscudoEquipo control.
+        /// lblCantidadJugadores control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fuEscudoEquipo;
+        protected global::System.Web.UI.WebControls.Label lblCantidadJugadores;
 
         /// <summary>
-        /// btnGuardarEquipo control.
+        /// rptJugadores control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGuardarEquipo;
+        protected global::System.Web.UI.WebControls.Repeater rptJugadores;
+
+        /// <summary>
+        /// txtBusquedaJugador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBusquedaJugador;
+
+        /// <summary>
+        /// btnGuardarJugador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarJugador;
     }
 }
