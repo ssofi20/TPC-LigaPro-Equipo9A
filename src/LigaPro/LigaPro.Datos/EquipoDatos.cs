@@ -357,5 +357,131 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
+
+        // LISTAR TODOS LOS EQUIPOS ACTIVOS
+        public List<Equipo> ListarTodosLosEquipos(int idUsuario)
+        {
+            List<Equipo> lista = new List<Equipo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = @"
+                    SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,
+                    (
+                        SELECT TOP 1 
+                            CASE 
+                                WHEN S.Estado = 'Aceptada' AND NOT EXISTS (
+                                    SELECT 1 FROM EquipoJugador EJ 
+                                    INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador 
+                                    WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario
+                                ) THEN NULL 
+                                ELSE S.Estado 
+                            END
+                        FROM Solicitudes S 
+                        WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario
+                        ORDER BY S.FechaSolicitud DESC
+                    ) AS EstadoSolicitud
+                    FROM Equipos E
+                    INNER JOIN Jugadores J ON E.IdUsuarioCreador = J.IdUsuarioJugador
+                    WHERE E.Activo = 1";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+                    aux.IdUsuarioCreador = (int)datos.Lector["IdUsuarioCreador"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+
+                    if (datos.Lector["EstadoSolicitud"] != DBNull.Value)
+                        aux.EstadoSolicitud = (string)datos.Lector["EstadoSolicitud"];
+                    else
+                        aux.EstadoSolicitud = null;
+
+                    aux.NombreCreador = (string)datos.Lector["Nombres"] + " " + (string)datos.Lector["Apellidos"];
+
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
+
+        // BUSCAR EQUIPOS POR CRITERIO
+        public List<Equipo> BuscarEquipos(string busqueda, int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Equipo> lista = new List<Equipo>();
+            try
+            {
+                datos.setearConsulta("SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,\r\n(SELECT TOP 1 Estado FROM Solicitudes S WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario) AS EstadoSolicitud\r\nFROM Equipos E\r\nINNER JOIN Jugadores J ON E.IdUsuarioCreador = J.IdUsuarioJugador\r\nWHERE E.Activo = 1 \r\nAND (E.Nombre LIKE @busqueda + '%' OR (J.Nombres + ' ' + J.Apellidos) LIKE '%' + @busqueda + '%')");
+                datos.setearParametro("@busqueda", busqueda);
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+                    aux.IdUsuarioCreador = (int)datos.Lector["IdUsuarioCreador"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.NombreCreador = (string)datos.Lector["Nombres"] + " " + (string)datos.Lector["Apellidos"];
+                    aux.EstadoSolicitud = (string)datos.Lector["EstadoSolicitud"];
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // CREAR SOLICITUD DE UN JUGADOR A UN EQUIPO
+        public void CrearSolicitud(int idUsuario, int idEquipo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("IF NOT EXISTS (SELECT 1 FROM EquipoJugador WHERE IdEquipo = @idEquipo AND IdJugador = (SELECT IdJugador FROM Jugadores WHERE IdUsuarioJugador = @idUsuario))\r\nAND NOT EXISTS (SELECT 1 FROM Solicitudes WHERE IdUsuario = @idUsuario AND IdEquipo = @idEquipo AND Estado = 'Pendiente')\r\nBEGIN\r\n    INSERT INTO Solicitudes (IdUsuario, IdEquipo, Estado, FechaSolicitud) \r\n    VALUES (@idUsuario, @idEquipo, 'Pendiente', GETDATE())\r\nEND");
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.setearParametro("@idEquipo", idEquipo);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

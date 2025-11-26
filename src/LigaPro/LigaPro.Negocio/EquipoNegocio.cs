@@ -90,5 +90,25 @@ namespace LigaPro.Negocio
         {
             datos.ActualizarDatosJugadorEnEquipo(jugadorEquipo);
         }
+
+        // LISTAR TODOS LOS EQUIPOS
+        public List<Equipo> ListarTodosLosEquipos(int idUsuario)
+        {
+            return datos.ListarTodosLosEquipos(idUsuario);
+        }
+
+        // BUSCAR EQUIPOS CON FILTRO AVANZADO
+        public List<Equipo> BuscarEquipos(string busqueda, int idUsuario)
+        {
+            // Ahora pasamos el ID
+            if (string.IsNullOrEmpty(busqueda)) return new List<Equipo>();
+            return datos.BuscarEquipos(busqueda, idUsuario);
+        }
+
+        // CREAR SOLICITUD
+        public void CrearSolicitud(int idUsuario, int idEquipo)
+        {
+            datos.CrearSolicitud(idUsuario, idEquipo);
+        }
     }
 }
