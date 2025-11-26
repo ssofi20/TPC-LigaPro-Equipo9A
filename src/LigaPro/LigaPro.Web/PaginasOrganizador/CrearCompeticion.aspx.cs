@@ -47,8 +47,11 @@ namespace LigaPro.Web.PaginasOrganizador
                 CompeticionDatos datos = new CompeticionDatos();
                 ReglamentoDatos regDatos = new ReglamentoDatos();
                 Reglamento reg = new Reglamento();
-                bool TieneFase = false;
+                Competicion nuevo = new Competicion();
+                nuevo.OrganizadorCompetencia = new Organizador();
+                nuevo.Reglas = new Reglamento();
 
+                int idOrganizador = int.Parse(ddlOrganizador.SelectedValue);
                 int idReg = regDatos.agregar(reg);
                 reg.Id = idReg;
 
@@ -58,38 +61,30 @@ namespace LigaPro.Web.PaginasOrganizador
                 reg.PartidosSuspensionPorRojaDirecta = int.Parse(txtPsrd.Text);
                 regDatos.agregar(reg);
 
+                nuevo.Nombre = txtNombre.Text;
+                nuevo.Estado = EstadoCompetencia.InscripcionAbierta;
+                nuevo.OrganizadorCompetencia.Id = idOrganizador;
+                nuevo.Reglas.Id = idReg;                
+
                 if (rbConFases.Checked)
                 {
-                    Liga nuevo = new Liga();
-                    TieneFase = true;
-
-                    nuevo.Nombre = txtNombre.Text;
-                    nuevo.Estado = EstadoCompetencia.InscripcionAbierta;
-                    nuevo.IdOrganizador = int.Parse(ddlOrganizador.SelectedValue);
-                    nuevo.IdReglamento = reg.Id;
+                    nuevo.Fases = true;
 
                     if (rbIdaVuelta.Checked)
                     {
-                        nuevo.Formato = TipoLiga.IdaYVuelta;
+                        nuevo.Formato = TipoLiga.IdaYVuelta.ToString();
                     }
                     else if (rbIda.Checked)
                     {
-                        nuevo.Formato = TipoLiga.Ida;
+                        nuevo.Formato = TipoLiga.Ida.ToString() ;
                     }
 
-                    datos.agregarComp(nuevo, TieneFase);
+                    datos.agregarComp(nuevo);
                 }
                 else if (rbSinFases.Checked)
                 {
-                    Competicion nuevoTorneo = new Competicion();
-
-                    nuevoTorneo.Nombre = txtNombre.Text;
-                    nuevoTorneo.Estado = EstadoCompetencia.InscripcionAbierta;
-                    nuevoTorneo.IdOrganizador = int.Parse(ddlOrganizador.SelectedValue);
-                    nuevoTorneo.IdReglamento = reg.Id;
-
-                    TieneFase = false;
-                    datos.agregarComp(nuevoTorneo, TieneFase);
+                    nuevo.Fases = false;
+                    datos.agregarComp(nuevo);
                 }
 
                 Response.Redirect("PerfilAdmin.aspx", false);
