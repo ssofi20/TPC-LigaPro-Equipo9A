@@ -122,5 +122,39 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
+
+        public List<Organizador> listar()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Organizador> lista = new List<Organizador>();  
+            try
+            {
+                datos.setearConsulta("SELECT IdOrganizador, IdUsuario, NombrePublico, EmailContacto, NumeroTelefono FROM Organizadores ");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Organizador aux = new Organizador();
+                    aux.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    aux.NombrePublico = (string)datos.Lector["NombrePublico"];
+                    aux.EmailContacto = (string)datos.Lector["EmailContacto"];
+                    aux.NumeroTelefono = (string)datos.Lector["NumeroTelefono"];
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+        }
     }
 }
