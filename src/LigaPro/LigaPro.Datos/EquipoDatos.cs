@@ -365,21 +365,28 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
+                // LÓGICA BLINDADA:
+                // 1. Chequeamos si EXISTE en la tabla de jugadores (Realidad).
+                // 2. Si no, chequeamos si tiene solicitud Pendiente (Historial).
+                // 3. Sino, NULL.
+
                 string consulta = @"
                     SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,
                     (
-                        SELECT TOP 1 
-                            CASE 
-                                WHEN S.Estado = 'Aceptada' AND NOT EXISTS (
-                                    SELECT 1 FROM EquipoJugador EJ 
-                                    INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador 
-                                    WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario
-                                ) THEN NULL 
-                                ELSE S.Estado 
-                            END
-                        FROM Solicitudes S 
-                        WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario
-                        ORDER BY S.FechaSolicitud DESC
+                        CASE 
+                            WHEN EXISTS (
+                                SELECT 1 FROM EquipoJugador EJ 
+                                INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador 
+                                WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario
+                            ) THEN 'Aceptada'
+                    
+                            WHEN EXISTS (
+                                SELECT 1 FROM Solicitudes S 
+                                WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario AND S.Estado = 'Pendiente'
+                            ) THEN 'Pendiente'
+                    
+                            ELSE NULL
+                        END
                     ) AS EstadoSolicitud
                     FROM Equipos E
                     INNER JOIN Jugadores J ON E.IdUsuarioCreador = J.IdUsuarioJugador
@@ -391,6 +398,71 @@ namespace LigaPro.Datos
 
                 while (datos.Lector.Read())
                 {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+                    aux.IdUsuarioCreador = (int)datos.Lector["IdUsuarioCreador"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+
+                    // Validamos nulos
+                    if (datos.Lector["EstadoSolicitud"] != DBNull.Value)
+                        aux.EstadoSolicitud = (string)datos.Lector["EstadoSolicitud"];
+                    else
+                        aux.EstadoSolicitud = null;
+
+                    aux.NombreCreador = (string)datos.Lector["Nombres"] + " " + (string)datos.Lector["Apellidos"];
+
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        // BUSCAR EQUIPOS POR CRITERIO
+        public List<Equipo> BuscarEquipos(string busqueda, int idUsuario)
+        {
+            List<Equipo> lista = new List<Equipo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Misma lógica de CASE WHEN que arriba
+                string consulta = @"
+                    SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,
+                    (
+                        CASE 
+                            WHEN EXISTS (
+                                SELECT 1 FROM EquipoJugador EJ 
+                                INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador 
+                                WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario
+                            ) THEN 'Aceptada'
+                    
+                            WHEN EXISTS (
+                                SELECT 1 FROM Solicitudes S 
+                                WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario AND S.Estado = 'Pendiente'
+                            ) THEN 'Pendiente'
+                    
+                            ELSE NULL
+                        END
+                    ) AS EstadoSolicitud
+                    FROM Equipos E
+                    INNER JOIN Jugadores J ON J.IdUsuarioJugador = E.IdUsuarioCreador
+                    WHERE E.Activo = 1 
+                    AND (E.Nombre LIKE @busqueda + '%' OR (J.Nombres + ' ' + J.Apellidos) LIKE '%' + @busqueda + '%')";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@busqueda", busqueda);
+                datos.setearParametro("@idUsuario", idUsuario); // <--- IMPORTANTE: Asegúrate de pasar este parámetro
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    // ... (El mapeo es idéntico al método anterior) ...
                     Equipo aux = new Equipo();
                     aux.Id = (int)datos.Lector["IdEquipo"];
                     aux.IdUsuarioCreador = (int)datos.Lector["IdUsuarioCreador"];
@@ -412,54 +484,8 @@ namespace LigaPro.Datos
                 }
                 return lista;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-
-        }
-
-        // BUSCAR EQUIPOS POR CRITERIO
-        public List<Equipo> BuscarEquipos(string busqueda, int idUsuario)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            List<Equipo> lista = new List<Equipo>();
-            try
-            {
-                datos.setearConsulta("SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,\r\n(SELECT TOP 1 Estado FROM Solicitudes S WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario) AS EstadoSolicitud\r\nFROM Equipos E\r\nINNER JOIN Jugadores J ON E.IdUsuarioCreador = J.IdUsuarioJugador\r\nWHERE E.Activo = 1 \r\nAND (E.Nombre LIKE @busqueda + '%' OR (J.Nombres + ' ' + J.Apellidos) LIKE '%' + @busqueda + '%')");
-                datos.setearParametro("@busqueda", busqueda);
-                datos.setearParametro("@idUsuario", idUsuario);
-                datos.ejecutarLectura();
-
-                while (datos.Lector.Read())
-                {
-                    Equipo aux = new Equipo();
-                    aux.Id = (int)datos.Lector["IdEquipo"];
-                    aux.IdUsuarioCreador = (int)datos.Lector["IdUsuarioCreador"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.NombreCreador = (string)datos.Lector["Nombres"] + " " + (string)datos.Lector["Apellidos"];
-                    aux.EstadoSolicitud = (string)datos.Lector["EstadoSolicitud"];
-                    if (!(datos.Lector["Imagen"] is DBNull))
-                        aux.Imagen = (string)datos.Lector["Imagen"];
-                    else
-                        aux.Imagen = "/Uploads/default-team.png";
-                    lista.Add(aux);
-                }
-                return lista;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
         }
 
         // CREAR SOLICITUD DE UN JUGADOR A UN EQUIPO
