@@ -11,43 +11,61 @@ namespace LigaPro.Web.PaginasJugador
 {
 
 
-    public partial class UnirseAEquipo
+    public partial class CompeticionesActivas
     {
 
         /// <summary>
-        /// txtBusqueda control.
+        /// rptTorneos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
+        protected global::System.Web.UI.WebControls.Repeater rptTorneos;
 
         /// <summary>
-        /// btnBuscar control.
+        /// lblNombreTorneoModal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnBuscar;
+        protected global::System.Web.UI.WebControls.Label lblNombreTorneoModal;
 
         /// <summary>
-        /// rptEquiposEncontrados control.
+        /// ddlMisEquipos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptEquiposEncontrados;
+        protected global::System.Web.UI.WebControls.DropDownList ddlMisEquipos;
 
         /// <summary>
-        /// pnlSinResultados control.
+        /// rfvEquipo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSinResultados;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEquipo;
+
+        /// <summary>
+        /// hfIdTorneoSeleccionado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdTorneoSeleccionado;
+
+        /// <summary>
+        /// btnConfirmarInscripcion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmarInscripcion;
     }
 }

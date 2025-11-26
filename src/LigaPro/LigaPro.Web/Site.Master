@@ -47,13 +47,13 @@
                         <!-- Panel Jugador -->
                         <ul id="PanelNavegacionJugador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="Default.aspx">Ver Torneos</a>
+                                <a class="nav-link" href="/PaginasJugador/CompeticionesActivas.aspx">Ver Tornos Activos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/PaginasJugador/MisEquipos.aspx">Mis Equipos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/PaginasJugador/UniseAEquipo.asp">Unirse a Equipo</a>
+                                <a class="nav-link" href="/PaginasJugador/UnirseAEquipo.asp">Unirse a Equipo</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/PaginasJugador/PerfilJugador.aspx">Mi Perfil</a>

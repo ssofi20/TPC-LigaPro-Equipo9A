@@ -85,6 +85,8 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Auth\InicioSesion.aspx" />
+    <Content Include="PaginasJugador\CompeticionesActivas.aspx" />
+    <Content Include="PaginasJugador\DetalleEquipo.aspx" />
     <Content Include="PaginasJugador\MisEquipos.aspx" />
     <Content Include="PaginasJugador\ModificarPerfilJugador.aspx" />
     <Content Include="PaginasJugador\ModificarSeguridadJugador.aspx" />
@@ -132,6 +134,20 @@
     </Compile>
     <Compile Include="Auth\InicioSesion.aspx.designer.cs">
       <DependentUpon>InicioSesion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasJugador\CompeticionesActivas.aspx.cs">
+      <DependentUpon>CompeticionesActivas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasJugador\CompeticionesActivas.aspx.designer.cs">
+      <DependentUpon>CompeticionesActivas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasJugador\DetalleEquipo.aspx.cs">
+      <DependentUpon>DetalleEquipo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasJugador\DetalleEquipo.aspx.designer.cs">
+      <DependentUpon>DetalleEquipo.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginasJugador\MisEquipos.aspx.cs">
       <DependentUpon>MisEquipos.aspx</DependentUpon>

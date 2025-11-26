@@ -13,5 +13,59 @@ namespace LigaPro.Web.PaginasJugador
 
     public partial class MisEquipos
     {
+
+        /// <summary>
+        /// rptEquipos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptEquipos;
+
+        /// <summary>
+        /// pnlSinEquipos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSinEquipos;
+
+        /// <summary>
+        /// txtNombreEquipo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNombreEquipo;
+
+        /// <summary>
+        /// rfvNombreEquipo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreEquipo;
+
+        /// <summary>
+        /// fuEscudoEquipo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuEscudoEquipo;
+
+        /// <summary>
+        /// btnGuardarEquipo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarEquipo;
     }
 }

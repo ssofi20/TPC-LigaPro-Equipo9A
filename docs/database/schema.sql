@@ -54,6 +54,16 @@ CREATE TABLE Equipos(
 )
 GO
 
+CREATE TABLE Solicitudes (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    IdUsuario INT NOT NULL,  -- El jugador que quiere entrar
+    IdEquipo INT NOT NULL,   -- El equipo al que quiere entrar
+    FechaSolicitud DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (IdUsuario) REFERENCES Usuarios(IdUsuario),
+    FOREIGN KEY (IdEquipo) REFERENCES Equipos(IdEquipo)
+)
+GO
+
 -- TABLA EQUIPO JUGADOR (Representa la instancia de un jugador dentro de un Equipo)
 
 CREATE TABLE EquipoJugador(
