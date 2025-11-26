@@ -21,7 +21,7 @@ namespace LigaPro.Datos
                 datos.setearParametro("@IdReglamento", nuevo.Reglas.Id);
                 datos.setearParametro("@Nombre", nuevo.Nombre);
                 datos.setearParametro("@Estado", nuevo.Estado);
-                datos.setearParametro("@FormatoLiga", nuevo.Formato);
+                datos.setearParametro("@FormatoLiga", nuevo.Formato != null ? (object)nuevo.Formato : DBNull.Value);
                 datos.setearParametro("@TieneFaseDeGrupos", nuevo.Fases);
 
                 datos.ejecutarAccion();
@@ -38,24 +38,40 @@ namespace LigaPro.Datos
 
         }
 
-       /* public List<Competicion> listarCompeticion()
+        public List<Competicion> listarCompeticion()
         {
             AccesoDatos datos = new AccesoDatos();
             List<Competicion> lista = new List<Competicion>();
             try
             {
-                datos.setearConsulta("SELECT IdOrganizador, IdReglamento, Nombre, Estado, FormatoLiga, TieneFaseDeGrupos FROM Competiciones");
+                datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Competicion aux = new Competicion();
-                    aux.IdOrganizador = (int)datos.Lector["IdOrganizador"];
-                    aux.IdReglamento = (int)datos.Lector["IdReglamento"];
+                    aux.OrganizadorCompetencia = new Organizador();
+                    aux.Reglas = new Reglamento();
+
+                    aux.OrganizadorCompetencia.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.OrganizadorCompetencia.NombrePublico = (string)datos.Lector["NombrePublico"];
+
+                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
+                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
+                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
+                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
+                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
+
+
+                    aux.Id = (int)datos.Lector["IdCompeticion"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
-                    aux.Formato = (string)datos.Lector["FormatoLiga"];
-                    aux.Fases = (bool)datos.Lector["TieneFaseDeGrupos"];
+                    aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
+                        ? datos.Lector["FormatoLiga"].ToString()
+                        : null;
+                    aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
+                        ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
+                        : false;
                     lista.Add(aux);
                 }
                 return lista;
@@ -75,20 +91,31 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT IdOrganizador, IdReglamento, Nombre, Estado, FormatoLiga, TieneFaseDeGrupos FROM Competiciones WHERE IdCompeticion = " + id);
+                datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento WHERE C.IdCompeticion = @id");
+                datos.setearParametro("@id", id);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Competicion aux = new Competicion();
-                    aux.IdOrganizador = (int)datos.Lector["IdOrganizador"];
-                    aux.IdReglamento = (int)datos.Lector["IdReglamento"];
+                    aux.OrganizadorCompetencia = new Organizador();
+                    aux.Reglas = new Reglamento();
+
+                    aux.OrganizadorCompetencia.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.OrganizadorCompetencia.NombrePublico = (string)datos.Lector["NombrePublico"];
+
+                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
+                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
+                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
+                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
+                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
+
+                    aux.Id = (int)datos.Lector["IdCompeticion"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
                     aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
                         ? datos.Lector["FormatoLiga"].ToString()
                         : null;
-
                     aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
                         ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
                         : false;
@@ -107,23 +134,44 @@ namespace LigaPro.Datos
             }
         }
 
-        public Competicion modificar(Competicion aux)
+        public void modificarCompetencia(Competicion aux)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
+                datos.setearConsulta("UPDATE Reglamentos SET PuntosPorVictoria = @PV, PuntosPorEmpate = @PE, TarjetasAmarillasParaSuspension = @TAS, PartidosSuspensionPorRojaDirecta = @PSRD WHERE IdReglamento = @IdReglamento");
+                datos.setearParametro("@PV", aux.Reglas.PuntosPorVictoria);
+                datos.setearParametro("@PE", aux.Reglas.PuntosPorEmpate);
+                datos.setearParametro("@TAS", aux.Reglas.TarjetasAmarillasParaSuspension);
+                datos.setearParametro("@PSRD", aux.Reglas.PartidosSuspensionPorRojaDirecta);
+                datos.setearParametro("@IdReglamento", aux.Reglas.Id);
+                datos.ejecutarAccion();
+                datos.cerrarConexion();
 
+                AccesoDatos datosComp = new AccesoDatos();
+
+
+                datosComp.setearConsulta("UPDATE Competiciones SET IdOrganizador = @IdOrganizador, IdReglamento = @IdReglamento, Nombre = @Nombre, Estado = @Estado, FormatoLiga = @FormatoLiga, TieneFaseDeGrupos = @TieneFaseDeGrupos WHERE IdCompeticion = @IdCompeticion");
+                datosComp.setearParametro("@IdOrganizador", aux.OrganizadorCompetencia.Id);
+                datosComp.setearParametro("@IdReglamento", aux.Reglas.Id);
+                datosComp.setearParametro("@Nombre", aux.Nombre);
+                datosComp.setearParametro("@Estado", aux.Estado);
+                datosComp.setearParametro("@FormatoLiga", aux.Formato != null ? (object)aux.Formato : DBNull.Value);
+                datosComp.setearParametro("@TieneFaseDeGrupos", aux.Fases);
+                datosComp.setearParametro("@IdCompeticion", aux.Id);
+                datosComp.ejecutarAccion();
+                datos.cerrarConexion();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             finally
             {
                 datos.cerrarConexion();
             }
-        }*/
+        }
 
 
     }

@@ -2,6 +2,7 @@
 using LigaPro.Domain.Actores;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,6 +12,10 @@ namespace LigaPro.Web.PaginasOrganizador
 {
     public partial class GestionarCompetencias : System.Web.UI.Page
     {
+        public string SepararEspacios(string texto)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(texto, "([a-z])([A-Z])", "$1 $2");
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -21,60 +26,111 @@ namespace LigaPro.Web.PaginasOrganizador
                     if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
                     {
                         CompeticionDatos datos = new CompeticionDatos();
-                       // dgvItems.DataSource = datos.listarCompeticion();
+                        dgvItems.DataSource = datos.listarCompeticion();
                         dgvItems.DataBind();
 
-                        // Panel Modificacion
-                        int id = int.Parse(dgvItems.SelectedDataKey.Value.ToString());
-                       /*Competicion aux = datos.buscarPorId(id);
+                        if (ddlOrganizador.Items.Count == 0)
+                        {
+                            OrganizadorDatos datosOrg = new OrganizadorDatos();
+                            List<Organizador> listaOrg = datosOrg.listar();
 
-                        txtNombre.Text = aux.Nombre.ToString();
-                        ddlOrganizador.Text = aux.IdOrganizador.ToString();
-                        txtPv.Text = aux.IdReglamento.ToString();*/
+                            ddlOrganizador.DataSource = listaOrg;
+                            ddlOrganizador.DataValueField = "Id";
+                            ddlOrganizador.DataTextField = "NombrePublico";
+                            ddlOrganizador.DataBind();
+                        }
+
+                        PanelSeleccionar.Visible = true;
+                        PanelModificar.Visible = false;                        
                     }
                     else
                     {
                         Response.Redirect("/Auth/InicioSesion.aspx", false);
                     }
-
-
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
             }
-            else
-            {
-                Response.Redirect("/Auth/InicioSesion.aspx", false);
-            }            
         }
 
         protected void dgvItems_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string id = dgvItems.SelectedDataKey.Value.ToString();
-            PanelSeleccionar.Visible = false;
+            int id = Convert.ToInt32(dgvItems.SelectedDataKey.Value);
             PanelModificar.Visible = true;
+            PanelSeleccionar.Visible = false;
+
+
+            if (dgvItems.SelectedIndex >= 0)
+            {
+                CompeticionDatos datos = new CompeticionDatos();
+                Competicion aux = datos.buscarPorId(id);
+
+                txtNombre.Text = aux.Nombre;
+                ddlOrganizador.SelectedValue = aux.OrganizadorCompetencia.Id.ToString();
+                txtPv.Text = aux.Reglas.PuntosPorVictoria.ToString();
+                txtPe.Text = aux.Reglas.PuntosPorEmpate.ToString();
+                txtTas.Text = aux.Reglas.TarjetasAmarillasParaSuspension.ToString();
+                txtPsrd.Text = aux.Reglas.PartidosSuspensionPorRojaDirecta.ToString();
+
+                rbConFases.Checked = aux.Fases;
+                rbSinFases.Checked = !aux.Fases;
+
+                panelOpcionesFases.Visible = aux.Fases;
+
+                if (aux.Formato == "Ida") rbIda.Checked = true;
+                else if (aux.Formato == "IdaYVuelta") rbIdaVuelta.Checked = true;
+            }
         }
 
         protected void rbConFases_CheckedChanged(object sender, EventArgs e)
         {
+            panelOpcionesFases.Visible = rbConFases.Checked;
 
         }
 
         protected void rbSinFases_CheckedChanged(object sender, EventArgs e)
         {
+            panelOpcionesFases.Visible = false;
 
         }
 
         protected void btnModificar_Click(object sender, EventArgs e)
         {
+            if (dgvItems.SelectedDataKey == null)
+                return;
 
+            int id = Convert.ToInt32(dgvItems.SelectedDataKey.Value);
+
+
+            CompeticionDatos datos = new CompeticionDatos();
+            Competicion nuevo = datos.buscarPorId(id);
+
+            nuevo.Nombre = txtNombre.Text;
+            nuevo.OrganizadorCompetencia.Id = int.Parse(ddlOrganizador.SelectedValue);
+            nuevo.Reglas.PuntosPorVictoria = int.Parse(txtPv.Text);
+            nuevo.Reglas.PuntosPorEmpate = int.Parse(txtPe.Text);
+            nuevo.Reglas.TarjetasAmarillasParaSuspension = int.Parse(txtTas.Text);
+            nuevo.Reglas.PartidosSuspensionPorRojaDirecta = int.Parse(txtPsrd.Text);
+
+            if (rbConFases.Checked)
+            {
+                nuevo.Fases = true;
+                nuevo.Formato = rbIdaVuelta.Checked ? "IdaYVuelta" : "Ida";
+            }
+            else
+            {
+                nuevo.Fases = false;
+                nuevo.Formato = null;
+            }
+            datos.modificarCompetencia(nuevo);
+            Response.Redirect("GestionarCompetencias.aspx");
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("PerfilAdmin.aspx", false);
         }
     }
 }
