@@ -76,7 +76,6 @@ namespace LigaPro.Web.PaginasJugador
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
             Response.Redirect("PerfilJugador.aspx", false);
-
         }
     }
 }

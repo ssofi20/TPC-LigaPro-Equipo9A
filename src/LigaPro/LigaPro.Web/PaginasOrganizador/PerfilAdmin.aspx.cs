@@ -14,7 +14,11 @@ namespace LigaPro.Web.PaginasOrganizador
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-                
+            if (Session["UsuarioLogueado"] == null)
+            {
+                Response.Redirect("~/Auth/InicioSesion.aspx");
+                return;
+            }
         }
     }
 }

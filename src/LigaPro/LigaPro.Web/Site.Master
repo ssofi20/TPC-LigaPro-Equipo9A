@@ -66,13 +66,7 @@
                         <!-- Panel Organizador -->
                         <ul id="PanelNavegacionOrganizador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/PaginasOrganizador/CrearCompeticion.aspx">Crear Competicion</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/PaginasOrganizador/MisCompeticiones.aspx">Mis Competiciones</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/PaginasOrganizador/GestionarCompetencias.aspx">Gestionar Competencias</a>
+                                <a class="nav-link" href="/PaginasOrganizador/MisTorneos.aspx">Mis Torneos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/PaginasOrganizador/PerfilAdmin.aspx">Mi Perfil</a>

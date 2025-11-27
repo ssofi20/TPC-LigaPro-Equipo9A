@@ -54,7 +54,7 @@ namespace LigaPro.Web.PaginasJugador
                         usuario.PasswordHash = seguridad.HashPassword(txtNewPass.Text);
                         datos.modificarPassJugador(usuario);
 
-                        Response.Redirect("PerfilAdmin.aspx", false);
+                        Response.Redirect("PerfilJugador.aspx", false);
                     }
                     else
                     {
@@ -72,7 +72,6 @@ namespace LigaPro.Web.PaginasJugador
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
             Response.Redirect("PerfilJugador.aspx", false);
-
         }
     }
 }

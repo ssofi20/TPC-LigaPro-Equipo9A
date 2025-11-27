@@ -11,7 +11,7 @@ namespace LigaPro.Web.PaginasOrganizador
 {
 
 
-    public partial class CrearCompeticion
+    public partial class CrearTorneo
     {
 
         /// <summary>

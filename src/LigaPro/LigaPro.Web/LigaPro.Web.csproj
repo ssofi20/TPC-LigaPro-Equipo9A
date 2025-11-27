@@ -91,9 +91,8 @@
     <Content Include="PaginasJugador\ModificarPerfilJugador.aspx" />
     <Content Include="PaginasJugador\ModificarSeguridadJugador.aspx" />
     <Content Include="PaginasJugador\UnirseAEquipo.aspx" />
-    <Content Include="PaginasOrganizador\CrearCompeticion.aspx" />
-    <Content Include="PaginasOrganizador\GestionarCompetencias.aspx" />
-    <Content Include="PaginasOrganizador\MisCompeticiones.aspx" />
+    <Content Include="PaginasOrganizador\CrearTorneo.aspx" />
+    <Content Include="PaginasOrganizador\MisTorneos.aspx" />
     <Content Include="PaginasOrganizador\ModificarPerfilAdmin.aspx" />
     <Content Include="PaginasOrganizador\ModificarSecurityAdmin.aspx" />
     <Content Include="PaginasOrganizador\PerfilAdmin.aspx" />
@@ -178,26 +177,19 @@
     <Compile Include="PaginasJugador\UnirseAEquipo.aspx.designer.cs">
       <DependentUpon>UnirseAEquipo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PaginasOrganizador\CrearCompeticion.aspx.cs">
-      <DependentUpon>CrearCompeticion.aspx</DependentUpon>
+    <Compile Include="PaginasOrganizador\CrearTorneo.aspx.cs">
+      <DependentUpon>CrearTorneo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PaginasOrganizador\CrearCompeticion.aspx.designer.cs">
-      <DependentUpon>CrearCompeticion.aspx</DependentUpon>
+    <Compile Include="PaginasOrganizador\CrearTorneo.aspx.designer.cs">
+      <DependentUpon>CrearTorneo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PaginasOrganizador\GestionarCompetencias.aspx.cs">
-      <DependentUpon>GestionarCompetencias.aspx</DependentUpon>
+    <Compile Include="PaginasOrganizador\MisTorneos.aspx.cs">
+      <DependentUpon>MisTorneos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="PaginasOrganizador\GestionarCompetencias.aspx.designer.cs">
-      <DependentUpon>GestionarCompetencias.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasOrganizador\MisCompeticiones.aspx.cs">
-      <DependentUpon>MisCompeticiones.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PaginasOrganizador\MisCompeticiones.aspx.designer.cs">
-      <DependentUpon>MisCompeticiones.aspx</DependentUpon>
+    <Compile Include="PaginasOrganizador\MisTorneos.aspx.designer.cs">
+      <DependentUpon>MisTorneos.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginasOrganizador\ModificarPerfilAdmin.aspx.cs">
       <DependentUpon>ModificarPerfilAdmin.aspx</DependentUpon>

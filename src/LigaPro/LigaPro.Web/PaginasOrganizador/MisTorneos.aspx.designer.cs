@@ -11,187 +11,142 @@ namespace LigaPro.Web.PaginasOrganizador
 {
 
 
-    public partial class GestionarCompetencias
+    public partial class MisTorneos
     {
 
         /// <summary>
-        /// PanelSeleccionar control.
+        /// rptTorneos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelSeleccionar;
+        protected global::System.Web.UI.WebControls.Repeater rptTorneos;
 
         /// <summary>
-        /// dgvItems control.
+        /// pnlVacio control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvItems;
+        protected global::System.Web.UI.WebControls.Panel pnlVacio;
 
         /// <summary>
-        /// PanelModificar control.
+        /// hfIdTorneoEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelModificar;
+        protected global::System.Web.UI.WebControls.HiddenField hfIdTorneoEditar;
 
         /// <summary>
-        /// txtNombre control.
+        /// txtNombreEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNombre;
+        protected global::System.Web.UI.WebControls.TextBox txtNombreEditar;
 
         /// <summary>
-        /// ddlEstado control.
+        /// ddlEstadoEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEstado;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEstadoEditar;
 
         /// <summary>
-        /// rbConFases control.
+        /// txtPvEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbConFases;
+        protected global::System.Web.UI.WebControls.TextBox txtPvEditar;
 
         /// <summary>
-        /// rbSinFases control.
+        /// txtPeEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbSinFases;
+        protected global::System.Web.UI.WebControls.TextBox txtPeEditar;
 
         /// <summary>
-        /// panelOpcionesFases control.
+        /// txtTasEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel panelOpcionesFases;
+        protected global::System.Web.UI.WebControls.TextBox txtTasEditar;
 
         /// <summary>
-        /// rbIda control.
+        /// txtPsrdEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbIda;
+        protected global::System.Web.UI.WebControls.TextBox txtPsrdEditar;
 
         /// <summary>
-        /// rbIdaVuelta control.
+        /// chkFasesEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbIdaVuelta;
+        protected global::System.Web.UI.WebControls.CheckBox chkFasesEditar;
 
         /// <summary>
-        /// txtPv control.
+        /// btnGuardarEdicion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPv;
+        protected global::System.Web.UI.WebControls.Button btnGuardarEdicion;
 
         /// <summary>
-        /// txtPe control.
+        /// lblNombreTorneoEliminar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPe;
+        protected global::System.Web.UI.WebControls.Label lblNombreTorneoEliminar;
 
         /// <summary>
-        /// txtTas control.
+        /// txtPassEliminar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTas;
+        protected global::System.Web.UI.WebControls.TextBox txtPassEliminar;
 
         /// <summary>
-        /// txtPsrd control.
+        /// hfIdTorneoEliminar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPsrd;
+        protected global::System.Web.UI.WebControls.HiddenField hfIdTorneoEliminar;
 
         /// <summary>
-        /// btnModificar control.
+        /// btnConfirmarEliminar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnModificar;
-
-        /// <summary>
-        /// btnCancelar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelar;
-
-        /// <summary>
-        /// PanelEliminar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelEliminar;
-
-        /// <summary>
-        /// txtPass control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPass;
-
-        /// <summary>
-        /// btnBaja control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnBaja;
-
-        /// <summary>
-        /// btnCancelarBaja control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelarBaja;
+        protected global::System.Web.UI.WebControls.Button btnConfirmarEliminar;
     }
 }
