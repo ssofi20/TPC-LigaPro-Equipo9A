@@ -67,42 +67,35 @@ namespace LigaPro.Datos
             }
         }
 
-        public List<Torneo> listarCompeticion(int id)
+        public List<Torneo> listarCompeticion(int idOrganizador)
         {
             AccesoDatos datos = new AccesoDatos();
             List<Torneo> lista = new List<Torneo>();
             try
             {
-                datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, C.Activo, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento WHERE O.IdOrganizador = @id");
-                datos.setearParametro("@id", id);
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdOrganizador = @IdOrganizador");
+                datos.setearParametro("@IdOrganizador", idOrganizador);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Torneo aux = new Torneo();
-                    aux.Organizador = new Organizador();
-                    aux.Reglas = new Reglamento();
-
-                    aux.Organizador.Id = (int)datos.Lector["IdOrganizador"];
-                    aux.Organizador.NombrePublico = (string)datos.Lector["NombrePublico"];
-
-                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
-                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
-                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
-                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
-                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
-
-
-                    aux.Id = (int)datos.Lector["IdCompeticion"];
+                    
+                    aux.Id = (int)datos.Lector["IdTorneo"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
-                    ////aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
-                    //    ? datos.Lector["FormatoLiga"].ToString()
-                    //    : null;
-                    ////aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
-                    //    ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
-                    //    : false;
+                    aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
+                    aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
                     aux.Activo = (bool)datos.Lector["Activo"];
+                    
+                    aux.Reglas = new Reglamento();
+                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
+                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
+                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
+                    aux.Reglas.PuntosPorDerrota = (int)datos.Lector["PuntosPorDerrota"];
+                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
+                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
+
                     lista.Add(aux);
                 }
                 return lista;
