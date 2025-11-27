@@ -28,12 +28,12 @@ namespace LigaPro.Web.PaginasOrganizador
         public void CargarEstados()
         {
             ddlEstado.DataSource = Enum.GetValues(typeof(EstadoCompetencia))
-     .Cast<EstadoCompetencia>()
-     .Select(e => new
-     {
-         Texto = FormatearNombreEnum(e.ToString()),
-         Valor = ((int)e).ToString()
-     });
+            .Cast<EstadoCompetencia>()
+            .Select(e => new
+            {
+                 Texto = FormatearNombreEnum(e.ToString()),
+                 Valor = ((int)e).ToString()
+            });
 
             ddlEstado.DataTextField = "Texto";
             ddlEstado.DataValueField = "Valor";
@@ -54,20 +54,11 @@ namespace LigaPro.Web.PaginasOrganizador
                     {
                         CargarEstados();
                         CompeticionDatos datos = new CompeticionDatos();
-                        List<Competicion> lista = datos.listarCompeticion();
+                        OrganizadorDatos orgDatos = new OrganizadorDatos();
+                        Organizador aux = orgDatos.ObtenerInfoAdmin(usuario.Id);
+                        List<Competicion> lista = datos.listarCompeticion(aux.Id);
                         dgvItems.DataSource = lista.Where(x => x.Activo == true).ToList();
                         dgvItems.DataBind();
-
-                        if (ddlOrganizador.Items.Count == 0)
-                        {
-                            OrganizadorDatos datosOrg = new OrganizadorDatos();
-                            List<Organizador> listaOrg = datosOrg.listar();
-
-                            ddlOrganizador.DataSource = listaOrg;
-                            ddlOrganizador.DataValueField = "Id";
-                            ddlOrganizador.DataTextField = "NombrePublico";
-                            ddlOrganizador.DataBind();
-                        }
 
                         PanelSeleccionar.Visible = true;
                         PanelModificar.Visible = false;

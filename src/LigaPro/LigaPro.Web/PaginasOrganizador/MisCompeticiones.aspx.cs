@@ -25,7 +25,9 @@ namespace LigaPro.Web.PaginasOrganizador
                     if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
                     {
                         CompeticionDatos datos = new CompeticionDatos();
-                        List<Competicion> lista = datos.listarCompeticion();
+                        OrganizadorDatos orgDatos = new OrganizadorDatos();
+                        Organizador aux = orgDatos.ObtenerInfoAdmin(usuario.Id);
+                        List<Competicion> lista = datos.listarCompeticion(aux.Id);
                         dgvItems.DataSource = lista.Where(x => x.Activo == true).ToList();
                         dgvItems.DataBind();
 

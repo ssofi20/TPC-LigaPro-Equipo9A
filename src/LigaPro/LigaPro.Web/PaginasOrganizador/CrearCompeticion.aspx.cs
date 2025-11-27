@@ -22,13 +22,7 @@ namespace LigaPro.Web.PaginasOrganizador
                     Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
                     if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
                     {
-                        OrganizadorDatos datos = new OrganizadorDatos();
-                        List<Organizador> listaOrg = datos.listar();
-
-                        ddlOrganizador.DataSource = listaOrg;
-                        ddlOrganizador.DataValueField = "Id";
-                        ddlOrganizador.DataTextField = "NombrePublico";
-                        ddlOrganizador.DataBind();
+                       
                     }
                     else
                     {
@@ -51,14 +45,14 @@ namespace LigaPro.Web.PaginasOrganizador
             }
             try
             {
+                Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
                 CompeticionDatos datos = new CompeticionDatos();
                 ReglamentoDatos regDatos = new ReglamentoDatos();
                 Reglamento reg = new Reglamento();
                 Competicion nuevo = new Competicion();
+                OrganizadorDatos orgDatos = new OrganizadorDatos();
                 nuevo.OrganizadorCompetencia = new Organizador();
                 nuevo.Reglas = new Reglamento();
-
-                int idOrganizador = int.Parse(ddlOrganizador.SelectedValue);
 
                 reg.PuntosPorVictoria = int.Parse(txtPv.Text);
                 reg.PuntosPorEmpate = int.Parse(txtPe.Text);
@@ -68,9 +62,9 @@ namespace LigaPro.Web.PaginasOrganizador
                 int idReg = regDatos.agregar(reg);
                 reg.Id = idReg;
 
+                nuevo.OrganizadorCompetencia = orgDatos.ObtenerInfoAdmin(usuario.Id);
                 nuevo.Nombre = txtNombre.Text;
                 nuevo.Estado = EstadoCompetencia.InscripcionAbierta;
-                nuevo.OrganizadorCompetencia.Id = idOrganizador;
                 nuevo.Reglas.Id = idReg;
 
                 if (rbConFases.Checked)
