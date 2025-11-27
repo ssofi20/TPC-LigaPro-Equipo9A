@@ -35,15 +35,10 @@ namespace LigaPro.Web.PaginasOrganizador
             try
             {
                 TorneoDatos datos = new TorneoDatos();
-                // Asumiendo que listarCompeticion filtra por ID de usuario u Organizador
-                // Si tu lógica pide ID de Organizador, obténlo primero como hacías antes
-
-                // Opción A: Si listarCompeticion pide ID Organizador
                 OrganizadorDatos orgDatos = new OrganizadorDatos();
                 Organizador org = orgDatos.ObtenerInfoAdmin(usuario.Id);
                 List<Torneo> lista = datos.listarCompeticion(org.Id);
 
-                // Filtramos solo activos
                 var listaActiva = lista.Where(x => x.Activo).ToList();
 
                 if (listaActiva.Count > 0)
@@ -67,7 +62,6 @@ namespace LigaPro.Web.PaginasOrganizador
 
         private void CargarComboEstados()
         {
-            // Usamos tu lógica existente para llenar el combo del modal
             ddlEstadoEditar.DataSource = Enum.GetValues(typeof(EstadoCompetencia));
             ddlEstadoEditar.DataBind();
         }
@@ -87,7 +81,6 @@ namespace LigaPro.Web.PaginasOrganizador
                 case "ConfirmarEliminar":
                     // Preparamos el modal de eliminación
                     hfIdTorneoEliminar.Value = idTorneo.ToString();
-                    lblNombreTorneoEliminar.Text = ObtenerNombreTorneo(idTorneo); // Método auxiliar rápido
                     // Abrir modal
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "PopDel", "abrirModalEliminar();", true);
                     break;
@@ -151,33 +144,13 @@ namespace LigaPro.Web.PaginasOrganizador
         {
             try
             {
-                Usuario usuario = (Usuario)Session["UsuarioLogueado"];
-                Seguridad seguridad = new Seguridad(); // Tu clase de seguridad
+                int idTorneo = int.Parse(hfIdTorneoEliminar.Value);
+                TorneoDatos datos = new TorneoDatos();
+                datos.DesactivarTorneo(idTorneo);
 
-                // Verificar contraseña
-                if (seguridad.VerifyPassword(txtPassEliminar.Text, usuario.PasswordHash))
-                {
-                    int id = int.Parse(hfIdTorneoEliminar.Value);
-                    TorneoDatos datos = new TorneoDatos();
-                    //datos.EliminarCompeticion(id); // Usa el método de baja lógica que creamos antes
-
-                    CargarTorneos();
-                }
-                else
-                {
-                    // Mostrar error de contraseña incorrecta (alert JS)
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "AlertPass", "alert('Contraseña incorrecta');", true);
-                }
+                CargarTorneos();
             }
             catch (Exception ex) { }
-        }
-
-        private string ObtenerNombreTorneo(int id)
-        {
-            // Pequeña ayuda para mostrar el nombre en el modal de eliminar
-            TorneoDatos datos = new TorneoDatos();
-            var comp = datos.buscarPorId(id);
-            return comp != null ? comp.Nombre : "Torneo";
         }
     }
 }

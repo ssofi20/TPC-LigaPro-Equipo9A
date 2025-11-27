@@ -114,24 +114,6 @@ namespace LigaPro.Web.PaginasOrganizador
         protected global::System.Web.UI.WebControls.Button btnGuardarEdicion;
 
         /// <summary>
-        /// lblNombreTorneoEliminar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNombreTorneoEliminar;
-
-        /// <summary>
-        /// txtPassEliminar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPassEliminar;
-
-        /// <summary>
         /// hfIdTorneoEliminar control.
         /// </summary>
         /// <remarks>

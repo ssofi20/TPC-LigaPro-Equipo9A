@@ -73,7 +73,7 @@ namespace LigaPro.Datos
             List<Torneo> lista = new List<Torneo>();
             try
             {
-                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdOrganizador = @IdOrganizador");
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdOrganizador = @IdOrganizador AND T.Activo = 1");
                 datos.setearParametro("@IdOrganizador", idOrganizador);
                 datos.ejecutarLectura();
 
@@ -115,34 +115,28 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento WHERE C.IdCompeticion = @id");
-                datos.setearParametro("@id", id);
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdTorneo = @idTorneo");
+                datos.setearParametro("@idTorneo", id);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     Torneo aux = new Torneo();
-                    aux.Organizador = new Organizador();
-                    aux.Reglas = new Reglamento();
-
-                    aux.Organizador.Id = (int)datos.Lector["IdOrganizador"];
-                    aux.Organizador.NombrePublico = (string)datos.Lector["NombrePublico"];
-
-                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
-                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
-                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
-                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
-                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
-
-                    aux.Id = (int)datos.Lector["IdCompeticion"];
+                    aux.Id = (int)datos.Lector["IdTorneo"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
-                    //aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
-                    //    ? datos.Lector["FormatoLiga"].ToString()
-                    //    : null;
-                    //aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
-                    //    ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
-                    //    : false;
+                    aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
+                    aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
+                    aux.Reglas = new Reglamento();
+                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
+                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
+                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
+                    aux.Reglas.PuntosPorDerrota = (int)datos.Lector["PuntosPorDerrota"];
+                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
+                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
+
                     return aux;
                 }
                 return null;
@@ -163,31 +157,20 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Reglamentos SET PuntosPorVictoria = @PV, PuntosPorEmpate = @PE, TarjetasAmarillasParaSuspension = @TAS, PartidosSuspensionPorRojaDirecta = @PSRD WHERE IdReglamento = @IdReglamento");
-                datos.setearParametro("@PV", aux.Reglas.PuntosPorVictoria);
-                datos.setearParametro("@PE", aux.Reglas.PuntosPorEmpate);
-                datos.setearParametro("@TAS", aux.Reglas.TarjetasAmarillasParaSuspension);
-                datos.setearParametro("@PSRD", aux.Reglas.PartidosSuspensionPorRojaDirecta);
-                datos.setearParametro("@IdReglamento", aux.Reglas.Id);
+                modificarReglamento(aux.Reglas);
+
+                datos.setearConsulta("UPDATE Torneos SET Nombre = @Nombre, Estado = @Estado, CupoMaximo = @CupoMaximo, TieneFaseGrupos = @TieneFaseGrupos WHERE IdTorneo = @IdTorneo");
+                datos.setearParametro("@IdTorneo", aux.Id);
+                datos.setearParametro("@Nombre", aux.Nombre);
+                datos.setearParametro("@Estado", aux.Estado);
+                datos.setearParametro("@CupoMaximo", aux.CupoMaximo);
+                datos.setearParametro("@TieneFaseGrupos", aux.TieneFaseDeGrupos);
+                
                 datos.ejecutarAccion();
-                datos.cerrarConexion();
-
-                AccesoDatos datosComp = new AccesoDatos();
-
-
-                datosComp.setearConsulta("UPDATE Competiciones SET IdReglamento = @IdReglamento, Nombre = @Nombre, Estado = @Estado, FormatoLiga = @FormatoLiga, TieneFaseDeGrupos = @TieneFaseDeGrupos WHERE IdCompeticion = @IdCompeticion");
-                datosComp.setearParametro("@IdReglamento", aux.Reglas.Id);
-                datosComp.setearParametro("@Nombre", aux.Nombre);
-                datosComp.setearParametro("@Estado", aux.Estado);
-                //datosComp.setearParametro("@FormatoLiga", aux.Formato != null ? (object)aux.Formato : DBNull.Value);
-                //datosComp.setearParametro("@TieneFaseDeGrupos", aux.Fases);
-                datosComp.setearParametro("@IdCompeticion", aux.Id);
-                datosComp.ejecutarAccion();
                 datos.cerrarConexion();
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -196,19 +179,33 @@ namespace LigaPro.Datos
             }
         }
 
-        public void DesactivarTorneo(Torneo aux)
+        private void modificarReglamento(Reglamento reglas)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            datos.setearConsulta("UPDATE Reglamentos SET PuntosPorVictoria = @PV, PuntosPorEmpate = @PE, PuntosPorDerrota = @PD, TarjetasAmarillasParaSuspension = @TAS, PartidosSuspensionPorRojaDirecta = @PSRD WHERE IdReglamento = @IdReglamento");
+            datos.setearParametro("@IdReglamento", reglas.Id);
+            datos.setearParametro("@PV", reglas.PuntosPorVictoria);
+            datos.setearParametro("@PE", reglas.PuntosPorEmpate);
+            datos.setearParametro("@PD", reglas.PuntosPorDerrota);
+            datos.setearParametro("@TAS", reglas.TarjetasAmarillasParaSuspension);
+            datos.setearParametro("@PSRD", reglas.PartidosSuspensionPorRojaDirecta);
+            
+            datos.ejecutarAccion();
+            datos.cerrarConexion();
+        }
+
+        public void DesactivarTorneo(int IdTorneo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Competiciones SET Activo = 0 WHERE IdCompeticion = @Id");
-                datos.setearParametro("@Id", aux.Id);
+                datos.setearConsulta("UPDATE Torneos SET Activo = 0 WHERE IdTorneo = @IdTorneo");
+                datos.setearParametro("@IdTorneo", IdTorneo);
 
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally

@@ -198,15 +198,10 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Estás a punto de eliminar el torneo <strong>
-                        <asp:Label ID="lblNombreTorneoEliminar" runat="server"></asp:Label></strong>.</p>
-                    <div class="alert alert-warning small">
-                        Esta acción es irreversible (Baja lógica).
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Contraseña para confirmar:</label>
-                        <asp:TextBox ID="txtPassEliminar" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
+                    <p>
+                        ¿Seguro que desea eliminar este Torneo? <strong></strong>
+                    </p>
+                    <div>
                         <asp:HiddenField ID="hfIdTorneoEliminar" runat="server" />
                     </div>
                 </div>
