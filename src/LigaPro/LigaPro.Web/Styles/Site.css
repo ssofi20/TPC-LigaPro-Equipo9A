@@ -1,2 +1,80 @@
 ﻿body {
 }
+
+.table-modern {
+    border-collapse: separate !important;
+    border-spacing: 0 12px !important;
+}
+
+    .table-modern tbody tr {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-modern td, .table-modern th {
+        border: none !important;
+        padding: 16px 20px !important;
+        vertical-align: middle !important;
+    }
+
+.badge-estado {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.acciones a {
+    margin-right: 10px;
+    font-size: 0.9rem;
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+    .acciones a:hover {
+        text-decoration: underline;
+    }
+
+
+.btn-action {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    background: #eef2ff;
+    color: #4f46e5;
+    border: none;
+    margin-right: 6px;
+}
+
+    .btn-action:hover {
+        background: #e0e7ff;
+        color: #4338ca;
+    }
+
+.table-modern {
+    border-collapse: separate !important;
+    border-spacing: 0 12px !important;
+}
+
+    .table-modern tbody tr {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-modern td, .table-modern th {
+        border: none !important;
+        padding: 16px 20px !important;
+        vertical-align: middle !important;
+    }
+
+.badge-estado {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    background: #f3f4f6;
+    color: #4b5563;
+}
+

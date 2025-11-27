@@ -32,8 +32,8 @@
                         </div>
 
                         <div class="d-flex justify-content-center gap-3">
-                            <asp:Button ID="btnAceptar" runat="server" Text="Modificar" CssClass="btn btn-success" OnClick="btnAceptar_Click" />
-                            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" OnClick="btnCancelar_Click" />
+                            <asp:Button ID="btnAceptar" runat="server" Text="Modificar" CssClass="btn btn-success" CausesValidation="true" OnClick="btnAceptar_Click" />
+                            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" CausesValidation="false" OnClick="btnCancelar_Click" />
                         </div>
                     </div>
                 </div>

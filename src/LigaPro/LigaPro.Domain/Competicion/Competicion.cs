@@ -15,6 +15,8 @@ namespace LigaPro.Domain.Actores
         public string Formato { get; set; }
         public bool Fases {  get; set; }
 
+        public bool Activo { get; set; }
+
         //Relaciones
         /*public int IdOrganizador { get; set; }
         public int IdReglamento { get; set; }*/

@@ -16,13 +16,14 @@ namespace LigaPro.Datos
 
             try
             {
-                datos.setearConsulta("INSERT INTO Competiciones (IdOrganizador, IdReglamento, Nombre, Estado, FormatoLiga, TieneFaseDeGrupos) values (@IdOrganizador, @IdReglamento, @Nombre, @Estado, @FormatoLiga, @TieneFaseDeGrupos)");
+                datos.setearConsulta("INSERT INTO Competiciones (IdOrganizador, IdReglamento, Nombre, Estado, FormatoLiga, TieneFaseDeGrupos, Activo) values (@IdOrganizador, @IdReglamento, @Nombre, @Estado, @FormatoLiga, @TieneFaseDeGrupos, @Activo)");
                 datos.setearParametro("@IdOrganizador", nuevo.OrganizadorCompetencia.Id);
                 datos.setearParametro("@IdReglamento", nuevo.Reglas.Id);
                 datos.setearParametro("@Nombre", nuevo.Nombre);
                 datos.setearParametro("@Estado", nuevo.Estado);
                 datos.setearParametro("@FormatoLiga", nuevo.Formato != null ? (object)nuevo.Formato : DBNull.Value);
                 datos.setearParametro("@TieneFaseDeGrupos", nuevo.Fases);
+                datos.setearParametro("@Activo", true);
 
                 datos.ejecutarAccion();
             }
@@ -44,7 +45,7 @@ namespace LigaPro.Datos
             List<Competicion> lista = new List<Competicion>();
             try
             {
-                datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento");
+                datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, C.Activo, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -72,6 +73,7 @@ namespace LigaPro.Datos
                     aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
                         ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
                         : false;
+                    aux.Activo = (bool)datos.Lector["Activo"];
                     lista.Add(aux);
                 }
                 return lista;
@@ -173,6 +175,26 @@ namespace LigaPro.Datos
             }
         }
 
+        public void DesactivarCompeticion(Competicion aux)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Competiciones SET Activo = 0 WHERE IdCompeticion = @Id");
+                datos.setearParametro("@Id", aux.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
     }
 }

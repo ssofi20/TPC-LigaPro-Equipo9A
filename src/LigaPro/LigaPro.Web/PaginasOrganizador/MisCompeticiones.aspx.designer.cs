@@ -13,5 +13,23 @@ namespace LigaPro.Web.PaginasOrganizador
 
     public partial class MisCompeticiones
     {
+
+        /// <summary>
+        /// PanelSeleccionar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelSeleccionar;
+
+        /// <summary>
+        /// dgvItems control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView dgvItems;
     }
 }

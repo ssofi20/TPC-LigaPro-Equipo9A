@@ -1,5 +1,6 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain.Actores;
+using LigaPro.Negocio;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,7 +27,8 @@ namespace LigaPro.Web.PaginasOrganizador
                     if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
                     {
                         CompeticionDatos datos = new CompeticionDatos();
-                        dgvItems.DataSource = datos.listarCompeticion();
+                        List<Competicion> lista = datos.listarCompeticion();
+                        dgvItems.DataSource = lista.Where(x => x.Activo == true).ToList();
                         dgvItems.DataBind();
 
                         if (ddlOrganizador.Items.Count == 0)
@@ -130,7 +132,64 @@ namespace LigaPro.Web.PaginasOrganizador
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            Response.Redirect("PerfilAdmin.aspx", false);
+            Response.Redirect("GestionarCompetencias.aspx", false);
+        }
+
+        protected void btnCancelarBaja_Click(object sender, EventArgs e)
+        {
+            PanelEliminar.Visible = false;
+            PanelSeleccionar.Visible = true;
+
+        }
+
+        protected void btnBaja_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
+                if (usuario != null && usuario.Id != 0)
+                {
+                    Seguridad seguridad = new Seguridad();
+                    CompeticionDatos datos = new CompeticionDatos();
+
+                    if (seguridad.VerifyPassword(txtPass.Text, usuario.PasswordHash))
+                    {
+                        usuario.PasswordHash = seguridad.HashPassword(txtPass.Text);
+
+                        int id = Convert.ToInt32(ViewState["id"]);
+
+                        Competicion nuevo = datos.buscarPorId(id);
+                        datos.DesactivarCompeticion(nuevo);
+
+                        PanelEliminar.Visible = false;
+                        PanelSeleccionar.Visible = true;
+
+                    }
+                    else
+                    {
+                        // mostrar msj contraseña antigua no coincide
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        protected void dgvItems_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Eliminar")
+            {
+                int id = Convert.ToInt32(e.CommandArgument);
+
+                ViewState["id"] = id;
+
+                PanelSeleccionar.Visible = false;
+                PanelModificar.Visible = false;
+                PanelEliminar.Visible = true;
+            }
         }
     }
 }
