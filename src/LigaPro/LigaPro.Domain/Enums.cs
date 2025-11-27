@@ -16,9 +16,11 @@ namespace LigaPro.Domain
     ///Define los posibles estados de una competición.
     public enum EstadoCompetencia
     {
-        InscripcionAbierta,
-        EnCurso,
-        Finalizado
+        InscripcionAbierta = 1,
+        SorteoRealizado = 2,
+        EnCurso = 3,
+        Finalizado = 4,
+        Cancelado = 0
     }
 
     ///Define el tipo de liga (ej. ida o ida y vuelta).

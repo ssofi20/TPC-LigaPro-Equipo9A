@@ -1,6 +1,7 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain;
 using LigaPro.Domain.Actores;
+using LigaPro.Domain.Actores.LigaPro.Domain.Actores;
 using LigaPro.Negocio;
 using System;
 using System.Collections.Generic;
@@ -33,14 +34,14 @@ namespace LigaPro.Web.PaginasOrganizador
             Usuario usuario = (Usuario)Session["UsuarioLogueado"];
             try
             {
-                CompeticionDatos datos = new CompeticionDatos();
+                TorneoDatos datos = new TorneoDatos();
                 // Asumiendo que listarCompeticion filtra por ID de usuario u Organizador
                 // Si tu lógica pide ID de Organizador, obténlo primero como hacías antes
 
                 // Opción A: Si listarCompeticion pide ID Organizador
                 OrganizadorDatos orgDatos = new OrganizadorDatos();
                 Organizador org = orgDatos.ObtenerInfoAdmin(usuario.Id);
-                List<Competicion> lista = datos.listarCompeticion(org.Id);
+                List<Torneo> lista = datos.listarCompeticion(org.Id);
 
                 // Filtramos solo activos
                 var listaActiva = lista.Where(x => x.Activo).ToList();
@@ -101,8 +102,8 @@ namespace LigaPro.Web.PaginasOrganizador
         // --- LÓGICA DE EDICIÓN ---
         private void CargarDatosParaEditar(int id)
         {
-            CompeticionDatos datos = new CompeticionDatos();
-            Competicion comp = datos.buscarPorId(id);
+            TorneoDatos datos = new TorneoDatos();
+            Torneo comp = datos.buscarPorId(id);
 
             hfIdTorneoEditar.Value = comp.Id.ToString();
             txtNombreEditar.Text = comp.Nombre;
@@ -114,7 +115,7 @@ namespace LigaPro.Web.PaginasOrganizador
             txtTasEditar.Text = comp.Reglas.TarjetasAmarillasParaSuspension.ToString();
             txtPsrdEditar.Text = comp.Reglas.PartidosSuspensionPorRojaDirecta.ToString();
 
-            chkFasesEditar.Checked = comp.Fases;
+            chkFasesEditar.Checked = comp.TieneFaseDeGrupos;
         }
 
         protected void btnGuardarEdicion_Click(object sender, EventArgs e)
@@ -122,8 +123,8 @@ namespace LigaPro.Web.PaginasOrganizador
             try
             {
                 int id = int.Parse(hfIdTorneoEditar.Value);
-                CompeticionDatos datos = new CompeticionDatos();
-                Competicion comp = datos.buscarPorId(id); // Traemos el original
+                TorneoDatos datos = new TorneoDatos();
+                Torneo comp = datos.buscarPorId(id); // Traemos el original
 
                 // Actualizamos valores
                 comp.Nombre = txtNombreEditar.Text;
@@ -132,9 +133,9 @@ namespace LigaPro.Web.PaginasOrganizador
                 comp.Reglas.PuntosPorEmpate = int.Parse(txtPeEditar.Text);
                 comp.Reglas.TarjetasAmarillasParaSuspension = int.Parse(txtTasEditar.Text);
                 comp.Reglas.PartidosSuspensionPorRojaDirecta = int.Parse(txtPsrdEditar.Text);
-                comp.Fases = chkFasesEditar.Checked;
+                comp.TieneFaseDeGrupos = chkFasesEditar.Checked;
 
-                datos.modificarCompetencia(comp);
+                datos.modificarTorneo(comp);
 
                 // Recargar lista
                 CargarTorneos();
@@ -157,7 +158,7 @@ namespace LigaPro.Web.PaginasOrganizador
                 if (seguridad.VerifyPassword(txtPassEliminar.Text, usuario.PasswordHash))
                 {
                     int id = int.Parse(hfIdTorneoEliminar.Value);
-                    CompeticionDatos datos = new CompeticionDatos();
+                    TorneoDatos datos = new TorneoDatos();
                     //datos.EliminarCompeticion(id); // Usa el método de baja lógica que creamos antes
 
                     CargarTorneos();
@@ -174,7 +175,7 @@ namespace LigaPro.Web.PaginasOrganizador
         private string ObtenerNombreTorneo(int id)
         {
             // Pequeña ayuda para mostrar el nombre en el modal de eliminar
-            CompeticionDatos datos = new CompeticionDatos();
+            TorneoDatos datos = new TorneoDatos();
             var comp = datos.buscarPorId(id);
             return comp != null ? comp.Nombre : "Torneo";
         }

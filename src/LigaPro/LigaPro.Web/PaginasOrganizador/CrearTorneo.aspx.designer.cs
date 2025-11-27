@@ -15,6 +15,24 @@ namespace LigaPro.Web.PaginasOrganizador
     {
 
         /// <summary>
+        /// ScriptManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+
+        /// <summary>
+        /// btnCancelar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelar;
+
+        /// <summary>
         /// txtNombre control.
         /// </summary>
         /// <remarks>
@@ -22,6 +40,24 @@ namespace LigaPro.Web.PaginasOrganizador
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
+
+        /// <summary>
+        /// txtCupos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCupos;
+
+        /// <summary>
+        /// upFormato control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upFormato;
 
         /// <summary>
         /// rbConFases control.
@@ -42,67 +78,58 @@ namespace LigaPro.Web.PaginasOrganizador
         protected global::System.Web.UI.WebControls.RadioButton rbSinFases;
 
         /// <summary>
-        /// panelOpcionesFases control.
+        /// pnlPuntos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel panelOpcionesFases;
+        protected global::System.Web.UI.WebControls.Panel pnlPuntos;
 
         /// <summary>
-        /// rbIda control.
+        /// txtPuntosVictoria control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbIda;
+        protected global::System.Web.UI.WebControls.TextBox txtPuntosVictoria;
 
         /// <summary>
-        /// rbIdaVuelta control.
+        /// txtPuntosEmpate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbIdaVuelta;
+        protected global::System.Web.UI.WebControls.TextBox txtPuntosEmpate;
 
         /// <summary>
-        /// txtPv control.
+        /// txtPuntosDerrota control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPv;
+        protected global::System.Web.UI.WebControls.TextBox txtPuntosDerrota;
 
         /// <summary>
-        /// txtPe control.
+        /// txtAmarillas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPe;
+        protected global::System.Web.UI.WebControls.TextBox txtAmarillas;
 
         /// <summary>
-        /// txtTas control.
+        /// txtRojas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTas;
-
-        /// <summary>
-        /// txtPsrd control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPsrd;
+        protected global::System.Web.UI.WebControls.TextBox txtRojas;
 
         /// <summary>
         /// btnCrear control.
@@ -112,14 +139,5 @@ namespace LigaPro.Web.PaginasOrganizador
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCrear;
-
-        /// <summary>
-        /// btnCancelar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelar;
     }
 }

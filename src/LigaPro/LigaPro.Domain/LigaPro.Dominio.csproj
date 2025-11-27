@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Competicion\Competicion.cs" />
     <Compile Include="Estuctura Torneos\Cruce.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Actores\Equipo.cs" />
@@ -51,7 +50,6 @@
     <Compile Include="Estuctura Torneos\Grupo.cs" />
     <Compile Include="Relaciones\Inscripcion.cs" />
     <Compile Include="Actores\Jugador.cs" />
-    <Compile Include="Competicion\Liga.cs" />
     <Compile Include="Actores\Organizador.cs" />
     <Compile Include="Partidos\Partido.cs" />
     <Compile Include="Partidos\PartidoEliminatoria.cs" />

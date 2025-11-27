@@ -15,6 +15,5 @@ namespace LigaPro.Domain.Actores
         public string Logo { get; set; }
         public string EmailContacto { get; set; }
         public string NumeroTelefono { get; set; }
-        public List<Competicion> CompetenciasOrganizador { get; set; }
     }
 }

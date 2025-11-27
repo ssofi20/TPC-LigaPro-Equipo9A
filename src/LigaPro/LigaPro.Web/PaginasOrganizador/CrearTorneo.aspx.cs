@@ -1,13 +1,10 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain;
 using LigaPro.Domain.Actores;
+using LigaPro.Domain.Actores.LigaPro.Domain.Actores;
 using LigaPro.Negocio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace LigaPro.Web.PaginasOrganizador
 {
@@ -15,100 +12,77 @@ namespace LigaPro.Web.PaginasOrganizador
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Session["UsuarioLogueado"] == null)
             {
-                try
-                {
-                    Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
-                    if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
-                    {
-                       
-                    }
-                    else
-                    {
-                        Response.Redirect("/Auth/InicioSesion.aspx", false);
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    throw ex;
-                }
+                Response.Redirect("~/Auth/InicioSesion.aspx");
             }
+        }
+
+        // Al cambiar el radio button para mostrar opciones de puntos
+        protected void Formato_Changed(object sender, EventArgs e)
+        {
+            pnlPuntos.Visible = rbConFases.Checked;
         }
 
         protected void btnCrear_Click(object sender, EventArgs e)
         {
-            if (!Page.IsValid)
-            {
-                return;
-            }
+            if (!Page.IsValid) return;
+
             try
             {
-                Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
-                CompeticionDatos datos = new CompeticionDatos();
-                ReglamentoDatos regDatos = new ReglamentoDatos();
-                Reglamento reg = new Reglamento();
-                Competicion nuevo = new Competicion();
+                Usuario usuario = (Usuario)Session["UsuarioLogueado"];
                 OrganizadorDatos orgDatos = new OrganizadorDatos();
-                nuevo.OrganizadorCompetencia = new Organizador();
-                nuevo.Reglas = new Reglamento();
+                TorneoNegocio negocio = new TorneoNegocio();
 
-                reg.PuntosPorVictoria = int.Parse(txtPv.Text);
-                reg.PuntosPorEmpate = int.Parse(txtPe.Text);
-                reg.TarjetasAmarillasParaSuspension = int.Parse(txtTas.Text);
-                reg.PartidosSuspensionPorRojaDirecta = int.Parse(txtPsrd.Text);
+                // CONFIGURAR REGLAMENTO
+                Reglamento reglas = new Reglamento();
+                reglas.TarjetasAmarillasParaSuspension = int.Parse(txtAmarillas.Text);
+                reglas.PartidosSuspensionPorRojaDirecta = int.Parse(txtRojas.Text);
 
-                int idReg = regDatos.agregar(reg);
-                reg.Id = idReg;
-
-                nuevo.OrganizadorCompetencia = orgDatos.ObtenerInfoAdmin(usuario.Id);
-                nuevo.Nombre = txtNombre.Text;
-                nuevo.Estado = EstadoCompetencia.InscripcionAbierta;
-                nuevo.Reglas.Id = idReg;
-
+                // Lógica de Puntos
                 if (rbConFases.Checked)
                 {
-                    nuevo.Fases = true;
-
-                    if (rbIdaVuelta.Checked)
-                    {
-                        nuevo.Formato = TipoLiga.IdaYVuelta.ToString();
-                    }
-                    else if (rbIda.Checked)
-                    {
-                        nuevo.Formato = TipoLiga.Ida.ToString();
-                    }
+                    // Si hay grupos, usamos lo que escribió el usuario
+                    reglas.PuntosPorVictoria = int.Parse(txtPuntosVictoria.Text);
+                    reglas.PuntosPorEmpate = int.Parse(txtPuntosEmpate.Text);
+                    reglas.PuntosPorDerrota = int.Parse(txtPuntosDerrota.Text);
                 }
-                else if (rbSinFases.Checked)
+                else
                 {
-                    nuevo.Fases = false;
-                    nuevo.Formato = null;
+                    // Si es eliminatoria directa, guardamos defaults (no afectan el juego)
+                    reglas.PuntosPorVictoria = 3;
+                    reglas.PuntosPorEmpate = 1;
+                    reglas.PuntosPorDerrota = 0;
                 }
-                datos.agregarComp(nuevo);
-                Response.Redirect("PerfilAdmin.aspx", false);
+
+                // CONFIGURAR TORNEO
+                Torneo nuevo = new Torneo();
+                nuevo.Nombre = txtNombre.Text;
+                nuevo.Activo = true;
+                nuevo.Estado = EstadoCompetencia.InscripcionAbierta;
+                nuevo.CupoMaximo = int.Parse(txtCupos.Text);
+
+                // La propiedad clave: ¿Tiene grupos o no?
+                nuevo.TieneFaseDeGrupos = rbConFases.Checked;
+
+                // Asignar objetos
+                nuevo.Reglas = reglas;
+                nuevo.Organizador = orgDatos.ObtenerInfoAdmin(usuario.Id);
+
+                // 3. GUARDAR
+                negocio.CrearTorneo(nuevo);
+
+                Response.Redirect("MisTorneos.aspx", false);
             }
             catch (Exception ex)
             {
-                throw ex;
+                // Manejo de error (puedes agregar un Label de error en el ASPX)
             }
-        }
-
-        protected void rbConFases_CheckedChanged(object sender, EventArgs e)
-        {
-            panelOpcionesFases.Visible = rbConFases.Checked;
-
-        }
-
-        protected void rbSinFases_CheckedChanged(object sender, EventArgs e)
-        {
-            panelOpcionesFases.Visible = false;
-
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            Response.Redirect("PerfilAdmin.aspx");
+            Response.Redirect("MisTorneos.aspx");
         }
     }
 }

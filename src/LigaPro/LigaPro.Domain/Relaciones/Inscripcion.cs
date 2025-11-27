@@ -16,7 +16,6 @@ namespace LigaPro.Domain.Actores
 
         //Navegacion
         public Equipo Equipo { get; set; }
-        public Competicion Competicion { get; set; }
         public DateTime FechaInscripcion { get; set; }
         public List<EquipoJugador> Plantel { get; set; }
     }

@@ -1,6 +1,8 @@
 ﻿using LigaPro.Domain;
 using LigaPro.Domain.Actores;
+using LigaPro.Domain.Actores.LigaPro.Domain.Actores;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,22 +10,23 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Datos
 {
-    public class CompeticionDatos
+    public class TorneoDatos
     {
-        public void agregarComp(Competicion nuevo)
+        public void CrearNuevoTorneo(Torneo nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("INSERT INTO Competiciones (IdOrganizador, IdReglamento, Nombre, Estado, FormatoLiga, TieneFaseDeGrupos, Activo) values (@IdOrganizador, @IdReglamento, @Nombre, @Estado, @FormatoLiga, @TieneFaseDeGrupos, @Activo)");
-                datos.setearParametro("@IdOrganizador", nuevo.OrganizadorCompetencia.Id);
-                datos.setearParametro("@IdReglamento", nuevo.Reglas.Id);
-                datos.setearParametro("@Nombre", nuevo.Nombre);
-                datos.setearParametro("@Estado", nuevo.Estado);
-                datos.setearParametro("@FormatoLiga", nuevo.Formato != null ? (object)nuevo.Formato : DBNull.Value);
-                datos.setearParametro("@TieneFaseDeGrupos", nuevo.Fases);
-                datos.setearParametro("@Activo", true);
+                int idReglamento = CrearReglamento(nuevo.Reglas);
+
+                datos.setearConsulta("INSERT INTO Torneos (IdOrganizador, Nombre, Estado, CupoMaximo, TieneFaseGrupos, IdReglamento) \r\nVALUES (@idOrganizador, @nombre, @estado, @cupoMaximo, @tieneFaseGrupos, @idReglamento)");
+                datos.setearParametro("@idOrganizador", nuevo.Organizador.Id);
+                datos.setearParametro("@nombre", nuevo.Nombre);
+                datos.setearParametro("@estado", nuevo.Estado);
+                datos.setearParametro("@cupoMaximo", nuevo.CupoMaximo);
+                datos.setearParametro("@tieneFaseGrupos", nuevo.TieneFaseDeGrupos);
+                datos.setearParametro("@idReglamento", idReglamento);
 
                 datos.ejecutarAccion();
             }
@@ -39,10 +42,35 @@ namespace LigaPro.Datos
 
         }
 
-        public List<Competicion> listarCompeticion(int id)
+        private int CrearReglamento(Reglamento reglamento)
         {
             AccesoDatos datos = new AccesoDatos();
-            List<Competicion> lista = new List<Competicion>();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO Reglamentos (PuntosPorVictoria, PuntosPorEmpate, PuntosPorDerrota, PartidosSuspensionPorRojaDirecta, TarjetasAmarillasParaSuspension)\r\nVALUES (@PuntosPorVictoria, @PuntosPorEmpate, @PuntosPorDerrota, @PartidosSuspensionPorRojaDirecta, @TarjetasAmarillasParaSuspension)\r\nSELECT SCOPE_IDENTITY()");
+                datos.setearParametro("@PuntosPorVictoria", reglamento.PuntosPorVictoria);
+                datos.setearParametro("@PuntosPorEmpate", reglamento.PuntosPorEmpate);
+                datos.setearParametro("@PuntosPorDerrota", reglamento.PuntosPorDerrota);
+                datos.setearParametro("@PartidosSuspensionPorRojaDirecta", reglamento.PuntosPorDerrota);
+                datos.setearParametro("@TarjetasAmarillasParaSuspension", reglamento.TarjetasAmarillasParaSuspension);
+
+                return Convert.ToInt32(datos.ejecutarScalar());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public List<Torneo> listarCompeticion(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Torneo> lista = new List<Torneo>();
             try
             {
                 datos.setearConsulta("SELECT C.IdCompeticion, C.Nombre, C.Estado, C.FormatoLiga, C.TieneFaseDeGrupos, C.Activo, O.IdOrganizador, O.NombrePublico, R.IdReglamento, R.PuntosPorVictoria, R.PuntosPorEmpate, R.TarjetasAmarillasParaSuspension, R.PartidosSuspensionPorRojaDirecta FROM Competiciones C INNER JOIN Organizadores O ON O.IdOrganizador = C.IdOrganizador INNER JOIN Reglamentos R ON R.IdReglamento = C.IdReglamento WHERE O.IdOrganizador = @id");
@@ -51,12 +79,12 @@ namespace LigaPro.Datos
 
                 while (datos.Lector.Read())
                 {
-                    Competicion aux = new Competicion();
-                    aux.OrganizadorCompetencia = new Organizador();
+                    Torneo aux = new Torneo();
+                    aux.Organizador = new Organizador();
                     aux.Reglas = new Reglamento();
 
-                    aux.OrganizadorCompetencia.Id = (int)datos.Lector["IdOrganizador"];
-                    aux.OrganizadorCompetencia.NombrePublico = (string)datos.Lector["NombrePublico"];
+                    aux.Organizador.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.Organizador.NombrePublico = (string)datos.Lector["NombrePublico"];
 
                     aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
                     aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
@@ -68,12 +96,12 @@ namespace LigaPro.Datos
                     aux.Id = (int)datos.Lector["IdCompeticion"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
-                    aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
-                        ? datos.Lector["FormatoLiga"].ToString()
-                        : null;
-                    aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
-                        ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
-                        : false;
+                    ////aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
+                    //    ? datos.Lector["FormatoLiga"].ToString()
+                    //    : null;
+                    ////aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
+                    //    ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
+                    //    : false;
                     aux.Activo = (bool)datos.Lector["Activo"];
                     lista.Add(aux);
                 }
@@ -89,7 +117,7 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
-        public Competicion buscarPorId(int id)
+        public Torneo buscarPorId(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -100,12 +128,12 @@ namespace LigaPro.Datos
 
                 while (datos.Lector.Read())
                 {
-                    Competicion aux = new Competicion();
-                    aux.OrganizadorCompetencia = new Organizador();
+                    Torneo aux = new Torneo();
+                    aux.Organizador = new Organizador();
                     aux.Reglas = new Reglamento();
 
-                    aux.OrganizadorCompetencia.Id = (int)datos.Lector["IdOrganizador"];
-                    aux.OrganizadorCompetencia.NombrePublico = (string)datos.Lector["NombrePublico"];
+                    aux.Organizador.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.Organizador.NombrePublico = (string)datos.Lector["NombrePublico"];
 
                     aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
                     aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
@@ -116,12 +144,12 @@ namespace LigaPro.Datos
                     aux.Id = (int)datos.Lector["IdCompeticion"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
-                    aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
-                        ? datos.Lector["FormatoLiga"].ToString()
-                        : null;
-                    aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
-                        ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
-                        : false;
+                    //aux.Formato = datos.Lector["FormatoLiga"] != DBNull.Value
+                    //    ? datos.Lector["FormatoLiga"].ToString()
+                    //    : null;
+                    //aux.Fases = datos.Lector["TieneFaseDeGrupos"] != DBNull.Value
+                    //    ? Convert.ToBoolean(datos.Lector["TieneFaseDeGrupos"])
+                    //    : false;
                     return aux;
                 }
                 return null;
@@ -137,7 +165,7 @@ namespace LigaPro.Datos
             }
         }
 
-        public void modificarCompetencia(Competicion aux)
+        public void modificarTorneo(Torneo aux)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -158,8 +186,8 @@ namespace LigaPro.Datos
                 datosComp.setearParametro("@IdReglamento", aux.Reglas.Id);
                 datosComp.setearParametro("@Nombre", aux.Nombre);
                 datosComp.setearParametro("@Estado", aux.Estado);
-                datosComp.setearParametro("@FormatoLiga", aux.Formato != null ? (object)aux.Formato : DBNull.Value);
-                datosComp.setearParametro("@TieneFaseDeGrupos", aux.Fases);
+                //datosComp.setearParametro("@FormatoLiga", aux.Formato != null ? (object)aux.Formato : DBNull.Value);
+                //datosComp.setearParametro("@TieneFaseDeGrupos", aux.Fases);
                 datosComp.setearParametro("@IdCompeticion", aux.Id);
                 datosComp.ejecutarAccion();
                 datos.cerrarConexion();
@@ -175,7 +203,7 @@ namespace LigaPro.Datos
             }
         }
 
-        public void DesactivarCompeticion(Competicion aux)
+        public void DesactivarTorneo(Torneo aux)
         {
             AccesoDatos datos = new AccesoDatos();
             try
