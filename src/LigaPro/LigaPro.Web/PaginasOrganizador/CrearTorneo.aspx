@@ -2,36 +2,98 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        .step-card {
-            border-left: 5px solid #0d6efd;
-            transition: transform 0.2s;
+        /* MINIMALISMO TOTAL */
+        body {
+            background-color: #f8f9fa; /* Fondo gris muy suave */
         }
 
-            .step-card:hover {
-                transform: translateY(-2px);
-            }
+        .card {
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); /* Sombra casi invisible */
+        }
 
         .form-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6c757d;
             font-weight: 600;
-            color: #495057;
+            margin-bottom: 0.5rem;
         }
 
-        .header-step {
+        .form-control, .input-group-text {
+            border: 1px solid #dee2e6;
             background-color: #fff;
-            border-bottom: 1px solid #e9ecef;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
         }
-        /* Animación suave para el panel de puntos */
+
+            .form-control:focus {
+                border-color: #212529; /* Borde negro al enfocar */
+                box-shadow: none;
+            }
+
+        /* DISEÑO DE RADIO BUTTONS COMO TARJETAS (TILES) */
+        .radio-tile-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-tile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+            .radio-tile:hover {
+                border-color: #adb5bd;
+                background-color: #fcfcfc;
+            }
+
+            /* Truco para detectar cuando el radio dentro del div está chequeado (Soporte moderno) */
+            .radio-tile:has(input:checked) {
+                border-color: #212529;
+                background-color: #fff;
+                box-shadow: 0 0 0 1px #212529; /* Simula borde doble */
+            }
+
+            /* Estilo del texto dentro del radio tile */
+            .radio-tile label {
+                cursor: pointer;
+                width: 100%;
+                margin-left: 10px;
+                font-weight: 600;
+                color: #212529;
+            }
+
+            .radio-tile small {
+                display: block;
+                font-weight: 400;
+                color: #6c757d;
+                margin-top: 4px;
+            }
+
+        /* Animación suave */
         .fade-in {
-            animation: fadeIn 0.5s;
+            animation: fadeIn 0.4s ease-out;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: translateY(5px);
             }
 
             to {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -43,148 +105,112 @@
 
     <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-lg-9">
+            <div class="col-lg-8">
 
-                <!-- CABECERA -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex justify-content-between align-items-end mb-5">
                     <div>
-                        <h2 class="fw-bold mb-1">Nuevo Torneo</h2>
-                        <p class="text-muted mb-0">Configura tu competición en 3 pasos.</p>
+                        <h2 class="fw-bold text-dark mb-1">Crear Torneo</h2>
+                        <p class="text-muted mb-0">Configuración de la nueva competencia</p>
                     </div>
                     <asp:Button ID="btnCancelar" runat="server" Text="Cancelar"
-                        CssClass="btn btn-outline-secondary btn-sm" CausesValidation="false" OnClick="btnCancelar_Click" />
+                        CssClass="btn btn-link text-decoration-none text-muted p-0" CausesValidation="false" OnClick="btnCancelar_Click" />
                 </div>
 
-                <!-- PASO 1: DATOS GENERALES -->
-                <div class="card shadow-sm mb-4 step-card border-primary">
-                    <div class="card-header header-step py-3">
-                        <h5 class="mb-0 text-primary"><i class="bi bi-info-circle-fill me-2"></i>1. Datos Generales</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-8">
-                                <label for="txtNombre" class="form-label">Nombre del Torneo</label>
-                                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control form-control-lg" placeholder="Ej: Copa Apertura 2025"></asp:TextBox>
-                                <asp:RequiredFieldValidator ErrorMessage="El nombre es obligatorio." ControlToValidate="txtNombre" CssClass="text-danger small" runat="server" Display="Dynamic" />
-                            </div>
-                            <div class="col-md-4">
-                                <label for="txtCupos" class="form-label">Cupo Máximo</label>
-                                <div class="input-group">
-                                    <asp:TextBox ID="txtCupos" runat="server" CssClass="form-control form-control-lg" TextMode="Number" placeholder="16"></asp:TextBox>
-                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
-                                </div>
-                                <asp:RequiredFieldValidator ErrorMessage="Define el cupo." ControlToValidate="txtCupos" CssClass="text-danger small" runat="server" Display="Dynamic" />
-                            </div>
+                <div class="card mb-4 p-4">
+                    <h5 class="fw-bold mb-4">1. Información General</h5>
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <label for="txtNombre" class="form-label">Nombre del Torneo</label>
+                            <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" placeholder="Ej. Torneo Apertura 2025"></asp:TextBox>
+                            <asp:RequiredFieldValidator ErrorMessage="Requerido" ControlToValidate="txtNombre" CssClass="text-danger small mt-1 d-block" runat="server" Display="Dynamic" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txtCupos" class="form-label">Cupo de Equipos</label>
+                            <asp:TextBox ID="txtCupos" runat="server" CssClass="form-control" TextMode="Number" placeholder="16"></asp:TextBox>
+                            <asp:RequiredFieldValidator ErrorMessage="Requerido" ControlToValidate="txtCupos" CssClass="text-danger small mt-1 d-block" runat="server" Display="Dynamic" />
                         </div>
                     </div>
                 </div>
 
-                <!-- PASO 2: ESTRUCTURA (Con AJAX para mostrar/ocultar puntos) -->
                 <asp:UpdatePanel ID="upFormato" runat="server">
                     <ContentTemplate>
-                        <div class="card shadow-sm mb-4 step-card" style="border-left-color: #198754;">
-                            <div class="card-header header-step py-3">
-                                <h5 class="mb-0 text-success"><i class="bi bi-trophy-fill me-2"></i>2. Estructura</h5>
-                            </div>
-                            <div class="card-body">
+                        <div class="card mb-4 p-4">
+                            <h5 class="fw-bold mb-4">2. Formato de Competencia</h5>
 
-                                <label class="form-label mb-3">¿Cómo se jugará el torneo?</label>
-                                <div class="row mb-4">
-                                    <div class="col-md-6">
-                                        <div class="form-check p-3 border rounded bg-light h-100">
-                                            <asp:RadioButton ID="rbConFases" GroupName="Fases" runat="server"
-                                                AutoPostBack="true" OnCheckedChanged="Formato_Changed" CssClass="form-check-input" />
-                                            <label class="form-check-label fw-bold ms-2" for="<%= rbConFases.ClientID %>">
-                                                Con Fase de Grupos
-                                            </label>
-                                            <div class="text-muted small ms-4 mt-1">
-                                                Los equipos se dividen en grupos y suman puntos para clasificar.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check p-3 border rounded bg-light h-100">
-                                            <asp:RadioButton ID="rbSinFases" GroupName="Fases" runat="server"
-                                                AutoPostBack="true" OnCheckedChanged="Formato_Changed" CssClass="form-check-input" Checked="true" />
-                                            <label class="form-check-label fw-bold ms-2" for="<%= rbSinFases.ClientID %>">
-                                                Eliminación Directa (Sin Grupos)
-                                            </label>
-                                            <div class="text-muted small ms-4 mt-1">
-                                                Solo llaves de eliminación (Octavos, Cuartos, etc.). No hay tabla de puntos.
-                                            </div>
-                                        </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="radio-tile">
+                                        <asp:RadioButton ID="rbConFases" GroupName="Fases" runat="server"
+                                            AutoPostBack="true" OnCheckedChanged="Formato_Changed" />
+                                        <label for="<%= rbConFases.ClientID %>">
+                                            Fase de Grupos
+                                            <small>Estilo Mundial. Grupos + Eliminatorias.</small>
+                                        </label>
                                     </div>
                                 </div>
 
-                                <!-- PANEL PUNTOS (Solo visible si hay grupos) -->
-                                <asp:Panel ID="pnlPuntos" runat="server" Visible="false" CssClass="bg-success bg-opacity-10 p-4 rounded fade-in">
-                                    <h6 class="fw-bold text-success mb-3"><i class="bi bi-calculator me-2"></i>Configuración de Puntos (Fase de Grupos)</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label small">Por Victoria</label>
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text bg-white text-success fw-bold">+</span>
-                                                <asp:TextBox ID="txtPuntosVictoria" runat="server" CssClass="form-control" TextMode="Number" Text="3"></asp:TextBox>
-                                            </div>
-                                            <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtPuntosVictoria" CssClass="text-danger" runat="server" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label small">Por Empate</label>
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text bg-white text-primary fw-bold">=</span>
-                                                <asp:TextBox ID="txtPuntosEmpate" runat="server" CssClass="form-control" TextMode="Number" Text="1"></asp:TextBox>
-                                            </div>
-                                            <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtPuntosEmpate" CssClass="text-danger" runat="server" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label small">Por Derrota</label>
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text bg-white text-danger fw-bold">-</span>
-                                                <asp:TextBox ID="txtPuntosDerrota" runat="server" CssClass="form-control" TextMode="Number" Text="0"></asp:TextBox>
-                                            </div>
-                                            <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtPuntosDerrota" CssClass="text-danger" runat="server" />
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="radio-tile">
+                                        <asp:RadioButton ID="rbSinFases" GroupName="Fases" runat="server"
+                                            AutoPostBack="true" OnCheckedChanged="Formato_Changed" Checked="true" />
+                                        <label for="<%= rbSinFases.ClientID %>">
+                                            Eliminación Directa
+                                            <small>Estilo Copa. Sin grupos previos.</small>
+                                        </label>
                                     </div>
-                                </asp:Panel>
-
+                                </div>
                             </div>
+
+                            <asp:Panel ID="pnlPuntos" runat="server" Visible="false" CssClass="mt-4 pt-4 border-top fade-in">
+                                <h6 class="fw-bold mb-3">Sistema de Puntuación</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Por Victoria</label>
+                                        <asp:TextBox ID="txtPuntosVictoria" runat="server" CssClass="form-control" TextMode="Number" Text="3"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtPuntosVictoria" CssClass="text-danger" runat="server" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Por Empate</label>
+                                        <asp:TextBox ID="txtPuntosEmpate" runat="server" CssClass="form-control" TextMode="Number" Text="1"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtPuntosEmpate" CssClass="text-danger" runat="server" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Por Derrota</label>
+                                        <asp:TextBox ID="txtPuntosDerrota" runat="server" CssClass="form-control" TextMode="Number" Text="0"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtPuntosDerrota" CssClass="text-danger" runat="server" />
+                                    </div>
+                                </div>
+                            </asp:Panel>
+
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
 
-                <!-- PASO 3: REGLAS -->
-                <div class="card shadow-sm mb-4 step-card" style="border-left-color: #dc3545;">
-                    <div class="card-header header-step py-3">
-                        <h5 class="mb-0 text-danger"><i class="bi bi-file-earmark-ruled-fill me-2"></i>3. Reglas Disciplinarias</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Límite de Amarillas</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-warning border-warning text-white"><i class="bi bi-files"></i></span>
-                                    <asp:TextBox ID="txtAmarillas" runat="server" CssClass="form-control" TextMode="Number" Text="5"></asp:TextBox>
-                                    <span class="input-group-text bg-light">para suspensión</span>
-                                </div>
-                                <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtAmarillas" CssClass="text-danger" runat="server" />
+                <div class="card mb-5 p-4">
+                    <h5 class="fw-bold mb-4">3. Disciplina</h5>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Acumulación Amarillas</label>
+                            <div class="input-group">
+                                <asp:TextBox ID="txtAmarillas" runat="server" CssClass="form-control" TextMode="Number" Text="5"></asp:TextBox>
+                                <span class="input-group-text bg-light text-muted small">tarjetas</span>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Roja Directa</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-danger border-danger text-white"><i class="bi bi-file-fill"></i></span>
-                                    <asp:TextBox ID="txtRojas" runat="server" CssClass="form-control" TextMode="Number" Text="1"></asp:TextBox>
-                                    <span class="input-group-text bg-light">fechas sanción</span>
-                                </div>
-                                <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtRojas" CssClass="text-danger" runat="server" />
+                            <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtAmarillas" CssClass="text-danger" runat="server" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Sanción Roja Directa</label>
+                            <div class="input-group">
+                                <asp:TextBox ID="txtRojas" runat="server" CssClass="form-control" TextMode="Number" Text="1"></asp:TextBox>
+                                <span class="input-group-text bg-light text-muted small">partidos</span>
                             </div>
+                            <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtRojas" CssClass="text-danger" runat="server" />
                         </div>
                     </div>
                 </div>
 
-                <!-- BOTÓN CREAR -->
-                <div class="d-grid gap-2 mb-5">
-                    <asp:Button ID="btnCrear" runat="server" Text="Confirmar y Crear Torneo"
-                        CssClass="btn btn-primary btn-lg shadow fw-bold py-3" OnClick="btnCrear_Click" />
+                <div class="d-grid">
+                    <asp:Button ID="btnCrear" runat="server" Text="Crear Torneo"
+                        CssClass="btn btn-dark btn-lg py-3 fw-bold" OnClick="btnCrear_Click" />
                 </div>
 
             </div>

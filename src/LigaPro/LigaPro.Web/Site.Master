@@ -28,13 +28,13 @@
                                 <a class="nav-link active" aria-current="page" href="/Default.aspx">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="Default.aspx">Torneos</a>
+                                <a class="nav-link" href="/Default.aspx">Torneos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="Default.aspx">Ligas</a>
+                                <a class="nav-link" href="/Default.aspx">Ligas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="Default.aspx">Equipos</a>
+                                <a class="nav-link" href="/Default.aspx">Equipos</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <a class="btn btn-secondary" href="/Auth/InicioSesion.aspx">Login</a>
@@ -47,7 +47,7 @@
                         <!-- Panel Jugador -->
                         <ul id="PanelNavegacionJugador" runat="server" visible="false" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/PaginasJugador/CompeticionesActivas.aspx">Ver Tornos Activos</a>
+                                <a class="nav-link" href="/PaginasJugador/TorneosActivos.aspx">Ver Tornos Activos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/PaginasJugador/MisEquipos.aspx">Mis Equipos</a>

@@ -110,6 +110,7 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
+
         public Torneo buscarPorId(int id)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -212,6 +213,97 @@ namespace LigaPro.Datos
             {
                 datos.cerrarConexion();
             }
+        }
+
+        public List<Torneo> ListarTorneosParaInscripcion()
+        {
+            List<Torneo> lista = new List<Torneo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.CupoMaximo, (SELECT COUNT(*) FROM Inscripciones WHERE IdTorneo = T.IdTorneo) as Inscriptos FROM Torneos T WHERE Activo = 1 AND Estado = 1");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Torneo aux = new Torneo();
+                    aux.Id = (int)datos.Lector["IdTorneo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
+                    int cant = (int)datos.Lector["Inscriptos"];
+                    aux.EquiposInscritos = new List<Equipo>(new Equipo[cant]);
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        public void InscribirEquipo(int idTorneo, int idEquipo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = @"
+                        IF NOT EXISTS (SELECT 1 FROM Inscripciones WHERE IdTorneo = @idTorneo AND IdEquipo = @idEquipo)
+                        BEGIN
+                            INSERT INTO Inscripciones (IdTorneo, IdEquipo, FechaInscripcion) VALUES (@idTorneo, @idEquipo, GETDATE())
+                        END";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idTorneo", idTorneo);
+                datos.setearParametro("@idEquipo", idEquipo);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        public void BajaEquipo(int idTorneo, int idEquipo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM Inscripciones WHERE IdTorneo = @idTorneo AND IdEquipo = @idEquipo");
+                datos.setearParametro("@idTorneo", idTorneo);
+                datos.setearParametro("@idEquipo", idEquipo);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        public List<Equipo> ListarEquiposUsuarioEnTorneo(int idUsuario, int idTorneo, bool inscriptos)
+        {
+            List<Equipo> lista = new List<Equipo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string operador = inscriptos ? "IN" : "NOT IN";
+
+                string consulta = $@"
+                    SELECT IdEquipo, Nombre FROM Equipos 
+                    WHERE IdUsuarioCreador = @idUser AND Activo = 1
+                    AND IdEquipo {operador} (SELECT IdEquipo FROM Inscripciones WHERE IdTorneo = @idTorneo)";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idUser", idUsuario);
+                datos.setearParametro("@idTorneo", idTorneo);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
         }
 
     }

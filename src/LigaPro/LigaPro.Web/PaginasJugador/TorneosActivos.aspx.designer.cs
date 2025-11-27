@@ -11,7 +11,7 @@ namespace LigaPro.Web.PaginasJugador
 {
 
 
-    public partial class CompeticionesActivas
+    public partial class TorneosActivos
     {
 
         /// <summary>
@@ -24,40 +24,40 @@ namespace LigaPro.Web.PaginasJugador
         protected global::System.Web.UI.WebControls.Repeater rptTorneos;
 
         /// <summary>
-        /// lblNombreTorneoModal control.
+        /// pnlVacio control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNombreTorneoModal;
+        protected global::System.Web.UI.WebControls.Panel pnlVacio;
 
         /// <summary>
-        /// ddlMisEquipos control.
+        /// hfIdTorneoInscribir control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMisEquipos;
+        protected global::System.Web.UI.WebControls.HiddenField hfIdTorneoInscribir;
 
         /// <summary>
-        /// rfvEquipo control.
+        /// ddlMisEquiposInscribir control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEquipo;
+        protected global::System.Web.UI.WebControls.DropDownList ddlMisEquiposInscribir;
 
         /// <summary>
-        /// hfIdTorneoSeleccionado control.
+        /// lblErrorInscripcion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hfIdTorneoSeleccionado;
+        protected global::System.Web.UI.WebControls.Label lblErrorInscripcion;
 
         /// <summary>
         /// btnConfirmarInscripcion control.
@@ -67,5 +67,41 @@ namespace LigaPro.Web.PaginasJugador
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnConfirmarInscripcion;
+
+        /// <summary>
+        /// hfIdTorneoBaja control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdTorneoBaja;
+
+        /// <summary>
+        /// ddlMisEquiposBaja control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlMisEquiposBaja;
+
+        /// <summary>
+        /// lblErrorBaja control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorBaja;
+
+        /// <summary>
+        /// btnConfirmarBaja control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmarBaja;
     }
 }
