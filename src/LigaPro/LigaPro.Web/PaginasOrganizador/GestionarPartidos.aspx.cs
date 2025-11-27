@@ -1,6 +1,7 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain.Actores;
 using LigaPro.Negocio;
+using LigaPro.Web.PaginasJugador;
 using System;
 using System.Collections.Generic;
 using System.Web.UI;
@@ -63,31 +64,12 @@ namespace LigaPro.Web.PaginasOrganizador
 
         private void CargarEquipos()
         {
-           
-            TorneoDatos datos = new TorneoDatos();
-            try
-            {
-                List<Equipo> equipos = datos.ListarEquiposInscriptos(IdTorneoActual);
+            EquipoDatos datos = new EquipoDatos();
+            List<Equipo> equipos = datos.listarEquiposPorTorneo(IdTorneoActual);
 
-                rptEquipos.DataSource = equipos;
-                rptEquipos.DataBind();
-
-                ddlLocalManual.DataSource = equipos;
-                ddlLocalManual.DataTextField = "Nombre";
-                ddlLocalManual.DataValueField = "Id";
-                ddlLocalManual.DataBind();
-                ddlLocalManual.Items.Insert(0, new ListItem("Seleccionar Local", "0"));
-
-                ddlVisitaManual.DataSource = equipos;
-                ddlVisitaManual.DataTextField = "Nombre";
-                ddlVisitaManual.DataValueField = "Id";
-                ddlVisitaManual.DataBind();
-                ddlVisitaManual.Items.Insert(0, new ListItem("Seleccionar Visita", "0"));
-            }
-            catch (Exception ex)
-            {
-                Response.Write("<script>alert('Error cargando equipos: " + ex.Message + "');</script>");
-            }
+            // Repeater de equipos
+            rptEquipos.DataSource = equipos;
+            rptEquipos.DataBind();
         }
 
         //FALTA COMPLETAR
