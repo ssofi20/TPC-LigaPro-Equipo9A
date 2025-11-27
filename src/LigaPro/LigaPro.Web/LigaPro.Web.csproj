@@ -100,6 +100,7 @@
     <Content Include="PaginasJugador\PerfilJugador.aspx" />
     <Content Include="Auth\RegistrarAdmin.aspx" />
     <Content Include="Auth\RegistrarJugador.aspx" />
+    <Content Include="PaginasPartidos\GestionarPartidos.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -225,6 +226,13 @@
     </Compile>
     <Compile Include="PaginasJugador\PerfilJugador.aspx.designer.cs">
       <DependentUpon>PerfilJugador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasPartidos\GestionarPartidos.aspx.cs">
+      <DependentUpon>GestionarPartidos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginasPartidos\GestionarPartidos.aspx.designer.cs">
+      <DependentUpon>GestionarPartidos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Auth\RegistrarAdmin.aspx.cs">

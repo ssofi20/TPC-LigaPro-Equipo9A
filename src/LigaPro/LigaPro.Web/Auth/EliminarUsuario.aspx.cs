@@ -72,10 +72,10 @@ namespace LigaPro.Web.Auth
             Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
             if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
             {
-                Response.Redirect("PerfilAdmin.aspx", false);
+                Response.Redirect("/PaginasOrganizador/PerfilAdmin.aspx", false);
             }else if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Jugador)
             {
-                Response.Redirect("PerfilJugador.aspx", false );
+                Response.Redirect("/PaginasJugador/PerfilJugador.aspx", false );
             }
         }
     }

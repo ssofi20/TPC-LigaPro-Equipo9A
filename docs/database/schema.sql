@@ -16,7 +16,7 @@ CREATE TABLE Usuarios(
 	PasswordHash VARCHAR(MAX) NOT NULL,
 	NombreUsuario VARCHAR(100) NOT NULL,
 	Rol VARCHAR(50) NOT NULL,
-	FechaRegistro DATETIME NOT NULL DEFAULT GETDATE()
+	FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
 	CONSTRAINT PK_Usuarios PRIMARY KEY (IdUsuario)
 )
 GO
@@ -98,14 +98,11 @@ CREATE TABLE Competiciones (
     Nombre VARCHAR(200) NOT NULL,
     Estado VARCHAR(50) NOT NULL,
 
-    -- Columna Discriminadora
-    TipoCompeticion VARCHAR(50) NOT NULL, -- "Liga" o "Torneo"
-
     -- Propiedades de Liga (Nulables)
-    FormatoLiga VARCHAR(50), -- (Enum TipoLiga: "Ida", "IdaYVuelta")
+    FormatoLiga VARCHAR(50) NULL, -- (Enum TipoLiga: "Ida", "IdaYVuelta")
 
     -- Propiedades de Torneo (Nulables)
-    TieneFaseDeGrupos BIT,
+    TieneFaseDeGrupos BIT NULL,
 
     CONSTRAINT FK_Competicion_Organizador FOREIGN KEY (IdOrganizador) REFERENCES Organizadores(IdOrganizador),
     CONSTRAINT FK_Competicion_Reglamento FOREIGN KEY (IdReglamento) REFERENCES Reglamentos(IdReglamento)
@@ -207,25 +204,18 @@ CREATE TABLE Sancion (
     CONSTRAINT FK_Sanciones_Jugadores FOREIGN KEY (IdEquipoJugador) REFERENCES EquipoJugador(Id),
     CONSTRAINT FK_Sanciones_Partidos FOREIGN KEY (IdPartidoOrigen) REFERENCES Partidos(IdPartido)
 );
-select * from Usuarios where IdUsuario = 5
-select * from Jugadores where IdUsuarioJugador = 5
 
+ALTER TABLE Usuarios
+ADD Activo BIT NOT NULL DEFAULT 1;
 
-select O.IdOrganizador,O.IdUsuario, O.NombrePublico , O.Logo , O.EmailContacto, O.NumeroTelefono 
-FROM Organizadores O, Usuarios U Where O.IdUsuario = U.IdUsuario
+UPDATE Usuarios
+SET Activo = 1
+WHERE IdUsuario = 5;
 
-UPDATE Organizadores 
-SET NombrePublico = 'Sofia', EmailContacto = 'user1@user.com', NumeroTelefono = '1231234'
-WHERE IdUsuario = 4
+select * from Competiciones
 
+SELECT IdReglamento, PuntosPorVictoria, PuntosPorEmpate, TarjetasAmarillasParaSuspension, PartidosSuspensionPorRojaDirecta FROM Reglamentos
 
+SELECT IdOrganizador, IdUsuario, NombrePublico, EmailContacto, NumeroTelefono FROM Organizadores 
 
-Select J.IdJugador, J.IdJugador, J.Nombres, J.Apellidos, J.FechaNacimiento, U.Email, U.NombreUsuario
-FROM Jugadores J, Usuarios U
-WHERE J.IdUsuarioJugador = U.IdUsuario
-
-
-
-UPDATE Jugadores J, Usuarios U
-SET J.Nombres = 'Sofia' , J.Apellidos = 'Iriarte', J.FechaNacimiento = '2004-08-19', U.Email = 'user3@user.com', U.NombreUsuario = 'Sofi'
-FROM Jugadores J, Usuarios U WHERE J.IdUsuarioJugador = 5
+INSERT INTO Reglamentos(PuntosPorVictoria, PuntosPorEmpate, TarjetasAmarillasParaSuspension, PartidosSuspensionPorRojaDirecta) VALUES(2, 1, 3, 2)

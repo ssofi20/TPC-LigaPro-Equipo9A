@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain.Actores
 {
-    internal class Torneo : Competicion
+    public class Torneo : Competicion
     {
         public bool TieneFaseDeGrupos { get; set; }
         public List<Fase> Fases { get; set; }

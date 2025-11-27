@@ -7,29 +7,38 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LigaPro.Web.PaginasOrganizador
+namespace LigaPro.Web.PaginasPartidos
 {
 
 
-    public partial class MisCompeticiones
+    public partial class GestionarPartidos
     {
 
         /// <summary>
-        /// PanelSeleccionar control.
+        /// PanelCargarResultados control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelSeleccionar;
+        protected global::System.Web.UI.WebControls.Panel PanelCargarResultados;
 
         /// <summary>
-        /// dgvItems control.
+        /// PanelVerEquipos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvItems;
+        protected global::System.Web.UI.WebControls.Panel PanelVerEquipos;
+
+        /// <summary>
+        /// PanelGenerarFixture control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelGenerarFixture;
     }
 }
