@@ -1,6 +1,7 @@
 ﻿using LigaPro.Domain.Actores;
 using LigaPro.Domain.Relaciones;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlTypes;
@@ -451,6 +452,42 @@ namespace LigaPro.Datos
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public List<Equipo> listarEquiposPorTorneo(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Equipo> lista = new List<Equipo>();
+            try
+            {
+                datos.setearConsulta("SELECT E.IdEquipo, E.Nombre, E.Imagen FROM Inscripciones I INNER JOIN Equipos E ON I.IdEquipo = E.IdEquipo WHERE I.IdTorneo = @IdTorneo;");
+                datos.setearParametro("@IdTorneo", id);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             finally
             {

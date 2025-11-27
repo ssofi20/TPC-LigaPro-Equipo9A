@@ -1,6 +1,7 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain.Actores;
 using LigaPro.Negocio;
+using LigaPro.Web.PaginasJugador;
 using System;
 using System.Collections.Generic;
 using System.Web.UI;
@@ -62,7 +63,12 @@ namespace LigaPro.Web.PaginasOrganizador
 
         private void CargarEquipos()
         {
-            
+            EquipoDatos datos = new EquipoDatos();
+            List<Equipo> equipos = datos.listarEquiposPorTorneo(IdTorneoActual);
+
+            // Repeater de equipos
+            rptEquipos.DataSource = equipos;
+            rptEquipos.DataBind();
         }
 
         protected void rptPartidos_ItemCommand(object source, RepeaterCommandEventArgs e)
