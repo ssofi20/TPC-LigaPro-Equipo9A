@@ -1,4 +1,5 @@
 ﻿using LigaPro.Datos;
+using LigaPro.Domain;
 using LigaPro.Domain.Actores;
 using LigaPro.Negocio;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -17,6 +19,30 @@ namespace LigaPro.Web.PaginasOrganizador
         {
             return System.Text.RegularExpressions.Regex.Replace(texto, "([a-z])([A-Z])", "$1 $2");
         }
+        public string FormatearNombreEnum(string nombre)
+        {
+            return string.Concat(
+                nombre.Select(x => char.IsUpper(x) ? " " + x : x.ToString())
+            ).TrimStart();
+        }
+        public void CargarEstados()
+        {
+            ddlEstado.DataSource = Enum.GetValues(typeof(EstadoCompetencia))
+     .Cast<EstadoCompetencia>()
+     .Select(e => new
+     {
+         Texto = FormatearNombreEnum(e.ToString()),
+         Valor = ((int)e).ToString()
+     });
+
+            ddlEstado.DataTextField = "Texto";
+            ddlEstado.DataValueField = "Valor";
+            ddlEstado.DataBind();
+
+            ddlEstado.Items.Insert(0, new ListItem("Seleccionar", ""));
+        }
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -26,6 +52,7 @@ namespace LigaPro.Web.PaginasOrganizador
                     Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
                     if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
                     {
+                        CargarEstados();
                         CompeticionDatos datos = new CompeticionDatos();
                         List<Competicion> lista = datos.listarCompeticion();
                         dgvItems.DataSource = lista.Where(x => x.Activo == true).ToList();
@@ -43,7 +70,7 @@ namespace LigaPro.Web.PaginasOrganizador
                         }
 
                         PanelSeleccionar.Visible = true;
-                        PanelModificar.Visible = false;                        
+                        PanelModificar.Visible = false;
                     }
                     else
                     {
@@ -71,6 +98,7 @@ namespace LigaPro.Web.PaginasOrganizador
 
                 txtNombre.Text = aux.Nombre;
                 ddlOrganizador.SelectedValue = aux.OrganizadorCompetencia.Id.ToString();
+                ddlEstado.SelectedValue = ((int)aux.Estado).ToString();
                 txtPv.Text = aux.Reglas.PuntosPorVictoria.ToString();
                 txtPe.Text = aux.Reglas.PuntosPorEmpate.ToString();
                 txtTas.Text = aux.Reglas.TarjetasAmarillasParaSuspension.ToString();
@@ -111,6 +139,7 @@ namespace LigaPro.Web.PaginasOrganizador
 
             nuevo.Nombre = txtNombre.Text;
             nuevo.OrganizadorCompetencia.Id = int.Parse(ddlOrganizador.SelectedValue);
+            nuevo.Estado = (EstadoCompetencia)Convert.ToInt32(ddlEstado.SelectedValue);
             nuevo.Reglas.PuntosPorVictoria = int.Parse(txtPv.Text);
             nuevo.Reglas.PuntosPorEmpate = int.Parse(txtPe.Text);
             nuevo.Reglas.TarjetasAmarillasParaSuspension = int.Parse(txtTas.Text);
@@ -189,6 +218,21 @@ namespace LigaPro.Web.PaginasOrganizador
                 PanelSeleccionar.Visible = false;
                 PanelModificar.Visible = false;
                 PanelEliminar.Visible = true;
+            }
+
+            if (e.CommandName == "VerEquipos")
+            {
+                Response.Redirect("/PaginasPartidos/GestionarPartidos.aspx?panel=VerEquipos&id=" + e.CommandArgument);
+            }
+
+            if (e.CommandName == "CargarResultados")
+            {
+                Response.Redirect("/PaginasPartidos/GestionarPartidos.aspx?panel=Resultados&id=" + e.CommandArgument);
+            }
+
+            if (e.CommandName == "GenerarFixture")
+            {
+                Response.Redirect("/PaginasPartidos/GestionarPartidos.aspx?panel=Fixture&id=" + e.CommandArgument);
             }
         }
     }

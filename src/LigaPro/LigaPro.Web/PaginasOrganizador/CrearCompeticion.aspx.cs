@@ -19,14 +19,21 @@ namespace LigaPro.Web.PaginasOrganizador
             {
                 try
                 {
+                    Usuario usuario = Session["UsuarioLogueado"] != null ? (Usuario)Session["UsuarioLogueado"] : null;
+                    if (usuario != null && usuario.Id != 0 && usuario.Rol == Domain.RolUsuario.Organizador)
+                    {
+                        OrganizadorDatos datos = new OrganizadorDatos();
+                        List<Organizador> listaOrg = datos.listar();
 
-                    OrganizadorDatos datos = new OrganizadorDatos();
-                    List<Organizador> listaOrg = datos.listar();
-
-                    ddlOrganizador.DataSource = listaOrg;
-                    ddlOrganizador.DataValueField = "Id";
-                    ddlOrganizador.DataTextField = "NombrePublico";
-                    ddlOrganizador.DataBind();
+                        ddlOrganizador.DataSource = listaOrg;
+                        ddlOrganizador.DataValueField = "Id";
+                        ddlOrganizador.DataTextField = "NombrePublico";
+                        ddlOrganizador.DataBind();
+                    }
+                    else
+                    {
+                        Response.Redirect("/Auth/InicioSesion.aspx", false);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -38,7 +45,7 @@ namespace LigaPro.Web.PaginasOrganizador
 
         protected void btnCrear_Click(object sender, EventArgs e)
         {
-            if(!Page.IsValid)
+            if (!Page.IsValid)
             {
                 return;
             }
@@ -64,7 +71,7 @@ namespace LigaPro.Web.PaginasOrganizador
                 nuevo.Nombre = txtNombre.Text;
                 nuevo.Estado = EstadoCompetencia.InscripcionAbierta;
                 nuevo.OrganizadorCompetencia.Id = idOrganizador;
-                nuevo.Reglas.Id = idReg;                
+                nuevo.Reglas.Id = idReg;
 
                 if (rbConFases.Checked)
                 {
@@ -76,7 +83,7 @@ namespace LigaPro.Web.PaginasOrganizador
                     }
                     else if (rbIda.Checked)
                     {
-                        nuevo.Formato = TipoLiga.Ida.ToString() ;
+                        nuevo.Formato = TipoLiga.Ida.ToString();
                     }
                 }
                 else if (rbSinFases.Checked)
@@ -96,11 +103,18 @@ namespace LigaPro.Web.PaginasOrganizador
         protected void rbConFases_CheckedChanged(object sender, EventArgs e)
         {
             panelOpcionesFases.Visible = rbConFases.Checked;
+
         }
 
         protected void rbSinFases_CheckedChanged(object sender, EventArgs e)
         {
             panelOpcionesFases.Visible = false;
+
+        }
+
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("PerfilAdmin.aspx");
         }
     }
 }
