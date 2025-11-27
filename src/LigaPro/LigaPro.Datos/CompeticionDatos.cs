@@ -154,8 +154,7 @@ namespace LigaPro.Datos
                 AccesoDatos datosComp = new AccesoDatos();
 
 
-                datosComp.setearConsulta("UPDATE Competiciones SET IdOrganizador = @IdOrganizador, IdReglamento = @IdReglamento, Nombre = @Nombre, Estado = @Estado, FormatoLiga = @FormatoLiga, TieneFaseDeGrupos = @TieneFaseDeGrupos WHERE IdCompeticion = @IdCompeticion");
-                datosComp.setearParametro("@IdOrganizador", aux.OrganizadorCompetencia.Id);
+                datosComp.setearConsulta("UPDATE Competiciones SET IdReglamento = @IdReglamento, Nombre = @Nombre, Estado = @Estado, FormatoLiga = @FormatoLiga, TieneFaseDeGrupos = @TieneFaseDeGrupos WHERE IdCompeticion = @IdCompeticion");
                 datosComp.setearParametro("@IdReglamento", aux.Reglas.Id);
                 datosComp.setearParametro("@Nombre", aux.Nombre);
                 datosComp.setearParametro("@Estado", aux.Estado);

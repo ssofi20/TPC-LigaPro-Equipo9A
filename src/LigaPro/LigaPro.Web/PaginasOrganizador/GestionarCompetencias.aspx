@@ -143,12 +143,6 @@
                                     </asp:DropDownList>
                                 </div>
 
-                                <!-- Organizador -->
-                                <div class="mb-4">
-                                    <label for="ddlOrganizador" class="form-label fw-semibold">Organizador/a</label>
-                                    <asp:DropDownList ID="ddlOrganizador" runat="server" CssClass="form-select form-select-lg rounded-3"></asp:DropDownList>
-                                </div>
-
                                 <!-- Fases -->
                                 <div class="mb-4 mb-2 d-flex align-items-center">
                                     <asp:RadioButton ID="rbConFases" GroupName="Fases" Text="Tiene Fases" CssClass="ms-3"

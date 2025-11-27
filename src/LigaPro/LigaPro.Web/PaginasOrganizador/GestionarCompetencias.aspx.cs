@@ -88,7 +88,6 @@ namespace LigaPro.Web.PaginasOrganizador
                 Competicion aux = datos.buscarPorId(id);
 
                 txtNombre.Text = aux.Nombre;
-                ddlOrganizador.SelectedValue = aux.OrganizadorCompetencia.Id.ToString();
                 ddlEstado.SelectedValue = ((int)aux.Estado).ToString();
                 txtPv.Text = aux.Reglas.PuntosPorVictoria.ToString();
                 txtPe.Text = aux.Reglas.PuntosPorEmpate.ToString();
@@ -129,7 +128,6 @@ namespace LigaPro.Web.PaginasOrganizador
             Competicion nuevo = datos.buscarPorId(id);
 
             nuevo.Nombre = txtNombre.Text;
-            nuevo.OrganizadorCompetencia.Id = int.Parse(ddlOrganizador.SelectedValue);
             nuevo.Estado = (EstadoCompetencia)Convert.ToInt32(ddlEstado.SelectedValue);
             nuevo.Reglas.PuntosPorVictoria = int.Parse(txtPv.Text);
             nuevo.Reglas.PuntosPorEmpate = int.Parse(txtPe.Text);
