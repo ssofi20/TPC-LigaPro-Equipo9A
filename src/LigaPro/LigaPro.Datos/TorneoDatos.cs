@@ -117,7 +117,7 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdTorneo = @idTorneo");
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, (SELECT COUNT(*) FROM Inscripciones I WHERE I.IdTorneo = T.IdTorneo) as CantidadInscriptos FROM Torneos T WHERE T.IdTorneo = @idTorneo");
                 datos.setearParametro("@idTorneo", id);
                 datos.ejecutarLectura();
 
@@ -129,15 +129,9 @@ namespace LigaPro.Datos
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
                     aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
                     aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
-                    aux.Activo = (bool)datos.Lector["Activo"];
+                    aux.Activo = (bool)datos.Lector["Activo"]; 
+                    aux.CantidadInscriptos = (int)datos.Lector["CantidadInscriptos"];
 
-                    aux.Reglas = new Reglamento();
-                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
-                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
-                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
-                    aux.Reglas.PuntosPorDerrota = (int)datos.Lector["PuntosPorDerrota"];
-                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
-                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
 
                     return aux;
                 }
@@ -298,6 +292,43 @@ namespace LigaPro.Datos
             }
             catch (Exception ex) { throw ex; }
             finally { datos.cerrarConexion(); }
+        }
+
+        public List<Equipo> ListarEquiposInscriptos(int idTorneo)
+        {
+            List<Equipo> lista = new List<Equipo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT E.IdEquipo, E.Nombre, E.Imagen FROM Equipos E INNER JOIN Inscripciones I ON E.IdEquipo = I.IdEquipo WHERE I.IdTorneo = @idTorneo AND E.Activo = 1");
+                datos.setearParametro("@idTorneo", idTorneo);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+
+                    if (!(datos.Lector["Nombre"] is DBNull))
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
 
     }

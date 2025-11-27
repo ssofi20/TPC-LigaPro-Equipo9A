@@ -131,7 +131,7 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td class="ps-4">
-                                                    <span class="fw-bold d-block"><%# Eval("NombreFase") %></span> <!-- Ej: Fecha 1, Octavos -->
+                                                    <span class="fw-bold d-block"><%# Eval("NombreFase") %></span> 
                                                     <small class="text-muted"><%# Eval("FechaProgramada", "{0:dd/MM HH:mm}") %></small>
                                                 </td>
                                                 
@@ -200,6 +200,7 @@
                         </ItemTemplate>
                     </asp:Repeater>
                 </div>
+                <!-- Agregar un opcion de eliminar del torneo desde aca-->
             </div>
 
         </div>

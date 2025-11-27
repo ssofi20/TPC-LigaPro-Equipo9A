@@ -54,6 +54,7 @@ namespace LigaPro.Web.PaginasOrganizador
             }
         }
 
+        //FALTA COMPLETAR
         private void CargarPartidos()
         {
             
@@ -62,9 +63,34 @@ namespace LigaPro.Web.PaginasOrganizador
 
         private void CargarEquipos()
         {
-            
+           
+            TorneoDatos datos = new TorneoDatos();
+            try
+            {
+                List<Equipo> equipos = datos.ListarEquiposInscriptos(IdTorneoActual);
+
+                rptEquipos.DataSource = equipos;
+                rptEquipos.DataBind();
+
+                ddlLocalManual.DataSource = equipos;
+                ddlLocalManual.DataTextField = "Nombre";
+                ddlLocalManual.DataValueField = "Id";
+                ddlLocalManual.DataBind();
+                ddlLocalManual.Items.Insert(0, new ListItem("Seleccionar Local", "0"));
+
+                ddlVisitaManual.DataSource = equipos;
+                ddlVisitaManual.DataTextField = "Nombre";
+                ddlVisitaManual.DataValueField = "Id";
+                ddlVisitaManual.DataBind();
+                ddlVisitaManual.Items.Insert(0, new ListItem("Seleccionar Visita", "0"));
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<script>alert('Error cargando equipos: " + ex.Message + "');</script>");
+            }
         }
 
+        //FALTA COMPLETAR
         protected void rptPartidos_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "CargarResultado")
@@ -78,6 +104,7 @@ namespace LigaPro.Web.PaginasOrganizador
             }
         }
 
+        //FALTA COMPLETAR
         protected void btnGuardarResultado_Click(object sender, EventArgs e)
         {
             try
@@ -96,16 +123,61 @@ namespace LigaPro.Web.PaginasOrganizador
 
         protected void btnCrearPartidoManual_Click(object sender, EventArgs e)
         {
-            //Lógica para insertar partido manual
+            try
+            {
+                int idLocal = int.Parse(ddlLocalManual.SelectedValue);
+                int idVisita = int.Parse(ddlVisitaManual.SelectedValue);
+                string fechaStr = txtFechaManual.Text;
+                string horaStr = txtHoraManual.Text;
+                string fase = txtFaseManual.Text;
 
-            CargarPartidos();
+                if (idLocal == 0 || idVisita == 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Debes seleccionar ambos equipos');", true);
+                    return;
+                }
+
+                if (idLocal == idVisita)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('El equipo local y visitante no pueden ser el mismo');", true);
+                    return;
+                }
+
+                DateTime fechaHora = DateTime.Parse(fechaStr + " " + horaStr);
+
+                Partido nuevoPartido = new Partido();
+                //cargar propiedades del nuevoPartido
+
+                //guardar en base de datos
+                PartidoNegocio negocio = new PartidoNegocio();
+
+                /* Para hacer: pensar que si es para fase de grupos
+                 * hay que cargar un partido de tipo liga, y si es eliminatoria
+                 * hay que cargar un partido de otro tipo.
+                 * SOBRECARGA DE METODOS??
+                 * Porque, por ejemplo, en fase de grupos no se necesita ganar si o si, 
+                 * pero en eliminatorias si. Hay tiempo extra y/o penales.
+                 */
+                negocio.CrearPartido(nuevoPartido);
+
+                CargarPartidos();
+
+                //limpiar los campos
+                txtFaseManual.Text = "";
+                ddlLocalManual.SelectedIndex = 0;
+                ddlVisitaManual.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", $"alert('Error al crear partido: {ex.Message}');", true);
+            }
         }
 
+        //FALTA COMPLETAR
         protected void btnGenerarFixture_Click(object sender, EventArgs e)
         {
             try
             {
-
                 // Crear un negocio.GenerarFixtureAutomatico(IdTorneoActual);
 
                 CargarPartidos();
