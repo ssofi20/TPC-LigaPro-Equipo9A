@@ -16,31 +16,25 @@ namespace LigaPro.Negocio
             UsuarioDatos usuarioDatos = new UsuarioDatos();
             try
             {
-                // 1. Obtener el usuario por email
                 Usuario usuario = usuarioDatos.GetUsuarioPorEmail(email);
 
-                // 2. Verificar si el usuario existe
                 if (usuario == null)
                 {
-                    return null; // Usuario no encontrado
+                    return null;
                 }
 
-                // 3. Verificar la contraseña
                 Seguridad seguridad = new Seguridad();
                 if (seguridad.VerifyPassword(passwordPlano, usuario.PasswordHash))
                 {
-                    // ¡Contraseña correcta!
                     return usuario;
                 }
                 else
                 {
-                    // Contraseña incorrecta
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                // Opcional: registrar el error
                 throw ex;
             }
         }

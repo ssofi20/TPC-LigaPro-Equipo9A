@@ -79,7 +79,7 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="progress flex-grow-1 me-2" style="height: 6px; width: 60px;">
-                                                    <div class="progress-bar" role="progressbar"
+                                                    <div class="progress-bar bg-primary" role="progressbar"
                                                         style='width: <%# (int)Eval("CupoMaximo") > 0 ? ((int)Eval("CantidadInscriptos") * 100 / (int)Eval("CupoMaximo")) : 0 %>%'>
                                                     </div>
                                                 </div>

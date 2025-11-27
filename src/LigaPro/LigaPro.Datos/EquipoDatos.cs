@@ -271,7 +271,6 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                // Actualizamos el estado buscando por Usuario y Equipo
                 string consulta = "UPDATE Solicitudes SET Estado = @estado WHERE IdUsuario = @idUsuario AND IdEquipo = @idEquipo";
 
                 datos.setearConsulta(consulta);
@@ -365,34 +364,7 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                // LÓGICA BLINDADA:
-                // 1. Chequeamos si EXISTE en la tabla de jugadores (Realidad).
-                // 2. Si no, chequeamos si tiene solicitud Pendiente (Historial).
-                // 3. Sino, NULL.
-
-                string consulta = @"
-                    SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,
-                    (
-                        CASE 
-                            WHEN EXISTS (
-                                SELECT 1 FROM EquipoJugador EJ 
-                                INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador 
-                                WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario
-                            ) THEN 'Aceptada'
-                    
-                            WHEN EXISTS (
-                                SELECT 1 FROM Solicitudes S 
-                                WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario AND S.Estado = 'Pendiente'
-                            ) THEN 'Pendiente'
-                    
-                            ELSE NULL
-                        END
-                    ) AS EstadoSolicitud
-                    FROM Equipos E
-                    INNER JOIN Jugadores J ON E.IdUsuarioCreador = J.IdUsuarioJugador
-                    WHERE E.Activo = 1";
-
-                datos.setearConsulta(consulta);
+                datos.setearConsulta("SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,\r\n                    (\r\n                        CASE \r\n                            WHEN EXISTS (\r\n                                SELECT 1 FROM EquipoJugador EJ \r\n                                INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador \r\n                                WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario\r\n                            ) THEN 'Aceptada'\r\n                    \r\n                            WHEN EXISTS (\r\n                                SELECT 1 FROM Solicitudes S \r\n                                WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario AND S.Estado = 'Pendiente'\r\n                            ) THEN 'Pendiente'\r\n                    \r\n                            ELSE NULL\r\n                        END\r\n                    ) AS EstadoSolicitud\r\n                    FROM Equipos E\r\n                    INNER JOIN Jugadores J ON E.IdUsuarioCreador = J.IdUsuarioJugador\r\n                    WHERE E.Activo = 1");
                 datos.setearParametro("@idUsuario", idUsuario);
                 datos.ejecutarLectura();
 
@@ -431,31 +403,7 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                // Misma lógica de CASE WHEN que arriba
-                string consulta = @"
-                    SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,
-                    (
-                        CASE 
-                            WHEN EXISTS (
-                                SELECT 1 FROM EquipoJugador EJ 
-                                INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador 
-                                WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario
-                            ) THEN 'Aceptada'
-                    
-                            WHEN EXISTS (
-                                SELECT 1 FROM Solicitudes S 
-                                WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario AND S.Estado = 'Pendiente'
-                            ) THEN 'Pendiente'
-                    
-                            ELSE NULL
-                        END
-                    ) AS EstadoSolicitud
-                    FROM Equipos E
-                    INNER JOIN Jugadores J ON J.IdUsuarioJugador = E.IdUsuarioCreador
-                    WHERE E.Activo = 1 
-                    AND (E.Nombre LIKE @busqueda + '%' OR (J.Nombres + ' ' + J.Apellidos) LIKE '%' + @busqueda + '%')";
-
-                datos.setearConsulta(consulta);
+                datos.setearConsulta("SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos,\r\n                    (\r\n                        CASE \r\n                            WHEN EXISTS (\r\n                                SELECT 1 FROM EquipoJugador EJ \r\n                                INNER JOIN Jugadores JUG ON EJ.IdJugador = JUG.IdJugador \r\n                                WHERE EJ.IdEquipo = E.IdEquipo AND JUG.IdUsuarioJugador = @idUsuario\r\n                            ) THEN 'Aceptada'\r\n                    \r\n                            WHEN EXISTS (\r\n                                SELECT 1 FROM Solicitudes S \r\n                                WHERE S.IdEquipo = E.IdEquipo AND S.IdUsuario = @idUsuario AND S.Estado = 'Pendiente'\r\n                            ) THEN 'Pendiente'\r\n                    \r\n                            ELSE NULL\r\n                        END\r\n                    ) AS EstadoSolicitud\r\n                    FROM Equipos E\r\n                    INNER JOIN Jugadores J ON J.IdUsuarioJugador = E.IdUsuarioCreador\r\n                    WHERE E.Activo = 1 \r\n                    AND (E.Nombre LIKE @busqueda + '%' OR (J.Nombres + ' ' + J.Apellidos) LIKE '%' + @busqueda + '%')");
                 datos.setearParametro("@busqueda", busqueda);
                 datos.setearParametro("@idUsuario", idUsuario); // <--- IMPORTANTE: Asegúrate de pasar este parámetro
                 datos.ejecutarLectura();

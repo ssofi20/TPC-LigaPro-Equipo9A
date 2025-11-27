@@ -11,21 +11,14 @@ namespace LigaPro.Datos
 {
     public class UsuarioDatos
     {
-        // Aquí van los métodos para interactuar con la base de datos relacionados con los usuarios
         
         public int InsertarUsuario(Usuario usuario)
         {
-            // Lógica para insertar un nuevo usuario en la base de datos
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                string query = "INSERT INTO Usuarios (Email, PasswordHash, NombreUsuario, Rol) " +
-                               "VALUES (@Email, @PasswordHash, @NombreUsuario, @Rol); " +
-                               "SELECT SCOPE_IDENTITY();";
-
-                datos.setearConsulta(query);
-
+                datos.setearConsulta("INSERT INTO Usuarios (Email, PasswordHash, NombreUsuario, Rol) \r\nVALUES (@Email, @PasswordHash, @NombreUsuario, @Rol)\r\nSELECT SCOPE_IDENTITY();");
                 datos.setearParametro("@Email", usuario.Email);
                 datos.setearParametro("@PasswordHash", usuario.PasswordHash);
                 datos.setearParametro("@NombreUsuario", usuario.NombreUsuario);
@@ -47,7 +40,6 @@ namespace LigaPro.Datos
             }
         }
 
-        // Nuevo método para verificar si un email ya existe
         public bool VerificarEmailExistente(string email)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -69,7 +61,6 @@ namespace LigaPro.Datos
             }
         }
 
-        // Busaca un usuario por su email
         public Usuario GetUsuarioPorEmail(string email)
         {
             AccesoDatos datos = new AccesoDatos();

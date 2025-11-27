@@ -15,7 +15,6 @@ namespace LigaPro.Web.PaginasOrganizador
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Seguridad básica
             if (Session["UsuarioLogueado"] == null)
             {
                 Response.Redirect("~/Auth/InicioSesion.aspx");
@@ -87,12 +86,11 @@ namespace LigaPro.Web.PaginasOrganizador
 
                 case "Partidos":
                     // Redirigir a la gestión de partidos/equipos
-                    Response.Redirect($"/PaginasPartidos/GestionarPartidos.aspx?id={idTorneo}");
+                    Response.Redirect($"GestionarPartidos.aspx?id={idTorneo}");
                     break;
             }
         }
 
-        // --- LÓGICA DE EDICIÓN ---
         private void CargarDatosParaEditar(int id)
         {
             TorneoDatos datos = new TorneoDatos();
@@ -117,7 +115,7 @@ namespace LigaPro.Web.PaginasOrganizador
             {
                 int id = int.Parse(hfIdTorneoEditar.Value);
                 TorneoDatos datos = new TorneoDatos();
-                Torneo comp = datos.buscarPorId(id); // Traemos el original
+                Torneo comp = datos.buscarPorId(id); 
 
                 // Actualizamos valores
                 comp.Nombre = txtNombreEditar.Text;
@@ -130,7 +128,6 @@ namespace LigaPro.Web.PaginasOrganizador
 
                 datos.modificarTorneo(comp);
 
-                // Recargar lista
                 CargarTorneos();
             }
             catch (Exception ex)
@@ -139,7 +136,6 @@ namespace LigaPro.Web.PaginasOrganizador
             }
         }
 
-        // --- LÓGICA DE ELIMINACIÓN ---
         protected void btnConfirmarEliminar_Click(object sender, EventArgs e)
         {
             try

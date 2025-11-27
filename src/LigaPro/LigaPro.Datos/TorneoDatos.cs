@@ -73,7 +73,7 @@ namespace LigaPro.Datos
             List<Torneo> lista = new List<Torneo>();
             try
             {
-                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdOrganizador = @IdOrganizador AND T.Activo = 1");
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, \r\n(SELECT COUNT(*) FROM Inscripciones I WHERE I.IdTorneo = T.IdTorneo) AS CantidadInscriptos,\r\nR.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, \r\nR.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdOrganizador = @IdOrganizador AND T.Activo = 1");
                 datos.setearParametro("@IdOrganizador", idOrganizador);
                 datos.ejecutarLectura();
 
@@ -87,7 +87,8 @@ namespace LigaPro.Datos
                     aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
                     aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
                     aux.Activo = (bool)datos.Lector["Activo"];
-                    
+                    aux.CantidadInscriptos = (int)datos.Lector["CantidadInscriptos"];
+
                     aux.Reglas = new Reglamento();
                     aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
                     aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
@@ -230,8 +231,7 @@ namespace LigaPro.Datos
                     aux.Id = (int)datos.Lector["IdTorneo"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
-                    int cant = (int)datos.Lector["Inscriptos"];
-                    aux.EquiposInscritos = new List<Equipo>(new Equipo[cant]);
+                    aux.CantidadInscriptos = (int)datos.Lector["Inscriptos"];
 
                     lista.Add(aux);
                 }
@@ -246,13 +246,7 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                string consulta = @"
-                        IF NOT EXISTS (SELECT 1 FROM Inscripciones WHERE IdTorneo = @idTorneo AND IdEquipo = @idEquipo)
-                        BEGIN
-                            INSERT INTO Inscripciones (IdTorneo, IdEquipo, FechaInscripcion) VALUES (@idTorneo, @idEquipo, GETDATE())
-                        END";
-
-                datos.setearConsulta(consulta);
+                datos.setearConsulta("IF NOT EXISTS (SELECT 1 FROM Inscripciones WHERE IdTorneo = @idTorneo AND IdEquipo = @idEquipo)\r\n                        BEGIN\r\n                            INSERT INTO Inscripciones (IdTorneo, IdEquipo, FechaInscripcion) VALUES (@idTorneo, @idEquipo, GETDATE())\r\n                        END");
                 datos.setearParametro("@idTorneo", idTorneo);
                 datos.setearParametro("@idEquipo", idEquipo);
                 datos.ejecutarAccion();

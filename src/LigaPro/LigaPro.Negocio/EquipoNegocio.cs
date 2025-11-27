@@ -39,13 +39,7 @@ namespace LigaPro.Negocio
             return datos.ListarJugadoresDeEquipo(idEquipo);
         }
 
-        // AGREGAR JUGADOR A EQUIPO
-        public void AgregarJugadorAEquipo(EquipoJugador nuevoIntegrante)
-        {
-            // Podrías validar que el jugador no esté ya en el equipo
-            //datos.InsertarJugadorEnEquipo(nuevoIntegrante);
-        }
-
+        // LISTAR SOLICITUDES PENDIENTES DE UN EQUIPO
         public List<Solicitud> ListarSolicitudesPendientes(int idEquipo)
         {
             EquipoNegocio negocio = new EquipoNegocio();
@@ -100,7 +94,6 @@ namespace LigaPro.Negocio
         // BUSCAR EQUIPOS CON FILTRO AVANZADO
         public List<Equipo> BuscarEquipos(string busqueda, int idUsuario)
         {
-            // Ahora pasamos el ID
             if (string.IsNullOrEmpty(busqueda)) return new List<Equipo>();
             return datos.BuscarEquipos(busqueda, idUsuario);
         }
