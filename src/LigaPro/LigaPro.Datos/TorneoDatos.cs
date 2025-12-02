@@ -20,13 +20,14 @@ namespace LigaPro.Datos
             {
                 int idReglamento = CrearReglamento(nuevo.Reglas);
 
-                datos.setearConsulta("INSERT INTO Torneos (IdOrganizador, Nombre, Estado, CupoMaximo, TieneFaseGrupos, IdReglamento) \r\nVALUES (@idOrganizador, @nombre, @estado, @cupoMaximo, @tieneFaseGrupos, @idReglamento)");
+                datos.setearConsulta("INSERT INTO Torneos (IdOrganizador, Nombre, Estado, CupoMaximo, TieneFaseGrupos, IdReglamento, CantidadGrupos) \r\nVALUES (@idOrganizador, @nombre, @estado, @cupoMaximo, @tieneFaseGrupos, @idReglamento, @cantidadGrupos)");
                 datos.setearParametro("@idOrganizador", nuevo.Organizador.Id);
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@estado", nuevo.Estado);
                 datos.setearParametro("@cupoMaximo", nuevo.CupoMaximo);
                 datos.setearParametro("@tieneFaseGrupos", nuevo.TieneFaseDeGrupos);
                 datos.setearParametro("@idReglamento", idReglamento);
+                datos.setearParametro("@cantidadGrupos", nuevo.CantidadGrupos);
 
                 datos.ejecutarAccion();
             }
@@ -117,7 +118,7 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, (SELECT COUNT(*) FROM Inscripciones I WHERE I.IdTorneo = T.IdTorneo) as CantidadInscriptos FROM Torneos T WHERE T.IdTorneo = @idTorneo");
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, (SELECT COUNT(*) FROM Inscripciones I WHERE I.IdTorneo = T.IdTorneo) as CantidadInscriptos, CantidadGrupos FROM Torneos T WHERE T.IdTorneo = @idTorneo");
                 datos.setearParametro("@idTorneo", id);
                 datos.ejecutarLectura();
 
@@ -131,7 +132,7 @@ namespace LigaPro.Datos
                     aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
                     aux.Activo = (bool)datos.Lector["Activo"]; 
                     aux.CantidadInscriptos = (int)datos.Lector["CantidadInscriptos"];
-
+                    aux.CantidadGrupos = (int)datos.Lector["CantidadGrupos"];
 
                     return aux;
                 }

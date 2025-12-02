@@ -9,19 +9,21 @@ namespace LigaPro.Domain.Actores
     public class Partido
     {
         public int Id { get; set; }
+        public int IdTorneo { get; set; }
         public DateTime FechaHora { get; set; }
-        public EstadoPartido Estado { get; set; }
+        public string Estado { get; set; } // "Pendiente", "Finalizado"
+        public string TipoPartido { get; set; } // "Grupo" o "Eliminatoria"
+
+        // Resultados Base
         public int ResultadoEquipoA { get; set; }
         public int ResultadoEquipoB { get; set; }
 
-        // Relaciones
-        public int IdCompeticion { get; set; }
+        // Relaciones (IDs de Inscripciones)
         public int IdInscripcionA { get; set; }
         public int IdInscripcionB { get; set; }
 
-        // Navegación
-        public Inscripcion EquipoA { get; set; }
-        public Inscripcion EquipoB { get; set; }
-        public List<EventoPartido> Eventos { get; set; }
+        // Navegación (Para mostrar nombres)
+        public string NombreLocal { get; set; }
+        public string NombreVisita { get; set; }
     }
 }

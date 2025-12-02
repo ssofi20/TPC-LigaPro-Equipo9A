@@ -8,17 +8,17 @@ namespace LigaPro.Domain.Actores
 {
     public class PartidoEliminatoria : Partido
     {
-        // Propiedades específicas de PartidoEliminatoria 
-        // (Nulleables porque no siempre se juegan tiempos extra o penales)
+        public int? IdCruce { get; set; } // Octavos, Cuartos...
+
+        // Penales y tiempo extra
         public int? GolesA_Extra { get; set; }
         public int? GolesB_Extra { get; set; }
         public int? PenalesA { get; set; }
         public int? PenalesB { get; set; }
 
-        // Relación
-        public int IdCruce { get; set; }
-
-        // Propiedad de Navegación
-        public Cruce Cruce { get; set; }
+        public PartidoEliminatoria()
+        {
+            this.TipoPartido = "Eliminatoria";
+        }
     }
 }

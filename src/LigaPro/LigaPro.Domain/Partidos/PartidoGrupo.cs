@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace LigaPro.Domain.Actores
 {
-    public class PartidoLiga : Partido
+    public class PartidoGrupo : Partido
     {
         public int NumeroJornada { get; set; }
+        public int IdGrupo { get; set; }
 
-        //Relación (Nullable por si es una Liga pura y no un grupo de torneo)
-        public int? IdGrupo { get; set; }
+        public PartidoGrupo()
+        {
+            this.TipoPartido = "Grupo";
+        }
     }
 }

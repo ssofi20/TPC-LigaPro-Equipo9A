@@ -204,13 +204,49 @@ namespace LigaPro.Web.PaginasOrganizador
         protected global::System.Web.UI.WebControls.TextBox txtHoraManual;
 
         /// <summary>
-        /// txtFaseManual control.
+        /// pnlInputGrupo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFaseManual;
+        protected global::System.Web.UI.WebControls.Panel pnlInputGrupo;
+
+        /// <summary>
+        /// ddlGrupo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlGrupo;
+
+        /// <summary>
+        /// txtJornadaGrupo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtJornadaGrupo;
+
+        /// <summary>
+        /// pnlInputFase control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlInputFase;
+
+        /// <summary>
+        /// ddlNombreFase control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlNombreFase;
 
         /// <summary>
         /// btnCrearPartidoManual control.

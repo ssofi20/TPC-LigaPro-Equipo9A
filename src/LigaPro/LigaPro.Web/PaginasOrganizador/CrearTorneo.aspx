@@ -162,6 +162,18 @@
                             </div>
 
                             <asp:Panel ID="pnlPuntos" runat="server" Visible="false" CssClass="mt-4 pt-4 border-top fade-in">
+
+                                <h6 class="fw-bold mb-3">Configuración de Grupos</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Cantidad de Grupos</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light text-muted">#</span>
+                                            <asp:TextBox ID="txtCantidadGrupos" runat="server" CssClass="form-control" TextMode="Number" placeholder="Ej. 4"></asp:TextBox>
+                                        </div>
+                                        <asp:RequiredFieldValidator ErrorMessage="Indica cuántos grupos tendrá el torneo" ControlToValidate="txtCantidadGrupos" CssClass="text-danger small mt-1 d-block" runat="server" Display="Dynamic" />
+                                    </div>
+                                </div>
                                 <h6 class="fw-bold mb-3">Sistema de Puntuación</h6>
                                 <div class="row g-3">
                                     <div class="col-md-4">
