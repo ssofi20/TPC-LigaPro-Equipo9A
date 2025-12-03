@@ -8,7 +8,7 @@ namespace LigaPro.Domain.Actores
 {
     public class PartidoGrupo : Partido
     {
-        public int NumeroJornada { get; set; }
+        public string NombreGrupo { get; set; }
         public int IdGrupo { get; set; }
 
         public PartidoGrupo()

@@ -93,7 +93,6 @@ namespace LigaPro.Web.PaginasOrganizador
 
         private void CargarEquipos()
         {
-            // Usamos TorneoDatos porque ahí creamos el método que busca en la tabla Inscripciones
             TorneoDatos datos = new TorneoDatos();
 
             try
@@ -154,6 +153,21 @@ namespace LigaPro.Web.PaginasOrganizador
             catch (Exception ex) { }
         }
 
+        //FALTA COMPLETAR
+        protected void btnGenerarFixture_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Crear un negocio.GenerarFixtureAutomatico(IdTorneoActual);
+
+                CargarPartidos();
+            }
+            catch (Exception ex)
+            {
+                // Alert error
+            }
+        }
+
         protected void btnCrearPartidoManual_Click(object sender, EventArgs e)
         {
             try
@@ -176,45 +190,41 @@ namespace LigaPro.Web.PaginasOrganizador
                 // 4. Crear el objeto Partido adecuado
                 Partido nuevoPartido;
 
-                // LÓGICA DE DECISIÓN:
-                // Si el usuario escribió algo en "Fase" que parece un número (ej: "1", "2"), asumimos Jornada de Grupo.
-                // Si escribió texto (ej: "Octavos"), asumimos Eliminatoria.
-                // O simplificamos: Por defecto "Grupo" si el torneo tiene fases, sino "Eliminatoria".
-
                 if (torneo.TieneFaseDeGrupos)
                 {
                     nuevoPartido = new PartidoGrupo();
-                    // Intentamos parsear la fase como número de jornada, sino ponemos 0
-                    int jornada;
-                    //bool esNumero = int.TryParse(txtFaseManual.Text, out jornada);
-                    //((PartidoGrupo)nuevoPartido).NumeroJornada = esNumero ? jornada : 1;
-                    // IdGrupo queda pendiente o null por ahora
+                    nuevoPartido.TipoPartido = "Grupo";
+                    nuevoPartido.NombreGrupo = "Grupo " + ddlGrupo.SelectedValue;
                 }
                 else
                 {
                     nuevoPartido = new PartidoEliminatoria();
-                    // Aquí podríamos buscar el IdCruce basado en el texto txtFaseManual.Text
-                    // Por ahora lo dejamos null
+                    nuevoPartido.TipoPartido = "Eliminatoria";
                 }
 
                 // 5. Llenar datos comunes
                 nuevoPartido.IdTorneo = IdTorneoActual;
                 nuevoPartido.FechaHora = fechaHora;
                 nuevoPartido.Estado = "Pendiente";
-
-                // NOTA: Necesitamos los IDs de Inscripción, no de Equipo.
-                // La capa de datos se encargará de traducir idEquipo -> idInscripcion
-                // Pasamos los IDs de equipo temporalmente en propiedades auxiliares o usamos un método inteligente en Datos.
+                nuevoPartido.ResultadoEquipoA = 0;
+                nuevoPartido.ResultadoEquipoB = 0;
 
                 // 6. Guardar usando un método que acepte IDs de Equipos
                 PartidoDatos pdatos = new PartidoDatos();
-                pdatos.CrearPartidoManual(nuevoPartido, idEquipoLocal, idEquipoVisita);
+
+                if (nuevoPartido is PartidoGrupo)
+                {
+                    pdatos.CrearPartidoManual((PartidoGrupo)nuevoPartido, idEquipoLocal, idEquipoVisita);
+                }
+                else
+                {
+                    pdatos.CrearPartidoManual((PartidoEliminatoria)nuevoPartido, idEquipoLocal, idEquipoVisita);
+                }
 
                 // 7. Refrescar
                 CargarPartidos();
 
                 // Limpiar
-                //txtFaseManual.Text = "";
                 ddlLocalManual.SelectedIndex = 0;
                 ddlVisitaManual.SelectedIndex = 0;
             }
@@ -224,19 +234,5 @@ namespace LigaPro.Web.PaginasOrganizador
             }
         }
 
-        //FALTA COMPLETAR
-        protected void btnGenerarFixture_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Crear un negocio.GenerarFixtureAutomatico(IdTorneoActual);
-
-                CargarPartidos();
-            }
-            catch (Exception ex)
-            {
-                // Alert error
-            }
-        }
     }
 }
