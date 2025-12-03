@@ -44,6 +44,7 @@
     <Compile Include="Estuctura Torneos\Cruce.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Actores\Equipo.cs" />
+    <Compile Include="Partidos\PartidoDto.cs" />
     <Compile Include="Relaciones\EquipoJugador.cs" />
     <Compile Include="Partidos\EventoPartido.cs" />
     <Compile Include="Estuctura Torneos\Fase.cs" />

@@ -135,7 +135,7 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td class="ps-4">
-                                                    <span class="fw-bold d-block"><%# Eval("NombreFase") %></span>
+                                                    <span class="fw-bold d-block"><%# Eval("Nombre") %></span>
                                                     <small class="text-muted"><%# Eval("FechaProgramada", "{0:dd/MM HH:mm}") %></small>
                                                 </td>
 
@@ -145,9 +145,13 @@
 
                                                 <td class="text-center">
                                                     <div class="d-flex justify-content-center align-items-center gap-1">
-                                                        <span class="score-box"><%# Eval("GolesLocal") ?? "-" %></span>
+                                                        <span class="score-box">
+                                                            <%# (bool)Eval("Jugado") ? Eval("GolesLocal") : "-" %>
+                                                        </span>
                                                         <span class="text-muted">:</span>
-                                                        <span class="score-box"><%# Eval("GolesVisita") ?? "-" %></span>
+                                                        <span class="score-box">
+                                                            <%# (bool)Eval("Jugado") ? Eval("GolesVisita") : "-" %>
+                                                        </span>
                                                     </div>
                                                 </td>
 
@@ -156,15 +160,16 @@
                                                 </td>
 
                                                 <td>
-                                                    <%# Eval("Jugado") != null && (bool)Eval("Jugado") ? 
-                                                        "<span class='badge bg-light text-dark border'>Finalizado</span>" : 
-                                                        "<span class='badge bg-warning text-dark'>Pendiente</span>" %>
+                                                    <%# (bool)Eval("Jugado") ? 
+                    "<span class='badge bg-light text-dark border'>Finalizado</span>" : 
+                    "<span class='badge bg-warning text-dark'>Pendiente</span>" 
+                                                    %>
                                                 </td>
 
                                                 <td class="text-end pe-4">
                                                     <asp:LinkButton ID="btnCargar" runat="server" CssClass="btn btn-sm btn-primary"
                                                         CommandName="CargarResultado" CommandArgument='<%# Eval("Id") %>'>
-                                                        <i class="bi bi-pencil-square"></i> Cargar
+                    <i class="bi bi-pencil-square"></i> Cargar
                                                     </asp:LinkButton>
                                                 </td>
                                             </tr>

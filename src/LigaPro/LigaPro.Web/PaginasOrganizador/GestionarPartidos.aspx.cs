@@ -1,6 +1,7 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain.Actores;
 using LigaPro.Domain.Actores.LigaPro.Domain.Actores;
+using LigaPro.Domain.Partidos;
 using LigaPro.Negocio;
 using LigaPro.Web.PaginasJugador;
 using System;
@@ -87,8 +88,30 @@ namespace LigaPro.Web.PaginasOrganizador
         //FALTA COMPLETAR
         private void CargarPartidos()
         {
+            try
+            {
+                PartidoDatos datos = new PartidoDatos();
 
-            pnlSinPartidos.Visible = true;
+                List<PartidoDto> partidos = datos.ListarPartidosResumen(IdTorneoActual);
+
+                if (partidos.Count > 0)
+                {
+                    rptPartidos.DataSource = partidos;
+                    rptPartidos.DataBind();
+
+                    pnlSinPartidos.Visible = false;
+                    rptPartidos.Visible = true;
+                }
+                else
+                {
+                    pnlSinPartidos.Visible = true;
+                    rptPartidos.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                pnlSinPartidos.Visible = true;
+            }
         }
 
         private void CargarEquipos()
@@ -194,7 +217,7 @@ namespace LigaPro.Web.PaginasOrganizador
                 {
                     nuevoPartido = new PartidoGrupo();
                     nuevoPartido.TipoPartido = "Grupo";
-                    nuevoPartido.NombreGrupo = "Grupo " + ddlGrupo.SelectedValue;
+                    ((PartidoGrupo)nuevoPartido).NombreGrupo = "Grupo " + ddlGrupo.SelectedValue;
                 }
                 else
                 {

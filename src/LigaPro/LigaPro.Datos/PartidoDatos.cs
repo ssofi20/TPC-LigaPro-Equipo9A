@@ -1,4 +1,5 @@
 ﻿using LigaPro.Domain.Actores;
+using LigaPro.Domain.Partidos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ namespace LigaPro.Datos
 {
     public class PartidoDatos
     {
+        // PARTIDO MANUAL - GRUPOS
         public void CrearPartidoManual(PartidoGrupo partido, int idEquipoLocal, int idEquipoVisita)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
+                AsignarEquipoAGrupo(partido.IdTorneo, idEquipoLocal, partido.NombreGrupo);
 
                 datos.setearConsulta("INSERT INTO Partidos (IdInscripcionA, IdInscripcionB, IdTorneo, IdGrupo,FechaHora, ResultadoEquipoA, ResultadoEquipoB, TipoPartido, Estado)\r\nSELECT \r\n\t(SELECT IdInscripcion FROM Inscripciones WHERE IdEquipo = @idEquipoLocal AND IdTorneo = @idTorneo),    \r\n\t(SELECT IdInscripcion FROM Inscripciones WHERE IdEquipo = @idEquipoVisita AND IdTorneo = @idTorneo),\r\n\t@idTorneo,\r\n\t(SELECT IdGrupo FROM Grupos WHERE IdTorneo = @idTorneo AND Nombre = @nombreGrupo),\r\n\t@fechaHora,\r\n\t@resultadoA,\r\n\t@resultadoB, \r\n\t@tipoPartido,\r\n\t@estado;");
                 datos.setearParametro("@idTorneo", partido.IdTorneo);
@@ -53,6 +56,7 @@ namespace LigaPro.Datos
             }
         }
 
+        // PARTIDO MANUAL - ELIMINATORIAS
         public void CrearPartidoManual(PartidoEliminatoria partido, int idEquipoLocal, int idEquipoVisita)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -72,6 +76,76 @@ namespace LigaPro.Datos
             }
             catch (Exception ex) { throw ex; }
             finally { datos.cerrarConexion(); }
+        }
+
+        // LISTADO DE PARTIDOS PARA PANEL DE GESTION
+        public List<PartidoDto> ListarPartidosResumen(int idTorneo)
+        {
+            List<PartidoDto> lista = new List<PartidoDto>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = @"
+                    SELECT 
+                        P.IdPartido,
+                        P.FechaHora,
+                        P.Estado,
+                        P.ResultadoEquipoA,
+                        P.ResultadoEquipoB,
+                        P.TipoPartido,
+                        G.Nombre as NombreGrupo,
+                        E1.Nombre as Local,
+                        E2.Nombre as Visita
+                    FROM Partidos P
+                    INNER JOIN Inscripciones I1 ON P.IdInscripcionA = I1.IdInscripcion
+                    INNER JOIN Equipos E1 ON I1.IdEquipo = E1.IdEquipo
+                    INNER JOIN Inscripciones I2 ON P.IdInscripcionB = I2.IdInscripcion
+                    INNER JOIN Equipos E2 ON I2.IdEquipo = E2.IdEquipo
+                    LEFT JOIN Grupos G ON P.IdGrupo = G.IdGrupo
+                    WHERE P.IdTorneo = @idTorneo
+                    ORDER BY P.FechaHora DESC";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@idTorneo", idTorneo);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    PartidoDto aux = new PartidoDto();
+                    aux.Id = (int)datos.Lector["IdPartido"];
+                    aux.FechaProgramada = (DateTime)datos.Lector["FechaHora"];
+                    aux.NombreLocal = (string)datos.Lector["Local"];
+                    aux.NombreVisita = (string)datos.Lector["Visita"];
+                    aux.GolesLocal = (int)datos.Lector["ResultadoEquipoA"];
+                    aux.GolesVisita = (int)datos.Lector["ResultadoEquipoB"];
+                    aux.Estado = (string)datos.Lector["Estado"];
+                    aux.Jugado = aux.Estado == "Finalizado";
+
+                    string tipo = (string)datos.Lector["TipoPartido"];
+                    if (tipo == "Grupo")
+                    {
+                        string grupo = datos.Lector["NombreGrupo"] != DBNull.Value ? datos.Lector["NombreGrupo"].ToString() : "?";
+                        aux.Nombre = "Grupo " + grupo;
+                    }
+                    else
+                    {
+                        aux.Nombre = tipo; // Ej: "Octavos", "Final"
+                    }
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
     }
 }
