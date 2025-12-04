@@ -103,5 +103,12 @@ namespace LigaPro.Negocio
         {
             datos.CrearSolicitud(idUsuario, idEquipo);
         }
+
+        //Listar todos los equipos sin id
+
+        public List<Equipo> ListarEquipos()
+        {
+           return datos.Listar();
+        }
     }
 }

@@ -34,7 +34,7 @@
                                 <a class="nav-link" href="/Default.aspx">Ligas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Default.aspx">Equipos</a>
+                                <a class="nav-link" href="/PaginasGenerales/PaginaEquipos.aspx">Equipos</a>
                             </li>
                             <li class="nav-item ms-lg-2">
                                 <a class="btn btn-secondary" href="/Auth/InicioSesion.aspx">Login</a>

@@ -494,5 +494,36 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
+
+        public List<Equipo> Listar()
+        {
+            List<Equipo> lista = new List<Equipo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT E.IdEquipo, E.IdUsuarioCreador, E.Nombre, E.Imagen, J.Nombres, J.Apellidos FROM Equipos E INNER JOIN Jugadores J ON J.IdUsuarioJugador = E.IdUsuarioCreador WHERE E.Activo = 1;");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+                    aux.IdUsuarioCreador = (int)datos.Lector["IdUsuarioCreador"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+
+                    aux.NombreCreador = (string)datos.Lector["Nombres"] + " " + (string)datos.Lector["Apellidos"];
+
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
     }
 }
