@@ -28,10 +28,7 @@
                                 <a class="nav-link active" aria-current="page" href="/Default.aspx">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Default.aspx">Torneos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Default.aspx">Ligas</a>
+                                <a class="nav-link" href="/PaginasGenerales/PaginaCompeticiones.aspx">Competiciones</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/PaginasGenerales/PaginaEquipos.aspx">Equipos</a>

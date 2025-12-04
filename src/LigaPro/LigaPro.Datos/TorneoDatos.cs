@@ -300,5 +300,56 @@ namespace LigaPro.Datos
             finally { datos.cerrarConexion(); }
         }
 
+        public List<Torneo> Listar()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Torneo> lista = new List<Torneo>();
+            try
+            {
+                datos.setearConsulta("SELECT T.IdTorneo, T.IdOrganizador, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, (SELECT COUNT(*) FROM Inscripciones I WHERE I.IdTorneo = T.IdTorneo) AS CantidadInscriptos,R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension, O.NombrePublico, O.IdUsuario, O.IdOrganizador, O.Logo, O.EmailContacto, O.NumeroTelefono FROM Torneos T INNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento INNER JOIN Organizadores O ON T.IdOrganizador = O.IdOrganizador WHERE T.Activo = 1");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Torneo aux = new Torneo();
+
+                    aux.Id = (int)datos.Lector["IdTorneo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
+                    aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
+                    aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+                    aux.CantidadInscriptos = (int)datos.Lector["CantidadInscriptos"];
+
+                    aux.Organizador = new Organizador();
+                    aux.Organizador.Id = (int)datos.Lector["IdOrganizador"];
+                    aux.Organizador.NombrePublico = (string)datos.Lector["NombrePublico"];
+                    aux.Organizador.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    aux.Organizador.Logo = (string)datos.Lector["Logo"];
+                    aux.Organizador.EmailContacto= (string)datos.Lector["EmailContacto"];
+                    aux.Organizador.NumeroTelefono= (string)datos.Lector["NumeroTelefono"];
+
+                    aux.Reglas = new Reglamento();
+                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
+                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
+                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
+                    aux.Reglas.PuntosPorDerrota = (int)datos.Lector["PuntosPorDerrota"];
+                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
+                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
