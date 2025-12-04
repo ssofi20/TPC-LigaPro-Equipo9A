@@ -98,7 +98,7 @@ namespace LigaPro.Web.PaginasOrganizador
 
             hfIdTorneoEditar.Value = comp.Id.ToString();
             txtNombreEditar.Text = comp.Nombre;
-            ddlEstadoEditar.SelectedValue = comp.Estado.ToString(); // Asegúrate que coincida con el Enum
+            ddlEstadoEditar.SelectedValue = comp.Estado.ToString();
 
             // Reglas
             txtPvEditar.Text = comp.Reglas.PuntosPorVictoria.ToString();

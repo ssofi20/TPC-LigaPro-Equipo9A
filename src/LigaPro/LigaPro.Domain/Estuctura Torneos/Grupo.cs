@@ -16,6 +16,6 @@ namespace LigaPro.Domain.Actores
 
         //Navegación
         public List<Inscripcion> Inscripciones { get; set; }
-        public List<PartidoLiga> Partidos { get; set; }
+        public List<PartidoGrupo> Partidos { get; set; }
     }
 }

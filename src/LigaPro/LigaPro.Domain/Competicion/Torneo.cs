@@ -21,7 +21,8 @@ namespace LigaPro.Domain.Actores
             public EstadoCompetencia Estado { get; set; } 
             public int CupoMaximo { get; set; } 
 
-            public bool TieneFaseDeGrupos { get; set; } 
+            public bool TieneFaseDeGrupos { get; set; }
+            public int CantidadGrupos { get; set; }
 
             public Reglamento Reglas { get; set; }
 

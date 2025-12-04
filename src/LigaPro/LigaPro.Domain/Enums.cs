@@ -17,7 +17,7 @@ namespace LigaPro.Domain
     public enum EstadoCompetencia
     {
         InscripcionAbierta = 1,
-        SorteoRealizado = 2,
+        FaseDeGrupos = 2,
         EnCurso = 3,
         Finalizado = 4,
         Cancelado = 0

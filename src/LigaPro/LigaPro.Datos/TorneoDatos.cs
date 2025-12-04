@@ -20,13 +20,14 @@ namespace LigaPro.Datos
             {
                 int idReglamento = CrearReglamento(nuevo.Reglas);
 
-                datos.setearConsulta("INSERT INTO Torneos (IdOrganizador, Nombre, Estado, CupoMaximo, TieneFaseGrupos, IdReglamento) \r\nVALUES (@idOrganizador, @nombre, @estado, @cupoMaximo, @tieneFaseGrupos, @idReglamento)");
+                datos.setearConsulta("INSERT INTO Torneos (IdOrganizador, Nombre, Estado, CupoMaximo, TieneFaseGrupos, IdReglamento, CantidadGrupos) \r\nVALUES (@idOrganizador, @nombre, @estado, @cupoMaximo, @tieneFaseGrupos, @idReglamento, @cantidadGrupos)");
                 datos.setearParametro("@idOrganizador", nuevo.Organizador.Id);
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@estado", nuevo.Estado);
                 datos.setearParametro("@cupoMaximo", nuevo.CupoMaximo);
                 datos.setearParametro("@tieneFaseGrupos", nuevo.TieneFaseDeGrupos);
                 datos.setearParametro("@idReglamento", idReglamento);
+                datos.setearParametro("@cantidadGrupos", nuevo.CantidadGrupos);
 
                 datos.ejecutarAccion();
             }
@@ -117,7 +118,7 @@ namespace LigaPro.Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, T.IdReglamento, R.PuntosPorEmpate, R.PuntosPorVictoria, R.PuntosPorDerrota, R.PartidosSuspensionPorRojaDirecta, R.TarjetasAmarillasParaSuspension\r\nFROM Torneos T\r\nINNER JOIN Reglamentos R ON R.IdReglamento = T.IdReglamento\r\nWHERE T.IdTorneo = @idTorneo");
+                datos.setearConsulta("SELECT T.IdTorneo, T.Nombre, T.Estado, T.CupoMaximo, T.TieneFaseGrupos, T.Activo, (SELECT COUNT(*) FROM Inscripciones I WHERE I.IdTorneo = T.IdTorneo) as CantidadInscriptos, CantidadGrupos FROM Torneos T WHERE T.IdTorneo = @idTorneo");
                 datos.setearParametro("@idTorneo", id);
                 datos.ejecutarLectura();
 
@@ -129,15 +130,9 @@ namespace LigaPro.Datos
                     aux.Estado = (EstadoCompetencia)Enum.Parse(typeof(EstadoCompetencia), datos.Lector["Estado"].ToString());
                     aux.CupoMaximo = (int)datos.Lector["CupoMaximo"];
                     aux.TieneFaseDeGrupos = (bool)datos.Lector["TieneFaseGrupos"];
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    aux.Reglas = new Reglamento();
-                    aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
-                    aux.Reglas.PuntosPorEmpate = (int)datos.Lector["PuntosPorEmpate"];
-                    aux.Reglas.PuntosPorVictoria = (int)datos.Lector["PuntosPorVictoria"];
-                    aux.Reglas.PuntosPorDerrota = (int)datos.Lector["PuntosPorDerrota"];
-                    aux.Reglas.PartidosSuspensionPorRojaDirecta = (int)datos.Lector["PartidosSuspensionPorRojaDirecta"];
-                    aux.Reglas.TarjetasAmarillasParaSuspension = (int)datos.Lector["TarjetasAmarillasParaSuspension"];
+                    aux.Activo = (bool)datos.Lector["Activo"]; 
+                    aux.CantidadInscriptos = (int)datos.Lector["CantidadInscriptos"];
+                    aux.CantidadGrupos = (int)datos.Lector["CantidadGrupos"];
 
                     return aux;
                 }
@@ -326,8 +321,8 @@ namespace LigaPro.Datos
                     aux.Organizador.NombrePublico = (string)datos.Lector["NombrePublico"];
                     aux.Organizador.IdUsuario = (int)datos.Lector["IdUsuario"];
                     aux.Organizador.Logo = (string)datos.Lector["Logo"];
-                    aux.Organizador.EmailContacto= (string)datos.Lector["EmailContacto"];
-                    aux.Organizador.NumeroTelefono= (string)datos.Lector["NumeroTelefono"];
+                    aux.Organizador.EmailContacto = (string)datos.Lector["EmailContacto"];
+                    aux.Organizador.NumeroTelefono = (string)datos.Lector["NumeroTelefono"];
 
                     aux.Reglas = new Reglamento();
                     aux.Reglas.Id = (int)datos.Lector["IdReglamento"];
@@ -343,7 +338,45 @@ namespace LigaPro.Datos
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
+        public List<Equipo> ListarEquiposInscriptos(int idTorneo)
+        {
+            List<Equipo> lista = new List<Equipo>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT E.IdEquipo, E.Nombre, E.Imagen FROM Equipos E INNER JOIN Inscripciones I ON E.IdEquipo = I.IdEquipo WHERE I.IdTorneo = @idTorneo AND E.Activo = 1");
+                datos.setearParametro("@idTorneo", idTorneo);
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+
+                    Equipo aux = new Equipo();
+                    aux.Id = (int)datos.Lector["IdEquipo"];
+
+                    if (!(datos.Lector["Nombre"] is DBNull))
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+
+                    if (!(datos.Lector["Imagen"] is DBNull))
+                        aux.Imagen = (string)datos.Lector["Imagen"];
+                    else
+                        aux.Imagen = "/Uploads/default-team.png";
+
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
             finally

@@ -39,6 +39,8 @@ namespace LigaPro.Web.PaginasOrganizador
                 reglas.TarjetasAmarillasParaSuspension = int.Parse(txtAmarillas.Text);
                 reglas.PartidosSuspensionPorRojaDirecta = int.Parse(txtRojas.Text);
 
+                Torneo nuevo = new Torneo();
+
                 // Lógica de Puntos
                 if (rbConFases.Checked)
                 {
@@ -46,6 +48,7 @@ namespace LigaPro.Web.PaginasOrganizador
                     reglas.PuntosPorVictoria = int.Parse(txtPuntosVictoria.Text);
                     reglas.PuntosPorEmpate = int.Parse(txtPuntosEmpate.Text);
                     reglas.PuntosPorDerrota = int.Parse(txtPuntosDerrota.Text);
+                    nuevo.CantidadGrupos = int.Parse(txtCantidadGrupos.Text);
                 }
                 else
                 {
@@ -53,10 +56,10 @@ namespace LigaPro.Web.PaginasOrganizador
                     reglas.PuntosPorVictoria = 3;
                     reglas.PuntosPorEmpate = 1;
                     reglas.PuntosPorDerrota = 0;
+                    nuevo.CantidadGrupos = 0;
                 }
 
                 // CONFIGURAR TORNEO
-                Torneo nuevo = new Torneo();
                 nuevo.Nombre = txtNombre.Text;
                 nuevo.Activo = true;
                 nuevo.Estado = EstadoCompetencia.InscripcionAbierta;

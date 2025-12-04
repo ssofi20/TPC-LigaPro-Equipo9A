@@ -1,5 +1,7 @@
 ﻿using LigaPro.Datos;
 using LigaPro.Domain.Actores;
+using LigaPro.Domain.Actores.LigaPro.Domain.Actores;
+using LigaPro.Domain.Partidos;
 using LigaPro.Negocio;
 using LigaPro.Web.PaginasJugador;
 using System;
@@ -12,6 +14,17 @@ namespace LigaPro.Web.PaginasOrganizador
     public partial class GestionarPartidos : System.Web.UI.Page
     {
         public int IdTorneoActual { get; set; }
+        private void MostrarMensaje(string titulo, string texto, string tipo)
+        {
+            string script = $"Swal.fire('{titulo}', '{texto}', '{tipo}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlert", script, true);
+        }
+
+        private void MostrarMensajeModal(string titulo, string texto, string tipo, string idModal)
+        {
+            string script = $"mostrarAlertaYReabrir('{titulo}', '{texto}', '{tipo}', '{idModal}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlertModal", script, true);
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -46,41 +59,317 @@ namespace LigaPro.Web.PaginasOrganizador
             {
                 lblNombreTorneo.Text = torneo.Nombre;
                 lblEstadoTorneo.Text = torneo.Estado.ToString();
-
-                lblFormato.Text = torneo.TieneFaseDeGrupos ? "Fase de Grupos + Eliminatoria" : "Eliminatoria / Liga";
-
+                lblFormato.Text = torneo.TieneFaseDeGrupos ? "Fase de Grupos + Eliminatoria" : "Eliminatoria";
                 lblInscriptos.Text = $"{torneo.CantidadInscriptos}/{torneo.CupoMaximo}";
-
                 liPosiciones.Visible = torneo.TieneFaseDeGrupos;
+
+                CargarConfiguracionModal(torneo);
+            }
+        }
+
+        private void CargarConfiguracionModal(Torneo torneo)
+        {
+            ddlGrupo.Items.Clear();
+
+            if ((int)torneo.Estado == 2)
+            {
+                pnlInputGrupo.Visible = true;
+                pnlInputFase.Visible = false;
+
+                char letra = 'A';
+                for (int i = 0; i < torneo.CantidadGrupos; i++)
+                {
+                    string nombreGrupo = $"Grupo {letra}";
+                    ddlGrupo.Items.Add(new ListItem(nombreGrupo, letra.ToString()));
+                    letra++;
+                }
+            }
+            else if ((int)torneo.Estado == 3)
+            {
+                pnlInputGrupo.Visible = false;
+                pnlInputFase.Visible = true;
+            }
+            else
+            {
+                pnlInputGrupo.Visible = false;
+                pnlInputFase.Visible = false;
             }
         }
 
         private void CargarPartidos()
         {
-            
-            pnlSinPartidos.Visible = true;
+            try
+            {
+                PartidoDatos datos = new PartidoDatos();
+
+                List<PartidoDto> partidos = datos.ListarPartidosResumen(IdTorneoActual);
+
+                if (partidos.Count > 0)
+                {
+                    rptPartidos.DataSource = partidos;
+                    rptPartidos.DataBind();
+
+                    pnlSinPartidos.Visible = false;
+                    rptPartidos.Visible = true;
+                }
+                else
+                {
+                    pnlSinPartidos.Visible = true;
+                    rptPartidos.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                pnlSinPartidos.Visible = true;
+            }
+        }
+
+        protected string ObtenerBadgeEstado(string estado)
+        {
+            switch (estado)
+            {
+                case "Finalizado":
+                    return "<span class='badge bg-secondary'><i class='bi bi-check-all me-1'></i>Finalizado</span>";
+                case "EnCurso":
+                    return "<span class='badge bg-success'><i class='bi bi-play-circle me-1'></i>En Curso</span>";
+                case "Suspendido":
+                case "Cancelado":
+                    return "<span class='badge bg-danger'><i class='bi bi-x-octagon me-1'></i>Suspendido</span>";
+                case "Walkover":
+                    return "<span class='badge bg-dark'>W.O.</span>";
+                case "Pendiente":
+                default:
+                    return "<span class='badge bg-warning text-dark'><i class='bi bi-clock me-1'></i>Pendiente</span>";
+            }
         }
 
         private void CargarEquipos()
         {
-            EquipoDatos datos = new EquipoDatos();
-            List<Equipo> equipos = datos.listarEquiposPorTorneo(IdTorneoActual);
+            TorneoDatos datos = new TorneoDatos();
 
-            // Repeater de equipos
-            rptEquipos.DataSource = equipos;
-            rptEquipos.DataBind();
+            try
+            {
+                List<Equipo> equipos = datos.ListarEquiposInscriptos(IdTorneoActual);
+
+                rptEquipos.DataSource = equipos;
+                rptEquipos.DataBind();
+
+
+                ddlLocalManual.DataSource = equipos;
+                ddlLocalManual.DataTextField = "Nombre";
+                ddlLocalManual.DataValueField = "Id";
+                ddlLocalManual.DataBind();
+                ddlLocalManual.Items.Insert(0, new ListItem("-- Seleccionar Local --", "0"));
+
+                ddlVisitaManual.DataSource = equipos;
+                ddlVisitaManual.DataTextField = "Nombre";
+                ddlVisitaManual.DataValueField = "Id";
+                ddlVisitaManual.DataBind();
+                ddlVisitaManual.Items.Insert(0, new ListItem("-- Seleccionar Visita --", "0"));
+            }
+            catch (Exception ex)
+            {
+                // Opcional: Mostrar error si falla la carga
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", $"alert('Error al cargar equipos: {ex.Message}');", true);
+            }
+        }
+
+        protected void btnCrearPartidoManual_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idEquipoLocal = int.Parse(ddlLocalManual.SelectedValue);
+                int idEquipoVisita = int.Parse(ddlVisitaManual.SelectedValue);
+
+                // VALIDACIONES VISUALES
+                if (idEquipoLocal == 0 || idEquipoVisita == 0)
+                {
+                    MostrarMensajeModal("Faltan datos", "Debes seleccionar ambos equipos.", "warning", "modalNuevoPartido");
+                    return;
+                }
+                if (idEquipoLocal == idEquipoVisita)
+                {
+                    MostrarMensajeModal("Error", "El equipo local y visitante no pueden ser el mismo.", "error", "modalNuevoPartido");
+                    return;
+                }
+
+                DateTime fechaHora = DateTime.Parse(txtFechaManual.Text + " " + txtHoraManual.Text);
+                if (!DateTime.TryParse(txtFechaManual.Text + " " + txtHoraManual.Text, out fechaHora))
+                {
+                    MostrarMensajeModal("Fecha Incorrecta", "Por favor ingresa una fecha y hora válidas.", "warning", "modalNuevoPartido");
+                    return;
+                }
+
+                if (fechaHora < DateTime.Now)
+                {
+                    MostrarMensajeModal("Atención", "No puedes programar partidos en el pasado.", "info", "modalNuevoPartido");
+                    return;
+                }
+
+                TorneoDatos tDatos = new TorneoDatos();
+                Torneo torneo = tDatos.buscarPorId(IdTorneoActual);
+
+                Partido nuevoPartido;
+
+                if (torneo.TieneFaseDeGrupos)
+                {
+                    nuevoPartido = new PartidoGrupo();
+                    nuevoPartido.TipoPartido = "Grupo";
+                    ((PartidoGrupo)nuevoPartido).NombreGrupo = "Grupo " + ddlGrupo.SelectedValue;
+                }
+                else
+                {
+                    nuevoPartido = new PartidoEliminatoria();
+                    nuevoPartido.TipoPartido = "Eliminatoria";
+                }
+
+                nuevoPartido.IdTorneo = IdTorneoActual;
+                nuevoPartido.FechaHora = fechaHora;
+                nuevoPartido.Estado = "Pendiente";
+                nuevoPartido.ResultadoEquipoA = 0;
+                nuevoPartido.ResultadoEquipoB = 0;
+
+                PartidoDatos pdatos = new PartidoDatos();
+
+                if (nuevoPartido is PartidoGrupo)
+                {
+                    pdatos.CrearPartidoManual((PartidoGrupo)nuevoPartido, idEquipoLocal, idEquipoVisita);
+                }
+                else
+                {
+                    pdatos.CrearPartidoManual((PartidoEliminatoria)nuevoPartido, idEquipoLocal, idEquipoVisita);
+                }
+
+                CargarPartidos();
+
+                ddlLocalManual.SelectedIndex = 0;
+                ddlVisitaManual.SelectedIndex = 0;
+                txtFechaManual.Text = "";
+                txtHoraManual.Text = "";
+
+                MostrarMensaje("¡Listo!", "El partido se creó correctamente.", "success");
+
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("Error", "Ocurrió un problema: " + ex.Message, "error");
+            }
         }
 
         protected void rptPartidos_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
+            int idPartido = int.Parse(e.CommandArgument.ToString());
+
+            /// CASO 1: CARGAR RESULTADO 
             if (e.CommandName == "CargarResultado")
             {
-                int idPartido = int.Parse(e.CommandArgument.ToString());
                 hfIdPartidoResultado.Value = idPartido.ToString();
 
-                //agrregarr
+                // (Aquí va tu lógica de precarga existente...)
+                PartidoDatos datos = new PartidoDatos();
+                var p = datos.ObtenerPorId(idPartido);
+                if (p != null)
+                {
+                    txtGolesLocal.Text = p.GolesLocal.ToString();
+                    txtGolesVisita.Text = p.GolesVisita.ToString();
+                }
 
                 ScriptManager.RegisterStartupScript(this, GetType(), "PopRes", "abrirModalResultado();", true);
+            }
+
+            /// CASO 2: MODIFICAR 
+            else if (e.CommandName == "Modificar")
+            {
+                hfIdPartidoModificar.Value = idPartido.ToString();
+
+                PartidoDatos datos = new PartidoDatos();
+                var p = datos.ObtenerPorId(idPartido);
+
+                if (p != null)
+                {
+                    if (p.Estado == "Finalizado")
+                    {
+                        MostrarMensaje("Acción denegada", "No se puede modificar un partido que ya ha finalizado.", "warning");
+                        return;
+                    }
+
+                    txtNuevaFecha.Text = p.FechaProgramada.ToString("yyyy-MM-dd");
+                    txtNuevaHora.Text = p.FechaProgramada.ToString("HH:mm");
+
+                    if (ddlEstadoModificar.Items.FindByValue(p.Estado) != null)
+                    {
+                        ddlEstadoModificar.SelectedValue = p.Estado;
+                    }
+                    else
+                    {
+                        ddlEstadoModificar.SelectedIndex = 0;
+                    }
+                }
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "PopMod", "abrirModalModificar();", true);
+            }
+
+            /// CASO 3: CANCELAR
+            else if (e.CommandName == "Cancelar")
+            {
+                hfIdPartidoCancelar.Value = idPartido.ToString();
+                ScriptManager.RegisterStartupScript(this, GetType(), "PopCancel", "abrirModalCancelar();", true);
+            }
+        }
+
+        protected void btnGuardarModificacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idPartido = int.Parse(hfIdPartidoModificar.Value);
+                DateTime nuevaFecha = DateTime.Parse(txtNuevaFecha.Text + " " + txtNuevaHora.Text);
+
+                //VALIDACION 
+                if (!DateTime.TryParse(txtNuevaFecha.Text + " " + txtNuevaHora.Text, out nuevaFecha))
+                {
+                    MostrarMensajeModal("Fecha inválida", "Revisa los campos de fecha y hora.", "error", "modalModificarPartido");
+                    return;
+                }
+
+                if (nuevaFecha < DateTime.Now)
+                {
+                    MostrarMensajeModal("Fecha pasada", "La nueva fecha no puede ser anterior a hoy.", "warning", "modalNuevoPartido");
+                    return;
+                }
+
+                string nuevoEstado = ddlEstadoModificar.SelectedValue;
+
+                PartidoDatos datos = new PartidoDatos();
+
+                datos.ModificarPartido(idPartido, nuevaFecha, nuevoEstado);
+
+                MostrarMensaje("Actualizado", "El partido ha sido modificado.", "success");
+
+                CargarPartidos();
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("Error", ex.Message, "error");
+            }
+        }
+
+        protected void btnConfirmarCancelacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idPartido = int.Parse(hfIdPartidoCancelar.Value);
+
+                PartidoDatos datos = new PartidoDatos();
+                datos.EliminarPartido(idPartido);
+
+                CargarPartidos();
+
+                MostrarMensaje("Partido Eliminado", "El partido se ha eliminado correctamente.", "success");
+
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("Error", ex.Message, "error");
             }
         }
 
@@ -89,29 +378,37 @@ namespace LigaPro.Web.PaginasOrganizador
             try
             {
                 int idPartido = int.Parse(hfIdPartidoResultado.Value);
-                int golesL = int.Parse(txtGolesLocal.Text);
-                int golesV = int.Parse(txtGolesVisita.Text);
-                bool finalizado = chkFinalizado.Checked;
 
-                // crear una funcion tipo negocio.CargarResultado(idPartido, golesL, golesV, finalizado);
+                int golesL = string.IsNullOrEmpty(txtGolesLocal.Text) ? 0 : int.Parse(txtGolesLocal.Text);
+                int golesV = string.IsNullOrEmpty(txtGolesVisita.Text) ? 0 : int.Parse(txtGolesVisita.Text);
+
+                if (golesL < 0 || golesV < 0)
+                {
+                    MostrarMensajeModal("Dato incorrecto", "Los goles no pueden ser negativos.", "error", "modalCargarResultado");
+                    return;
+                }
+
+                bool finalizado = true;
+
+                PartidoDatos datos = new PartidoDatos();
+                datos.CargarResultado(idPartido, golesL, golesV, finalizado);
+
+                MostrarMensaje("Resultado Cargado", "El partido se marcó como finalizado.", "success");
 
                 CargarPartidos();
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+                MostrarMensaje("Error", ex.Message, "error");
+            }
         }
 
-        protected void btnCrearPartidoManual_Click(object sender, EventArgs e)
-        {
-            //Lógica para insertar partido manual
 
-            CargarPartidos();
-        }
-
+        //FALTA COMPLETAR
         protected void btnGenerarFixture_Click(object sender, EventArgs e)
         {
             try
             {
-
                 // Crear un negocio.GenerarFixtureAutomatico(IdTorneoActual);
 
                 CargarPartidos();
@@ -121,5 +418,7 @@ namespace LigaPro.Web.PaginasOrganizador
                 // Alert error
             }
         }
+
+
     }
 }

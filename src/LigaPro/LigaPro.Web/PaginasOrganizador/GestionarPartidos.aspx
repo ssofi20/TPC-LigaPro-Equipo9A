@@ -1,6 +1,8 @@
 ﻿<%@ Page Title="Gestión de Torneo" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="GestionarPartidos.aspx.cs" Inherits="LigaPro.Web.PaginasOrganizador.GestionarPartidos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .tournament-header {
             background-color: #fff;
@@ -8,7 +10,7 @@
             padding: 2rem 0;
             margin-bottom: 2rem;
         }
-        
+
         .badge-soft {
             background-color: #f8f9fa;
             color: #495057;
@@ -19,6 +21,7 @@
         .table-matches td {
             vertical-align: middle;
         }
+
         .score-box {
             display: inline-block;
             width: 35px;
@@ -41,11 +44,35 @@
             var myModal = new bootstrap.Modal(document.getElementById('modalNuevoPartido'));
             myModal.show();
         }
+        function abrirModalModificar() {
+            var myModal = new bootstrap.Modal(document.getElementById('modalModificarPartido'));
+            myModal.show();
+        }
+        function abrirModalCancelar() {
+            var myModal = new bootstrap.Modal(document.getElementById('modalCancelarPartido'));
+            myModal.show();
+        }
+        function mostrarAlertaYReabrir(titulo, texto, tipo, idModal) {
+            Swal.fire({
+                title: titulo,
+                text: texto,
+                icon: tipo,
+                confirmButtonColor: '#212529', // Color oscuro para combinar
+                confirmButtonText: 'Entendido'
+            }).then((result) => {
+                // Esto se ejecuta cuando el usuario da click en "Entendido" o cierra la alerta
+                if (idModal) {
+                    var myModal = new bootstrap.Modal(document.getElementById(idModal));
+                    myModal.show();
+                }
+            });
+        }
     </script>
+
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    
+
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
     <!-- ENCABEZADO DEL TORNEO -->
@@ -60,16 +87,19 @@
                         <asp:Label ID="lblEstadoTorneo" runat="server" CssClass="badge bg-success small">En Curso</asp:Label>
                     </div>
                     <div class="text-muted small">
-                        <i class="bi bi-grid-3x3 me-1"></i> <asp:Label ID="lblFormato" runat="server" Text="-"></asp:Label>
+                        <i class="bi bi-grid-3x3 me-1"></i>
+                        <asp:Label ID="lblFormato" runat="server" Text="-"></asp:Label>
                         <span class="mx-2">|</span>
-                        <i class="bi bi-people me-1"></i> <asp:Label ID="lblInscriptos" runat="server" Text="0/0"></asp:Label> Equipos
+                        <i class="bi bi-people me-1"></i>
+                        <asp:Label ID="lblInscriptos" runat="server" Text="0/0"></asp:Label>
+                        Equipos
                     </div>
                 </div>
-                
+
                 <!-- Acciones Principales -->
                 <div class="d-flex gap-2">
-                    <asp:Button ID="btnGenerarFixture" runat="server" Text="Generar Fixture Automático" 
-                        CssClass="btn btn-dark shadow-sm" OnClick="btnGenerarFixture_Click" 
+                    <asp:Button ID="btnGenerarFixture" runat="server" Text="Generar Fixture Automático"
+                        CssClass="btn btn-dark shadow-sm" OnClick="btnGenerarFixture_Click"
                         OnClientClick="return confirm('¿Generar fixture automáticamente? Esto borrará partidos existentes si el torneo no ha comenzado.');" />
                 </div>
             </div>
@@ -77,7 +107,7 @@
     </div>
 
     <div class="container">
-        
+
         <!-- PESTAÑAS DE NAVEGACIÓN -->
         <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
             <li class="nav-item">
@@ -99,15 +129,15 @@
 
         <!-- CONTENIDO DE PESTAÑAS -->
         <div class="tab-content" id="myTabContent">
-            
+
             <!-- TAB 1: PARTIDOS -->
             <div class="tab-pane fade show active" id="partidos" role="tabpanel">
-                
+
                 <!-- Toolbar Partidos -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Calendario de Encuentros</h5>
                     <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrirModalNuevoPartido()">
-                        <i class="bi bi-plus-lg me-1"></i> Nuevo Partido Manual
+                        <i class="bi bi-plus-lg me-1"></i>Nuevo Partido Manual
                     </button>
                 </div>
 
@@ -123,7 +153,7 @@
                                         <th class="text-center" style="width: 100px;">Resultado</th>
                                         <th>Visitante</th>
                                         <th>Estado</th>
-                                        <th class="text-end pe-4">Acción</th>
+                                        <th class="text-center" style="width: 150px;">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -131,37 +161,65 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td class="ps-4">
-                                                    <span class="fw-bold d-block"><%# Eval("NombreFase") %></span> <!-- Ej: Fecha 1, Octavos -->
+                                                    <span class="fw-bold d-block"><%# Eval("Nombre") %></span>
                                                     <small class="text-muted"><%# Eval("FechaProgramada", "{0:dd/MM HH:mm}") %></small>
                                                 </td>
-                                                
+
                                                 <td class="text-end fw-bold">
                                                     <%# Eval("NombreLocal") %>
                                                 </td>
-                                                
+
                                                 <td class="text-center">
                                                     <div class="d-flex justify-content-center align-items-center gap-1">
-                                                        <span class="score-box"><%# Eval("GolesLocal") ?? "-" %></span>
+                                                        <span class="score-box">
+                                                            <%# (bool)Eval("Jugado") ? Eval("GolesLocal") : "-" %>
+                                                        </span>
                                                         <span class="text-muted">:</span>
-                                                        <span class="score-box"><%# Eval("GolesVisita") ?? "-" %></span>
+                                                        <span class="score-box">
+                                                            <%# (bool)Eval("Jugado") ? Eval("GolesVisita") : "-" %>
+                                                        </span>
                                                     </div>
                                                 </td>
-                                                
+
                                                 <td class="fw-bold">
                                                     <%# Eval("NombreVisita") %>
                                                 </td>
 
                                                 <td>
-                                                    <%# Eval("Jugado") != null && (bool)Eval("Jugado") ? 
-                                                        "<span class='badge bg-light text-dark border'>Finalizado</span>" : 
-                                                        "<span class='badge bg-warning text-dark'>Pendiente</span>" %>
+                                                    <%# ObtenerBadgeEstado(Eval("Estado").ToString()) %>
                                                 </td>
 
-                                                <td class="text-end pe-4">
-                                                    <asp:LinkButton ID="btnCargar" runat="server" CssClass="btn btn-sm btn-primary" 
-                                                        CommandName="CargarResultado" CommandArgument='<%# Eval("Id") %>'>
-                                                        <i class="bi bi-pencil-square"></i> Cargar
-                                                    </asp:LinkButton>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm shadow-sm" role="group">
+
+                                                        <td class="text-center">
+                                                            <div class="btn-group btn-group-sm shadow-sm" role="group">
+
+                                                                <asp:LinkButton ID="btnModificar" runat="server"
+                                                                    CommandName="Modificar"
+                                                                    CommandArgument='<%# Eval("Id") %>'
+                                                                    Enabled='<%# Eval("Estado").ToString() != "Finalizado" %>'
+                                                                    CssClass='<%# Eval("Estado").ToString() == "Finalizado" ? "btn btn-secondary disabled opacity-50" : "btn btn-primary" %>'
+                                                                    ToolTip='<%# Eval("Estado").ToString() == "Finalizado" ? "Partido Finalizado (Bloqueado)" : "Modificar Partido" %>'>
+                                                                <i class="bi bi-pencil-square"></i>
+                                                                </asp:LinkButton>
+
+                                                                <asp:LinkButton ID="btnCargar" runat="server" CssClass="btn btn-outline-success"
+                                                                    CommandName="CargarResultado" CommandArgument='<%# Eval("Id") %>'
+                                                                    ToolTip="Cargar Resultado Final">
+                                                                    <i class="bi bi-trophy-fill"></i>
+                                                                </asp:LinkButton>
+
+                                                                <asp:LinkButton ID="btnCancelar" runat="server" CssClass="btn btn-outline-danger"
+                                                                    CommandName="Cancelar" CommandArgument='<%# Eval("Id") %>'
+                                                                    ToolTip="Suspender Partido">
+                                                                    <i class="bi bi-trash-fill"></i>
+                                                                </asp:LinkButton>
+
+                                                            </div>
+                                                        </td>
+
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -169,19 +227,11 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <asp:Panel ID="pnlSinPartidos" runat="server" Visible="false" CssClass="text-center py-5">
                             <p class="text-muted">Aún no se han generado partidos para este torneo.</p>
                         </asp:Panel>
                     </div>
-                </div>
-            </div>
-
-            <!-- TAB 2: POSICIONES -->
-            <div class="tab-pane fade" id="posiciones" role="tabpanel">
-                <div class="card border-0 shadow-sm p-5 text-center">
-                    <h5 class="text-muted">Tabla de Posiciones</h5>
-                    <p class="small text-muted">Aquí se mostrará la tabla de puntos generada automáticamente.</p>
                 </div>
             </div>
 
@@ -192,14 +242,15 @@
                         <ItemTemplate>
                             <div class="col">
                                 <div class="card h-100 border-0 shadow-sm text-center p-3">
-                                    <img src='<%# Eval("Imagen") != null ? Eval("Imagen") : "/Uploads/default-team.png" %>' 
-                                         class="rounded-circle mx-auto mb-3" width="60" height="60" style="object-fit:cover;">
+                                    <img src='<%# Eval("Imagen") != null ? Eval("Imagen") : "/Uploads/default-team.png" %>'
+                                        class="rounded-circle mx-auto mb-3" width="60" height="60" style="object-fit: cover;">
                                     <h6 class="fw-bold mb-0"><%# Eval("Nombre") %></h6>
                                 </div>
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
                 </div>
+                <!-- Agregar un opcion de eliminar del torneo desde aca-->
             </div>
 
         </div>
@@ -211,35 +262,104 @@
     <div class="modal fade" id="modalCargarResultado" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Resultado del Partido</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Cargar Resultado Final</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body text-center">
                     <asp:HiddenField ID="hfIdPartidoResultado" runat="server" />
-                    
+
+                    <div class="alert alert-light border small text-muted mb-4">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Al guardar, el partido se marcará automáticamente como <strong>Finalizado</strong>.
+               
+                    </div>
+
                     <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
                         <div class="text-end">
-                            <h5 class="fw-bold mb-2"><asp:Label ID="lblLocalModal" runat="server" Text="Local"></asp:Label></h5>
-                            <asp:TextBox ID="txtGolesLocal" runat="server" CssClass="form-control form-control-lg text-center mx-auto" 
-                                TextMode="Number" Width="80px"></asp:TextBox>
+                            <h5 class="fw-bold mb-2">
+                                <asp:Label ID="lblLocalModal" runat="server" Text="Local"></asp:Label></h5>
+                            <asp:TextBox ID="txtGolesLocal" runat="server" CssClass="form-control form-control-lg text-center mx-auto"
+                                TextMode="Number" Width="80px" placeholder="0"></asp:TextBox>
                         </div>
                         <div class="h3 text-muted">-</div>
                         <div class="text-start">
-                            <h5 class="fw-bold mb-2"><asp:Label ID="lblVisitaModal" runat="server" Text="Visita"></asp:Label></h5>
-                            <asp:TextBox ID="txtGolesVisita" runat="server" CssClass="form-control form-control-lg text-center mx-auto" 
-                                TextMode="Number" Width="80px"></asp:TextBox>
+                            <h5 class="fw-bold mb-2">
+                                <asp:Label ID="lblVisitaModal" runat="server" Text="Visita"></asp:Label></h5>
+                            <asp:TextBox ID="txtGolesVisita" runat="server" CssClass="form-control form-control-lg text-center mx-auto"
+                                TextMode="Number" Width="80px" placeholder="0"></asp:TextBox>
                         </div>
-                    </div>
-                    
-                    <div class="form-check d-inline-block">
-                        <asp:CheckBox ID="chkFinalizado" runat="server" CssClass="form-check-input" Checked="true" />
-                        <label class="form-check-label">Marcar como Finalizado</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:Button ID="btnGuardarResultado" runat="server" Text="Guardar Resultado" 
-                        CssClass="btn btn-primary w-100" OnClick="btnGuardarResultado_Click" />
+                    <asp:Button ID="btnGuardarResultado" runat="server" Text="Confirmar Resultado"
+                        CssClass="btn btn-success w-100 fw-bold" OnClick="btnGuardarResultado_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MODIFICAR PARTIDO -->
+    <div class="modal fade" id="modalModificarPartido" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Reprogramar Partido</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <asp:HiddenField ID="hfIdPartidoModificar" runat="server" />
+
+                    <div class="mb-3">
+                        <label class="form-label small">Nueva Fecha</label>
+                        <asp:TextBox ID="txtNuevaFecha" runat="server" TextMode="Date" CssClass="form-control"></asp:TextBox>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Nueva Hora</label>
+                        <asp:TextBox ID="txtNuevaHora" runat="server" TextMode="Time" CssClass="form-control"></asp:TextBox>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Estado del Partido</label>
+                        <asp:DropDownList ID="ddlEstadoModificar" runat="server" CssClass="form-select">
+                            <asp:ListItem Text="Pendiente" Value="Pendiente"></asp:ListItem>
+                            <asp:ListItem Text="En Curso" Value="EnCurso"></asp:ListItem>
+                            <asp:ListItem Text="Cancelado" Value="Cancelado"></asp:ListItem>
+                            <asp:ListItem Text="Walkover" Value="Walkover"></asp:ListItem>
+                        </asp:DropDownList>
+                        <div class="form-text small text-muted">
+                            <i class="bi bi-info-circle"></i>Para suspender use el botón rojo de cancelar.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <asp:Button ID="btnGuardarModificacion" runat="server" Text="Guardar Cambios"
+                        CssClass="btn btn-primary w-100" OnClick="btnGuardarModificacion_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CANCELAR PARTIDO -->
+    <div class="modal fade" id="modalCancelarPartido" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Eliminar Partido</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <asp:HiddenField ID="hfIdPartidoCancelar" runat="server" />
+                    <i class="bi bi-exclamation-triangle text-danger display-1 mb-3"></i>
+                    <p class="lead fw-bold">¿Estás seguro?</p>
+                    <p class="text-muted small">El equipo será eliminado</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Volver</button>
+                    <asp:Button ID="btnConfirmarCancelacion" runat="server" Text="Confirmar eliminación"
+                        CssClass="btn btn-danger" OnClick="btnConfirmarCancelacion_Click" />
                 </div>
             </div>
         </div>
@@ -253,32 +373,62 @@
                     <h5 class="modal-title">Crear Cruce Manual</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Equipo Local</label>
-                        <asp:DropDownList ID="ddlLocalManual" runat="server" CssClass="form-select"></asp:DropDownList>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Equipo Visitante</label>
-                        <asp:DropDownList ID="ddlVisitaManual" runat="server" CssClass="form-select"></asp:DropDownList>
-                    </div>
                     <div class="row g-2 mb-3">
                         <div class="col-6">
-                            <label class="form-label">Fecha</label>
+                            <label class="form-label small fw-bold">Equipo Local</label>
+                            <asp:DropDownList ID="ddlLocalManual" runat="server" CssClass="form-select"></asp:DropDownList>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Equipo Visitante</label>
+                            <asp:DropDownList ID="ddlVisitaManual" runat="server" CssClass="form-select"></asp:DropDownList>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small">Fecha</label>
                             <asp:TextBox ID="txtFechaManual" runat="server" TextMode="Date" CssClass="form-control"></asp:TextBox>
                         </div>
                         <div class="col-6">
-                            <label class="form-label">Hora</label>
+                            <label class="form-label small">Hora</label>
                             <asp:TextBox ID="txtHoraManual" runat="server" TextMode="Time" CssClass="form-control"></asp:TextBox>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Fase / Jornada</label>
-                        <asp:TextBox ID="txtFaseManual" runat="server" CssClass="form-control" placeholder="Ej: Fecha 1, Octavos..."></asp:TextBox>
-                    </div>
+
+                    <hr />
+
+                    <asp:Panel ID="pnlInputGrupo" runat="server" Visible="false">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-primary">Asignar a Grupo</label>
+                            <asp:DropDownList ID="ddlGrupo" runat="server" CssClass="form-select">
+                            </asp:DropDownList>
+                            <div class="form-text small">Selecciona el grupo al que pertenece este partido.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Número de Jornada (Fecha)</label>
+                            <asp:TextBox ID="txtJornadaGrupo" runat="server" TextMode="Number" CssClass="form-control" placeholder="Ej: 1"></asp:TextBox>
+                        </div>
+                    </asp:Panel>
+
+                    <asp:Panel ID="pnlInputFase" runat="server" Visible="false">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-success">Instancia de Eliminatoria</label>
+                            <asp:DropDownList ID="ddlNombreFase" runat="server" CssClass="form-select">
+                                <asp:ListItem Text="32avos de Final" Value="32avos"></asp:ListItem>
+                                <asp:ListItem Text="16avos de Final" Value="16avos"></asp:ListItem>
+                                <asp:ListItem Text="Octavos de Final" Value="Octavos"></asp:ListItem>
+                                <asp:ListItem Text="Cuartos de Final" Value="Cuartos"></asp:ListItem>
+                                <asp:ListItem Text="Semifinal" Value="Semifinal"></asp:ListItem>
+                                <asp:ListItem Text="Final" Value="Final"></asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                    </asp:Panel>
                 </div>
+
                 <div class="modal-footer">
-                    <asp:Button ID="btnCrearPartidoManual" runat="server" Text="Crear Partido" 
+                    <asp:Button ID="btnCrearPartidoManual" runat="server" Text="Crear Partido"
                         CssClass="btn btn-dark w-100" OnClick="btnCrearPartidoManual_Click" />
                 </div>
             </div>
