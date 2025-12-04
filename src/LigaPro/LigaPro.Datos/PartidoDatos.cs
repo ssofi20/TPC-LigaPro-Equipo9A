@@ -147,5 +147,98 @@ namespace LigaPro.Datos
                 datos.cerrarConexion();
             }
         }
+
+        // OBTERNER PARTIDO POR ID
+        public PartidoDto ObtenerPorId(int idPartido)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Traemos los datos básicos de la tabla Partidos
+                datos.setearConsulta("SELECT IdPartido, FechaHora, Estado, ResultadoEquipoA, ResultadoEquipoB, TipoPartido FROM Partidos WHERE IdPartido = @id");
+                datos.setearParametro("@id", idPartido);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    PartidoDto partido = new PartidoDto();
+                    partido.Id = (int)datos.Lector["IdPartido"];
+                    partido.FechaProgramada = (DateTime)datos.Lector["FechaHora"];
+                    partido.Estado = datos.Lector["Estado"].ToString();
+
+                    // Mapeamos goles por si los necesitas, aunque para modificar fecha/estado no son críticos
+                    partido.GolesLocal = datos.Lector["ResultadoEquipoA"] != DBNull.Value ? (int)datos.Lector["ResultadoEquipoA"] : 0;
+                    partido.GolesVisita = datos.Lector["ResultadoEquipoB"] != DBNull.Value ? (int)datos.Lector["ResultadoEquipoB"] : 0;
+
+                    return partido;
+                }
+                return null;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        // MODIFICAR FECHA, HORA Y ESTADO DE UN PARTIDO
+        public void ModificarPartido(int idPartido, DateTime nuevaFecha, string nuevoEstado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Partidos SET FechaHora = @fechaHora, Estado = @estado WHERE IdPartido = @idPartido");
+                datos.setearParametro("@fechaHora", nuevaFecha);
+                datos.setearParametro("@estado", nuevoEstado);
+                datos.setearParametro("@idPartido", idPartido);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        // ELIMINAR PARTIDO
+        public void EliminarPartido(int idPartido)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Partidos SET Activo = 0 WHERE IdPartido = @id");
+                datos.setearParametro("@id", idPartido);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
+
+        // CARGAR RESULTADO DE PARTIDO
+        public void CargarResultado(int idPartido, int golesL, int golesV, bool finalizado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string estado = finalizado ? "Finalizado" : "Pendiente";
+
+                datos.setearConsulta(@"
+                    UPDATE Partidos 
+                    SET ResultadoEquipoA = @golesL, 
+                        ResultadoEquipoB = @golesV, 
+                        Estado = @estado 
+                    WHERE IdPartido = @id");
+
+                datos.setearParametro("@golesL", golesL);
+                datos.setearParametro("@golesV", golesV);
+                datos.setearParametro("@estado", estado);
+                datos.setearParametro("@id", idPartido);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

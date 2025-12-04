@@ -150,15 +150,6 @@ namespace LigaPro.Web.PaginasOrganizador
         protected global::System.Web.UI.WebControls.TextBox txtGolesVisita;
 
         /// <summary>
-        /// chkFinalizado control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkFinalizado;
-
-        /// <summary>
         /// btnGuardarResultado control.
         /// </summary>
         /// <remarks>
@@ -166,6 +157,69 @@ namespace LigaPro.Web.PaginasOrganizador
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGuardarResultado;
+
+        /// <summary>
+        /// hfIdPartidoModificar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdPartidoModificar;
+
+        /// <summary>
+        /// txtNuevaFecha control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaFecha;
+
+        /// <summary>
+        /// txtNuevaHora control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaHora;
+
+        /// <summary>
+        /// ddlEstadoModificar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlEstadoModificar;
+
+        /// <summary>
+        /// btnGuardarModificacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarModificacion;
+
+        /// <summary>
+        /// hfIdPartidoCancelar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfIdPartidoCancelar;
+
+        /// <summary>
+        /// btnConfirmarCancelacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmarCancelacion;
 
         /// <summary>
         /// ddlLocalManual control.

@@ -85,7 +85,6 @@ namespace LigaPro.Web.PaginasOrganizador
             }
         }
 
-        //FALTA COMPLETAR
         private void CargarPartidos()
         {
             try
@@ -111,6 +110,25 @@ namespace LigaPro.Web.PaginasOrganizador
             catch (Exception ex)
             {
                 pnlSinPartidos.Visible = true;
+            }
+        }
+
+        protected string ObtenerBadgeEstado(string estado)
+        {
+            switch (estado)
+            {
+                case "Finalizado":
+                    return "<span class='badge bg-secondary'><i class='bi bi-check-all me-1'></i>Finalizado</span>";
+                case "EnCurso":
+                    return "<span class='badge bg-success'><i class='bi bi-play-circle me-1'></i>En Curso</span>";
+                case "Suspendido":
+                case "Cancelado":
+                    return "<span class='badge bg-danger'><i class='bi bi-x-octagon me-1'></i>Suspendido</span>";
+                case "Walkover":
+                    return "<span class='badge bg-dark'>W.O.</span>";
+                case "Pendiente":
+                default:
+                    return "<span class='badge bg-warning text-dark'><i class='bi bi-clock me-1'></i>Pendiente</span>";
             }
         }
 
@@ -142,52 +160,6 @@ namespace LigaPro.Web.PaginasOrganizador
             {
                 // Opcional: Mostrar error si falla la carga
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert", $"alert('Error al cargar equipos: {ex.Message}');", true);
-            }
-        }
-
-        //FALTA COMPLETAR
-        protected void rptPartidos_ItemCommand(object source, RepeaterCommandEventArgs e)
-        {
-            if (e.CommandName == "CargarResultado")
-            {
-                int idPartido = int.Parse(e.CommandArgument.ToString());
-                hfIdPartidoResultado.Value = idPartido.ToString();
-
-                //agrregarr
-
-                ScriptManager.RegisterStartupScript(this, GetType(), "PopRes", "abrirModalResultado();", true);
-            }
-        }
-
-        //FALTA COMPLETAR
-        protected void btnGuardarResultado_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                int idPartido = int.Parse(hfIdPartidoResultado.Value);
-                int golesL = int.Parse(txtGolesLocal.Text);
-                int golesV = int.Parse(txtGolesVisita.Text);
-                bool finalizado = chkFinalizado.Checked;
-
-                // crear una funcion tipo negocio.CargarResultado(idPartido, golesL, golesV, finalizado);
-
-                CargarPartidos();
-            }
-            catch (Exception ex) { }
-        }
-
-        //FALTA COMPLETAR
-        protected void btnGenerarFixture_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Crear un negocio.GenerarFixtureAutomatico(IdTorneoActual);
-
-                CargarPartidos();
-            }
-            catch (Exception ex)
-            {
-                // Alert error
             }
         }
 
@@ -256,6 +228,138 @@ namespace LigaPro.Web.PaginasOrganizador
                 // Mostrar error
             }
         }
+
+        protected void rptPartidos_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            int idPartido = int.Parse(e.CommandArgument.ToString());
+
+            /// CASO 1: CARGAR RESULTADO 
+            if (e.CommandName == "CargarResultado")
+            {
+                hfIdPartidoResultado.Value = idPartido.ToString();
+
+                // (Aquí va tu lógica de precarga existente...)
+                PartidoDatos datos = new PartidoDatos();
+                var p = datos.ObtenerPorId(idPartido);
+                if (p != null)
+                {
+                    txtGolesLocal.Text = p.GolesLocal.ToString();
+                    txtGolesVisita.Text = p.GolesVisita.ToString();
+                }
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "PopRes", "abrirModalResultado();", true);
+            }
+
+            /// CASO 2: MODIFICAR 
+            else if (e.CommandName == "Modificar")
+            {
+                hfIdPartidoModificar.Value = idPartido.ToString();
+
+                PartidoDatos datos = new PartidoDatos();
+                var p = datos.ObtenerPorId(idPartido);
+
+                if (p != null)
+                {
+                    txtNuevaFecha.Text = p.FechaProgramada.ToString("yyyy-MM-dd");
+                    txtNuevaHora.Text = p.FechaProgramada.ToString("HH:mm");
+
+                    if (ddlEstadoModificar.Items.FindByValue(p.Estado) != null)
+                    {
+                        ddlEstadoModificar.SelectedValue = p.Estado;
+                    }
+                    else
+                    {
+                        ddlEstadoModificar.SelectedIndex = 0;
+                    }
+                }
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "PopMod", "abrirModalModificar();", true);
+            }
+
+            /// CASO 3: CANCELAR
+            else if (e.CommandName == "Cancelar")
+            {
+                hfIdPartidoCancelar.Value = idPartido.ToString();
+                ScriptManager.RegisterStartupScript(this, GetType(), "PopCancel", "abrirModalCancelar();", true);
+            }
+        }
+
+        protected void btnGuardarModificacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idPartido = int.Parse(hfIdPartidoModificar.Value);
+                DateTime nuevaFecha = DateTime.Parse(txtNuevaFecha.Text + " " + txtNuevaHora.Text);
+
+                string nuevoEstado = ddlEstadoModificar.SelectedValue;
+
+                PartidoDatos datos = new PartidoDatos();
+
+                datos.ModificarPartido(idPartido, nuevaFecha, nuevoEstado);
+
+                CargarPartidos();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alertMod", $"alert('Error al modificar: {ex.Message}');", true);
+            }
+        }
+
+        protected void btnConfirmarCancelacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idPartido = int.Parse(hfIdPartidoCancelar.Value);
+
+                PartidoDatos datos = new PartidoDatos();
+                datos.EliminarPartido(idPartido);
+
+                CargarPartidos();
+            }
+            catch (Exception ex)
+            {
+                // Manejar error
+            }
+        }
+
+        protected void btnGuardarResultado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idPartido = int.Parse(hfIdPartidoResultado.Value);
+
+                int golesL = string.IsNullOrEmpty(txtGolesLocal.Text) ? 0 : int.Parse(txtGolesLocal.Text);
+                int golesV = string.IsNullOrEmpty(txtGolesVisita.Text) ? 0 : int.Parse(txtGolesVisita.Text);
+
+                bool finalizado = true;
+
+                PartidoDatos datos = new PartidoDatos();
+                datos.CargarResultado(idPartido, golesL, golesV, finalizado);
+
+                CargarPartidos();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alertError", $"alert('Error: {ex.Message}');", true);
+            }
+        }
+
+
+        //FALTA COMPLETAR
+        protected void btnGenerarFixture_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Crear un negocio.GenerarFixtureAutomatico(IdTorneoActual);
+
+                CargarPartidos();
+            }
+            catch (Exception ex)
+            {
+                // Alert error
+            }
+        }
+
 
     }
 }
