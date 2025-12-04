@@ -14,6 +14,17 @@ namespace LigaPro.Web.PaginasOrganizador
     public partial class GestionarPartidos : System.Web.UI.Page
     {
         public int IdTorneoActual { get; set; }
+        private void MostrarMensaje(string titulo, string texto, string tipo)
+        {
+            string script = $"Swal.fire('{titulo}', '{texto}', '{tipo}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlert", script, true);
+        }
+
+        private void MostrarMensajeModal(string titulo, string texto, string tipo, string idModal)
+        {
+            string script = $"mostrarAlertaYReabrir('{titulo}', '{texto}', '{tipo}', '{idModal}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlertModal", script, true);
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -167,22 +178,37 @@ namespace LigaPro.Web.PaginasOrganizador
         {
             try
             {
-                // 1. Obtener IDs de Equipos del Dropdown
                 int idEquipoLocal = int.Parse(ddlLocalManual.SelectedValue);
                 int idEquipoVisita = int.Parse(ddlVisitaManual.SelectedValue);
 
-                // Validaciones básicas
-                if (idEquipoLocal == 0 || idEquipoVisita == 0) { /* Alert: Seleccionar equipos */ return; }
-                if (idEquipoLocal == idEquipoVisita) { /* Alert: Mismos equipos */ return; }
+                // VALIDACIONES VISUALES
+                if (idEquipoLocal == 0 || idEquipoVisita == 0)
+                {
+                    MostrarMensajeModal("Faltan datos", "Debes seleccionar ambos equipos.", "warning", "modalNuevoPartido");
+                    return;
+                }
+                if (idEquipoLocal == idEquipoVisita)
+                {
+                    MostrarMensajeModal("Error", "El equipo local y visitante no pueden ser el mismo.", "error", "modalNuevoPartido");
+                    return;
+                }
 
-                // 2. Fecha y Hora
                 DateTime fechaHora = DateTime.Parse(txtFechaManual.Text + " " + txtHoraManual.Text);
+                if (!DateTime.TryParse(txtFechaManual.Text + " " + txtHoraManual.Text, out fechaHora))
+                {
+                    MostrarMensajeModal("Fecha Incorrecta", "Por favor ingresa una fecha y hora válidas.", "warning", "modalNuevoPartido");
+                    return;
+                }
 
-                // 3. Obtener info del Torneo para decidir el tipo
+                if (fechaHora < DateTime.Now)
+                {
+                    MostrarMensajeModal("Atención", "No puedes programar partidos en el pasado.", "info", "modalNuevoPartido");
+                    return;
+                }
+
                 TorneoDatos tDatos = new TorneoDatos();
                 Torneo torneo = tDatos.buscarPorId(IdTorneoActual);
 
-                // 4. Crear el objeto Partido adecuado
                 Partido nuevoPartido;
 
                 if (torneo.TieneFaseDeGrupos)
@@ -197,14 +223,12 @@ namespace LigaPro.Web.PaginasOrganizador
                     nuevoPartido.TipoPartido = "Eliminatoria";
                 }
 
-                // 5. Llenar datos comunes
                 nuevoPartido.IdTorneo = IdTorneoActual;
                 nuevoPartido.FechaHora = fechaHora;
                 nuevoPartido.Estado = "Pendiente";
                 nuevoPartido.ResultadoEquipoA = 0;
                 nuevoPartido.ResultadoEquipoB = 0;
 
-                // 6. Guardar usando un método que acepte IDs de Equipos
                 PartidoDatos pdatos = new PartidoDatos();
 
                 if (nuevoPartido is PartidoGrupo)
@@ -216,16 +240,19 @@ namespace LigaPro.Web.PaginasOrganizador
                     pdatos.CrearPartidoManual((PartidoEliminatoria)nuevoPartido, idEquipoLocal, idEquipoVisita);
                 }
 
-                // 7. Refrescar
                 CargarPartidos();
 
-                // Limpiar
                 ddlLocalManual.SelectedIndex = 0;
                 ddlVisitaManual.SelectedIndex = 0;
+                txtFechaManual.Text = "";
+                txtHoraManual.Text = "";
+
+                MostrarMensaje("¡Listo!", "El partido se creó correctamente.", "success");
+
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al crear el partido: " + ex.Message);
+                MostrarMensaje("Error", "Ocurrió un problema: " + ex.Message, "error");
             }
         }
 
@@ -260,6 +287,12 @@ namespace LigaPro.Web.PaginasOrganizador
 
                 if (p != null)
                 {
+                    if (p.Estado == "Finalizado")
+                    {
+                        MostrarMensaje("Acción denegada", "No se puede modificar un partido que ya ha finalizado.", "warning");
+                        return;
+                    }
+
                     txtNuevaFecha.Text = p.FechaProgramada.ToString("yyyy-MM-dd");
                     txtNuevaHora.Text = p.FechaProgramada.ToString("HH:mm");
 
@@ -291,17 +324,32 @@ namespace LigaPro.Web.PaginasOrganizador
                 int idPartido = int.Parse(hfIdPartidoModificar.Value);
                 DateTime nuevaFecha = DateTime.Parse(txtNuevaFecha.Text + " " + txtNuevaHora.Text);
 
+                //VALIDACION 
+                if (!DateTime.TryParse(txtNuevaFecha.Text + " " + txtNuevaHora.Text, out nuevaFecha))
+                {
+                    MostrarMensajeModal("Fecha inválida", "Revisa los campos de fecha y hora.", "error", "modalModificarPartido");
+                    return;
+                }
+
+                if (nuevaFecha < DateTime.Now)
+                {
+                    MostrarMensajeModal("Fecha pasada", "La nueva fecha no puede ser anterior a hoy.", "warning", "modalNuevoPartido");
+                    return;
+                }
+
                 string nuevoEstado = ddlEstadoModificar.SelectedValue;
 
                 PartidoDatos datos = new PartidoDatos();
 
                 datos.ModificarPartido(idPartido, nuevaFecha, nuevoEstado);
 
+                MostrarMensaje("Actualizado", "El partido ha sido modificado.", "success");
+
                 CargarPartidos();
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "alertMod", $"alert('Error al modificar: {ex.Message}');", true);
+                MostrarMensaje("Error", ex.Message, "error");
             }
         }
 
@@ -315,10 +363,13 @@ namespace LigaPro.Web.PaginasOrganizador
                 datos.EliminarPartido(idPartido);
 
                 CargarPartidos();
+
+                MostrarMensaje("Partido Eliminado", "El partido se ha eliminado correctamente.", "success");
+
             }
             catch (Exception ex)
             {
-                // Manejar error
+                MostrarMensaje("Error", ex.Message, "error");
             }
         }
 
@@ -331,16 +382,24 @@ namespace LigaPro.Web.PaginasOrganizador
                 int golesL = string.IsNullOrEmpty(txtGolesLocal.Text) ? 0 : int.Parse(txtGolesLocal.Text);
                 int golesV = string.IsNullOrEmpty(txtGolesVisita.Text) ? 0 : int.Parse(txtGolesVisita.Text);
 
+                if (golesL < 0 || golesV < 0)
+                {
+                    MostrarMensajeModal("Dato incorrecto", "Los goles no pueden ser negativos.", "error", "modalCargarResultado");
+                    return;
+                }
+
                 bool finalizado = true;
 
                 PartidoDatos datos = new PartidoDatos();
                 datos.CargarResultado(idPartido, golesL, golesV, finalizado);
 
+                MostrarMensaje("Resultado Cargado", "El partido se marcó como finalizado.", "success");
+
                 CargarPartidos();
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "alertError", $"alert('Error: {ex.Message}');", true);
+                MostrarMensaje("Error", ex.Message, "error");
             }
         }
 

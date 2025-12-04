@@ -2,6 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .tournament-header {
             background-color: #fff;
@@ -50,6 +51,21 @@
         function abrirModalCancelar() {
             var myModal = new bootstrap.Modal(document.getElementById('modalCancelarPartido'));
             myModal.show();
+        }
+        function mostrarAlertaYReabrir(titulo, texto, tipo, idModal) {
+            Swal.fire({
+                title: titulo,
+                text: texto,
+                icon: tipo,
+                confirmButtonColor: '#212529', // Color oscuro para combinar
+                confirmButtonText: 'Entendido'
+            }).then((result) => {
+                // Esto se ejecuta cuando el usuario da click en "Entendido" o cierra la alerta
+                if (idModal) {
+                    var myModal = new bootstrap.Modal(document.getElementById(idModal));
+                    myModal.show();
+                }
+            });
         }
     </script>
 
@@ -179,10 +195,13 @@
                                                         <td class="text-center">
                                                             <div class="btn-group btn-group-sm shadow-sm" role="group">
 
-                                                                <asp:LinkButton ID="btnModificar" runat="server" CssClass="btn btn-outline-primary"
-                                                                    CommandName="Modificar" CommandArgument='<%# Eval("Id") %>'
-                                                                    ToolTip="Reprogramar / Cambiar Estado">
-                                                                    <i class="bi bi-pencil-square"></i>
+                                                                <asp:LinkButton ID="btnModificar" runat="server"
+                                                                    CommandName="Modificar"
+                                                                    CommandArgument='<%# Eval("Id") %>'
+                                                                    Enabled='<%# Eval("Estado").ToString() != "Finalizado" %>'
+                                                                    CssClass='<%# Eval("Estado").ToString() == "Finalizado" ? "btn btn-secondary disabled opacity-50" : "btn btn-primary" %>'
+                                                                    ToolTip='<%# Eval("Estado").ToString() == "Finalizado" ? "Partido Finalizado (Bloqueado)" : "Modificar Partido" %>'>
+                                                                <i class="bi bi-pencil-square"></i>
                                                                 </asp:LinkButton>
 
                                                                 <asp:LinkButton ID="btnCargar" runat="server" CssClass="btn btn-outline-success"
@@ -306,7 +325,6 @@
                         <asp:DropDownList ID="ddlEstadoModificar" runat="server" CssClass="form-select">
                             <asp:ListItem Text="Pendiente" Value="Pendiente"></asp:ListItem>
                             <asp:ListItem Text="En Curso" Value="EnCurso"></asp:ListItem>
-                            <asp:ListItem Text="Finalizado" Value="Finalizado"></asp:ListItem>
                             <asp:ListItem Text="Cancelado" Value="Cancelado"></asp:ListItem>
                             <asp:ListItem Text="Walkover" Value="Walkover"></asp:ListItem>
                         </asp:DropDownList>
