@@ -225,7 +225,7 @@ namespace LigaPro.Web.PaginasOrganizador
             }
             catch (Exception ex)
             {
-                // Mostrar error
+                throw new Exception("Error al crear el partido: " + ex.Message);
             }
         }
 

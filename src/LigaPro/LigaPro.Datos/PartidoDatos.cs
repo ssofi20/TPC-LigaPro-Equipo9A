@@ -17,6 +17,7 @@ namespace LigaPro.Datos
             try
             {
                 AsignarEquipoAGrupo(partido.IdTorneo, idEquipoLocal, partido.NombreGrupo);
+                AsignarEquipoAGrupo(partido.IdTorneo, idEquipoVisita, partido.NombreGrupo);
 
                 datos.setearConsulta("INSERT INTO Partidos (IdInscripcionA, IdInscripcionB, IdTorneo, IdGrupo,FechaHora, ResultadoEquipoA, ResultadoEquipoB, TipoPartido, Estado)\r\nSELECT \r\n\t(SELECT IdInscripcion FROM Inscripciones WHERE IdEquipo = @idEquipoLocal AND IdTorneo = @idTorneo),    \r\n\t(SELECT IdInscripcion FROM Inscripciones WHERE IdEquipo = @idEquipoVisita AND IdTorneo = @idTorneo),\r\n\t@idTorneo,\r\n\t(SELECT IdGrupo FROM Grupos WHERE IdTorneo = @idTorneo AND Nombre = @nombreGrupo),\r\n\t@fechaHora,\r\n\t@resultadoA,\r\n\t@resultadoB, \r\n\t@tipoPartido,\r\n\t@estado;");
                 datos.setearParametro("@idTorneo", partido.IdTorneo);
